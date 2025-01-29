@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forms</title>
+</head>
+<style>
+
+    form {
+        padding: 50px;
+        border: 1px groove black;
+        width: fit-content;
+        margin-inline: auto;
+    }
+    form>* {
+        display: block;
+        margin-bottom: 20px;
+        padding: 10px;
+        border: none;
+        background-color: antiquewhite;
+    }
+
+    title {
+        font-size: 30px;
+    }
+</style>
+<body>
+
+    <form action="" name="Details">
+        <h2>Student Information</h2>
+        Name: <input type="text" name="name" id="">
+        Email: <input type="email" name="email" autocapitalize required id="">
+        Password: <input type="password" name="password" id="">
+        Mobile: <input type="tel" name="phone" id="">
+        D.O.B: <input type="date" name="birthday" id="">
+        <fieldset>
+            Gender: <select name="gender" id="">
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <optgroup label="Other">
+                    <option value="Trans">Transgender</option>
+                    <option value="Queer">Queer</option>
+                    <option value="Other">Other</option>
+                </optgroup>
+            </select>
+        </fieldset>
+        <fieldset>
+            English Proficiency: <input type="radio" name="Language" value="Written" id="">:Written
+            <input type="radio" name="Language" value="Speaking" id="">: Speaking
+            <input type="radio" name="Language" value="Native" checked id="">: Native
+        </fieldset>
+        <fieldset>
+            Graduation percentage: <input type="range" name="percentage" id="" min="0" max="100">
+        </fieldset>
+        <fieldset>
+            Image to pick Color: <input type="file" name="image" id="" multiple accept="image/png, .jpg, image/*">
+            Favorite Color: <input type="color" name="color" id="">
+            <img src="#" id="user-img" alt="" height="200px">
+        </fieldset>
+        <!-- <button type="submit">Submit</button> -->
+        Click Image to submit<input type="image" src="./13-jan-25 (maffick painting wall).jpg" alt="" height="40px">
+        <button type="reset">Clear</button>
+    </form>
+
+    <h2>Well done. Try listeing this song and enjoy</h2>
+    <iframe width="662" height="372" src="https://www.youtube.com/embed/iOxzG3jjFkY?list=RDiOxzG3jjFkY" title="Willy William - Ego (Clip Officiel)" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+    <script>
+        const Image = document.querySelector("#user-img");
+        const URL = document.querySelector("input[type='file']");
+        
+        
+    </script>
+</body>
+</html>
