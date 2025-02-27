@@ -1,0 +1,226 @@
+/* Challenge CSS */
+:root {
+  --clr-primary: #6F4E37;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Georgia", serif;
+  line-height: 1.6;
+  color: #333;
+}
+
+.header {
+  /* Define header styles here */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 5vw;
+}
+
+.header * {
+  color: var(--clr-primary);
+}
+
+.logo {
+  /* Define logo styles here */
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo img {
+  /* Define image styles within the logo here */
+  border-radius: 100px;
+}
+
+.nav-menu a {
+  /* Define navigation link styles here */
+  text-decoration: none;
+  margin-right: 20px;
+  transition: opacity 0.2s ease-in;
+}
+
+.nav-menu a:hover {
+  /* Define hover styles for navigation links here */
+  opacity: 0.6;
+}
+
+.close-btn,
+.open-btn {
+  background-color: transparent;
+  border: none;
+  display: none;
+}
+
+.open-btn {
+  color: var(--clr-primary);
+}
+
+.close-btn {
+  color: white;
+}
+
+.hero {
+  /* Define hero section styles here */
+  min-height: 60vh;
+  background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.804)), url('./assets/chaipatti.png') no-repeat;
+  background-position: center center;
+  background-size: cover;
+  color: white;
+  display: grid;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.hero-text h1 {
+  /* Define styles for h1 in hero-text here */
+  color: white;
+  font-size: 3rem;
+  line-height: 1.2em;
+  padding-block: 10px;
+
+}
+
+.hero-text p {
+  /* Define styles for paragraph in hero-text here */
+}
+
+.shop-button {
+  /* Define shop button styles here */
+  background-color: var(--clr-primary);
+  padding: 10px 20px;
+  margin-block: 20px;
+  border-radius: 100px;
+  border: 1px solid white;
+  color: rgb(255, 255, 255);
+  box-shadow: 0px 01px 2px 0px;
+  transition: all 0.5s ease-out;
+}
+
+.shop-button:hover {
+  /* Define hover styles for shop button here */
+  color: var(--clr-primary);
+  cursor: pointer;
+  background-color: white;
+}
+
+.tea-collection {
+  /* Define tea collection section styles here */
+  padding-block: 60px;
+}
+
+.tea-collection h2 {
+  /* Define styles for h2 in tea collection here */
+  text-align: center;
+  font-size: 2rem;
+  line-height: 1.2em;
+  color: var(--clr-primary);
+}
+
+.tea-cards {
+  /* Define tea cards container styles here */
+  width: 80%;
+  max-width: 1200px;
+  margin-inline: auto;
+  padding-block: 40px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.tea-card {
+  /* Define styles for each tea card here */
+  text-align: center;
+  padding: 30px 16px;
+  /* border: 1px solid black; */
+  border-radius: 5px;
+  box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.167);
+}
+
+.tea-card h3 {
+  /* Define styles for tea card headings here */
+  color: var(--clr-primary);
+  padding-bottom: 12px;
+}
+
+.tea-card p {
+  /* Define styles for tea card paragraph text here */
+}
+
+@media screen and (max-width: 700px) {
+  .hero h1 {
+    font-size: 2.5rem;
+    max-width: 15ch;
+    margin-inline: auto;
+  }
+
+  .tea-collection h2 {
+    max-width: 15ch;
+    margin-inline: auto;
+  }
+
+  .tea-cards {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .hero h1 {
+    font-size: 2rem;
+  }
+
+  .tea-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .tea-card {
+    width: 100%;
+    max-width: none;
+  }
+
+  .close-btn,
+  .open-btn {
+    display: block;
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    font-size: 1.2rem;
+    cursor: pointer;
+  }
+
+  .open-btn {
+    border: 1px solid gray;
+    border-radius: 100px;
+    width: 10px;
+    aspect-ratio: 1/1;
+    padding: 5px;
+  }
+
+  .nav-menu {
+    position: absolute;
+    right: 0;
+    top: 0;
+    display: grid;
+    align-content: flex-start;
+    gap: 20px;
+    background-color: var(--clr-primary);
+    height: 100vh;
+    width: 70%;
+    border-radius: 10px 0px 0px 10px;
+    padding: 50px;
+    transform: translateX(100%);
+    transition: transform 1s ease-in;
+    z-index: 999;
+  }
+
+  .nav-menu a {
+    color: white;
+  }
+}

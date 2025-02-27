@@ -1,0 +1,124 @@
+/* Challenge CSS */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+  background-color: #f5f5f5;
+}
+
+.container {
+  /* Add your styles here */
+  max-width: 1200px;
+  width: 80%;
+  margin-inline: auto;
+  padding-block: 40px;
+}
+
+h1 {
+  /* Add your styles here */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-block: 20px; 
+}
+
+.pricing-heading {
+  /* Add your styles here */
+}
+
+.pricing-container {
+  /* Add your styles here */
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  text-align: center;
+  gap: 10px;
+}
+
+.pricing-card {
+  /* Add your styles here */
+
+  background-color: azure;
+  padding: 40px 20px 20px 20px;
+  border-radius: 10px;
+  display: grid;
+  grid-template-rows: 40px 60px 20px auto 70px;    
+  justify-items: center;
+  align-items: start;
+  /* align-content: space-between; */
+}
+
+.pricing-card h2 {
+  font-size: 1rem;
+}
+
+.pricing-card:hover {
+  /* Add your styles here */
+}
+
+.pricing-card.popular {
+  /* Add your styles here */
+  position: relative;
+  border: 2px solid orange;
+}
+
+.popular-badge {
+  /* Add your styles here */
+  position: absolute;
+  top: -12px;
+  transform: translateX(-50%);
+  left: 50%;
+  background-color: orange;
+  padding: 4px 12px;
+  border-radius: 80px;
+  color: white;
+}
+
+.price {
+  /* Add your styles here */
+  font-weight: bold;
+  font-size: 2rem;
+}
+
+.period {
+  /* Add your styles here */
+}
+
+.features {
+  /* Add your styles here */
+  align-self:center;
+}
+
+.features li {
+  /* Add your styles here */
+  list-style-type: square;
+  margin-left: 40px;
+  vertical-align: middle;
+}
+
+.features li::marker {
+  /* padding-left: 80px; */
+  font-size: 2rem;
+  /* line-height: 1em; */
+  color: rgb(133, 97, 97);
+  /* transform: translateY(24px); */
+}
+
+.subscribe-btn {
+  background-color: orange;
+  padding: 8px 12px;
+  border-radius: 80px;
+  border: none;
+  margin-top: 20px;
+  align-self: flex-end;
+  /* Add your styles here */
+}
+
+.subscribe-btn:hover {
+  /* Add your styles here */
+}

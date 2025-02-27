@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patterns</title>
+</head>
+<body>
+    <form action="">
+<!-- Instead of (?=.*[0-9]), if we used (?!.*[0-9]), it would mean that the password must not contain any digit from 1-9 (Difference with the (?=.*[0-9]) is the use of ! instead of =) -->
+        <input type="password" pattern="(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.* ).{8,16}" minlength="8" name="" id="">
+        <button type="submit">Click me</button>
+    </form>
+</body>
+</html>

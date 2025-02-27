@@ -1,0 +1,177 @@
+/* Challenge CSS */
+:root{
+--clr-primary: orange;
+}
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+  background-color: rgb(8, 8, 8);
+}
+
+.container {
+  /* Add your styles here */
+  max-width: 1200px;
+  width: 80%;
+  margin-inline: auto;
+  padding-bottom: 40px;
+}
+
+.header {
+  /* Add your styles here */
+  display: grid;
+  /* align-items: center; */
+  justify-items: center;
+  padding-block: 50px; 
+}
+
+h1 {
+  /* Add your styles here */
+  color: var(--clr-primary)
+}
+
+.subtitle {
+  /* Add your styles here */
+  color: white;
+  opacity: 0.6;
+  font-weight: 300;
+}
+
+.pricing-container {
+  /* Add your styles here */
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 20px;
+}
+
+.pricing-card {
+  /* Add your styles here */
+  --bg-clr: 49, 47, 47;
+  position: relative;
+  padding: 40px 20px 20px 20px;
+  border-radius: 10px;
+  display: grid;
+  /* grid-template-rows: 40px 60px 20px auto 70px;     */
+  justify-items: center;
+  background-color: var(--bg-clr);
+  box-shadow: -2px 2px 0 0 var(--bg-clr); 
+  /* align-items: start; */
+  color: white;
+}
+
+.pricing-card:hover {
+  /* Add your styles here */
+}
+
+.card-header {
+  /* Add your styles here */
+  text-align: center;
+}
+
+.icon {
+  /* Add your styles here */
+  font-size: 3rem;
+}
+
+.popular-tag {
+  /* Add your styles here */
+  position: absolute;
+  top: -12px;
+  transform: translateX(-50%);
+  left: 50%;
+  background-color: yellow;
+  padding: 4px 12px;
+  border-radius: 80px;
+  color: black;
+}
+
+.price-block {
+  /* Add your styles here */
+  text-align: center;
+  width: 100%;
+  border-radius: 8px;
+  padding: 20px 30px;
+  margin-block: 30px;
+  background: rgba(50, 48, 48, 0.627);
+}
+
+.price {
+  /* Add your styles here */
+  color: var(--clr-primary);
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.period {
+  /* Add your styles here */
+  text-transform: uppercase;
+  opacity: 0.7
+}
+
+.features {
+  /* Add your styles here */
+}
+
+.features li {
+  /* Add your styles here */
+  list-style-type: none;
+ margin-bottom: 1.2em;
+}
+
+.features li.disabled {
+  /* Add your styles here */
+  opacity: 0.3;
+}
+
+.join-btn {
+  /* Add your styles here */
+  width: 100%;
+  padding-block: 10px;
+  color: var(--clr-primary);
+  background-color: transparent;
+  border: 2px solid var(--clr-primary);
+  border-radius: 4px;
+  margin-top: 20px;
+  font-size: 1rem;
+  transition: all 0.3s ease-in;
+}
+
+.join-btn:hover {
+  /* Add your styles here */
+  cursor: pointer;
+  color: black;
+  background-color: var(--clr-primary);
+}
+
+/* Custom Class Modifiers */
+.beginner {
+  --bg-clr: rgba(27, 26, 26, 0.789);
+}
+
+.warrior {
+  /* Add your styles here */
+  --bg-clr: rgb(113, 26, 26);
+}
+
+.champion {
+  /* Add your styles here */
+  --bg-clr: rgb(84, 84, 9);
+  --clr-primary: yellow;
+}
+
+.champion .price {
+  /* Add your styles here */
+}
+
+.champion .join-btn {
+  /* Add your styles here */
+}
+
+.champion .join-btn:hover {
+  /* Add your styles here */
+}

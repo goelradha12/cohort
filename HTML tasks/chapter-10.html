@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audio/Video</title>
+</head>
+<body>
+    <!-- 1. **Embed a video on a webpage with the following:**
+    - Add controls, autoplay, and a poster image.
+    - Add subtitles using the `<track>`  tag.
+2. **Create an audio player with two different audio formats.**
+3. **Embed a YouTube video using an **`**<iframe>**` **.**
+4. **Create a table listing three common video and audio formats, along with their descriptions.**
+ -->
+    <video src="./noida-project.mp4" mute controls>
+        Shows up if video is not rendered.
+        <track default kind="captions" src="./caption.vtt"></track>
+    </video>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/iOxzG3jjFkY?si=pjTN8F_rGtUNJImk" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+ <table border="">
+    <tr>
+        <th>Audio/video</th>
+        <th>Type</th>
+        <th>Description</th>
+    </tr>
+    <tr>
+        <td rowspan="3">Audio</td>
+        <td>MP3</td>
+        <td>Popular for music and online streaming due to its compressed file size and decent quality.</td>
+    </tr>
+    <tr>
+        <td>WAV (Waveform Audio File Format) </td>
+        <td> Uncompressed and high-quality, commonly used in professional audio production.</td>
+    </tr>
+    <tr>
+        <td>AAC (Advanced Audio Codec)</td>
+        <td>Used in Apple devices and YouTube, offering better sound quality than MP3 at similar bit rates.</td>
+    </tr>
+    <tr>
+        <td rowspan="3">Video</td>
+        <td>MP4 </td>
+        <td>The most widely used format for videos due to its high compatibility and efficient compression.</td>
+    </tr>
+    <tr>
+        <td>AVI (Audio Video Interleave)</td>
+        <td>An older format developed by Microsoft, known for large file sizes and broad compatibility.</td>
+    </tr>
+    <tr>
+        <td>MKV (Matroska Video Format)</td>
+        <td>Supports multiple audio and subtitle tracks, commonly used for high-quality video storage.</td>
+    </tr>
+</table>
+</body>
+</html>
