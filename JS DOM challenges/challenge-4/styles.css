@@ -72,15 +72,25 @@ h1 {
 }
 
 .complete-checkbox {
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
+  /* padding: 9px; */
+  border-radius: 100px;
   cursor: pointer;
+  border: 1px solid;
+  line-height: 1em;
+  
+  /* display: flex;
+  justify-content: center;
+  align-items: center; */
 }
 
 .task-item.completed .task-text {
   text-decoration: line-through;
   color: #95a5a6;
 }
+
+
 
 .delete-button {
   background-color: #e74c3c;
