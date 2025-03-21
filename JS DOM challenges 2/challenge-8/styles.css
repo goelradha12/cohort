@@ -55,3 +55,11 @@ button {
   color: #666;
   padding: 20px;
 }
+
+.cart-item {
+  display: flex;
+  justify-content: space-between;
+  border: 1px solid black;
+  align-items: center;
+  padding: 20px;
+}

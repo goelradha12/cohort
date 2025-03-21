@@ -76,6 +76,6 @@ h2 {
   transform: rotate(180deg);
 }
 
-.active .accordion-content {
+.active-accordion-content {
   max-height: 200px;
 }

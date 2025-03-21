@@ -1,16 +1,17 @@
-import { useState } from 'react'
-import './App.css'
-
+import { IceSkatingOutlined } from '@mui/icons-material';
+import Header from './components/Header'
+import { Button, TextField } from '@mui/material';
 
 function App() {
-  const [count, setCount] = useState()
-
   return (
     <>
-      <input type="text" name="password" id="" minLength="4" maxLength="30"/>
-      
+      <Header></Header>
+      <div>
+        <TextField></TextField>
+        <Button color='secondary' startIcon={<IceSkatingOutlined/>}>Generate Password</Button>
+      </div>
     </>
-  )
+  );
 }
 
-export default App
+export default App;

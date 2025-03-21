@@ -12,8 +12,12 @@
       <p>Moves: <span id="moves">0</span></p>
       <p>Time: <span id="time">0:00</span></p>
     </div>
-    <div class="game-container" id="gameContainer"></div>
-    <button onclick="restartGame()">Restart Game</button>
+    <div class="result-message"></div>
+    <div class="gameContainer" id="gameContainer">
+      <div class="game-container" id="imageContainer"></div>
+    </div>
+    <button id="startBtn" onclick="startGame()">Start Game</button>
+    <!-- <button onclick="restartGame()">End Game</button> -->
 
     <script src="app.js"></script>
   </body>
