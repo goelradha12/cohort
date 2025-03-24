@@ -1,0 +1,22 @@
+button {
+    padding:10px 20px;
+    border: none;
+    border-radius: 4px;
+    box-shadow: 1px 1px 5px 0 rgba(0, 0, 0, 0.412);
+    margin-inline: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease-in;
+}
+
+button:hover {
+    transform: scale(1.1);
+    opacity: 0.9;
+}
+
+input {
+    padding:10px;
+    border-radius: 100px;
+    border: 1px solid rgba(0, 0, 0, 0.412);
+    outline: none;
+    width: 300px;
+}

@@ -143,3 +143,12 @@
 - You can use any images, icons, or emojis for the cards.
 - Suggested 8 emojis for card pairs:
   🐶, 🐱, 🐭, 🐹, 🐰, 🦊, 🐻, 🐼.
+
+## Challenge 11: Using closure for a background Changer
+
+### User Input
+- Take user input as one color and create a button of that color only.
+
+### Button feature
+- Add event listener to those buttons
+- When button is clicked, background color of screen changes to that button color.
