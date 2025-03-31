@@ -116,10 +116,10 @@ function isMatched() {
 
 function updateImages() {
   let currImages = [...images];
-
+  let size = currImages.length;
   // making a span.card and adding 2 spans with card-back
   // and card front images, making absolute in styles
-  for (let i = 0; i < currImages.length; i++) {
+  for (let i = 0; i < size; i++) {
     let randomNum = Math.floor(Math.random() * currImages.length);
 
     let imageBox = document.createElement("div");
@@ -140,7 +140,7 @@ function updateImages() {
 
     imageContainer.append(imageBox);
 
-    currImages.splice(currImages.findIndex(elem => elem === currImages[randomNum]), 1);
+    currImages.splice(randomNum, 1);
   }
   console.log([...imageContainer.children].map(div => {
     return div.children[0].innerText
