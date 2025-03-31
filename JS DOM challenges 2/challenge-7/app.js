@@ -6,10 +6,10 @@ const handleHeaderClick = (e) => {
     let content = button.parentNode.children[1]; // Target the accordion content
 
     // Check if any other accordion is open and close it
-    if (!arrow.classList.contains("active")) {
-        let checkArrow = document.querySelector(".arrow.active");
+    if (!arrow.classList.contains("arrow-active")) {
+        let checkArrow = document.querySelector(".arrow-active");
         if (checkArrow && checkArrow !== arrow) {
-            checkArrow.classList.remove("active");
+            checkArrow.classList.remove("arrow-active");
         }
 
         let checkContent = document.querySelector(".active-accordion-content");
@@ -19,7 +19,7 @@ const handleHeaderClick = (e) => {
     }
 
     // Toggle active class
-    arrow.classList.toggle("active");
+    arrow.classList.toggle("arrow-active");
     content.classList.toggle("active-accordion-content");
 };
 
