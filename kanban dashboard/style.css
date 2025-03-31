@@ -1,0 +1,234 @@
+:root {
+    --clr-primary: #16537e;
+    --clr-secondary:#0b5394;
+    --clr-bg-light: #cee6fc;
+    --clr-white: #ffffff;
+}
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: "lato",'Arial Narrow', Arial, sans-serif;
+}
+
+body {
+    background-color: #f7fafe74;
+}
+.intro {
+    padding: 20px;
+    background-color: var(--clr-bg-light);
+    text-align: center;
+    margin-bottom: 40px;
+    color: var(--clr-secondary);
+}
+
+.buttons {
+    display: flex;
+    gap: 20px;
+}
+
+.buttons>* {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+#choices-main {
+    justify-content: end;
+    margin-inline: 10px;
+}
+
+.kanban-board {
+    margin: 10px;
+}
+
+.boards {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 40px; 
+    align-items: start;
+}
+
+.board {
+    display: grid;
+    gap: 10px;
+    width: 400px;
+    /* border: 1px solid; */
+    border-radius: 10px;
+    padding: 10px 10px;
+    background-color: var(--clr-white);
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+    position: relative;
+}
+
+.board-desc {
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--clr-bg-light);
+    padding-bottom: 15px;
+    font-weight: lighter;
+}
+
+.board-footer {
+    margin-top: 20px;
+    border-top: 1px solid var(--clr-bg-light);
+    padding-top: 20px;
+    padding-bottom: 10px;
+}
+
+.board-header-intro {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: bold;
+    font-size: 1.3rem;
+    color: var(--clr-primary);
+}
+
+.board-header, .board-footer {
+    display: flex;
+    justify-content: space-between;
+    
+}
+
+
+.board-control {
+    position: absolute;
+    right: -10px;
+    top: -15px;
+}
+
+.board-control-btn {
+    cursor: pointer;
+    border-radius: 100px;
+    padding: 3px;
+    margin: 5px;
+    border: none;
+    background-color: var(--clr-bg-light);
+}
+
+.board-control-btn:hover {
+    color: var(--clr-secondary);
+}
+
+.board-tasks {
+    display: grid;
+    gap: 20px;
+}
+
+.btn {
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: none;
+    background-color: var(--clr-primary);
+    color: var(--clr-white);
+    font-size: 1rem;
+    font-weight:normal;
+    cursor: pointer;
+}
+.btn:hover {
+    background-color: var(--clr-secondary);
+    transform: scale(1.02);
+}
+
+.task {
+    display: grid;
+    gap: 10px;
+    /* border: 1px solid var(--clr-secondary); */
+    border-radius: 5px;
+    box-shadow: rgba(26, 57, 211, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
+    background-color: #ebf2fc;
+}
+
+.task-header,
+.task-footer {
+    padding: 20px 15px;
+    display: flex;
+    justify-content: space-between;
+}
+.task-header {
+    background-color: var(--clr-bg-light);
+    cursor: move;
+    font-size: 1.2rem;
+}
+
+#isTaskComplete {
+    width: 20px;
+    background-color: var(--clr-bg-light);
+    border: 1px solid var(--clr-secondary);
+    cursor: pointer;
+}
+
+.task-content {
+    padding: 20px 15px;
+}
+
+.task-footer {
+    border-top: 1px solid var(--clr-bg-light);
+}
+
+.btn-task {
+    border: none;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    text-decoration: underline;
+    cursor: pointer;
+    background-color: transparent;
+}
+
+.btn-task:hover {
+    color: blue;
+}
+
+.modal {
+    padding: 40px;
+    position: fixed;
+    top: 50%;
+    right: 50%;
+    background-color: var(--clr-bg-light);
+    border-radius: 5px;
+    border: 1px solid var(--clr-primary);
+    min-width: 50%; 
+    transform: translateX(100vw)
+    translateY(-50%);
+    transition: transform 0.5s linear;
+}
+
+.modal-toggle {
+    
+    transform: translateX(50%) translateY(-50%);
+}
+
+.modal form {
+    display: grid;
+    gap: 20px;
+    font-size: 1.2rem;
+}
+
+.modal fieldset {
+    display: grid;
+    gap: 4px;
+    border: none;
+}
+
+.modal form option {
+    font-size: 1rem;
+    font-family: lato;
+}
+
+.modal form textarea, 
+.modal form select {
+    width: 100%;
+    border: none;
+    height: 40px;
+    padding: 10px;
+    border-radius: 4px;
+}
+
+.close-modal {
+    position: absolute;
+    top: 0;
+    right: 0;
+
+}

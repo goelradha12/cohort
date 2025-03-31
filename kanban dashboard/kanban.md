@@ -1,0 +1,21 @@
+- Multiple boards: One permanant board called "Drafts"
+- One board can have multiple tasks
+    - Edit and delete boards (name and color)
+
+- One task:
+    - Task content
+    - Edit
+    - Delete
+    - Board name that changes dynamically.
+    - Time when created
+    - Move within board
+    - Move around boards
+- Create task button:
+    - Task text
+    - Board name select options.
+    - A button saying "Add" or "Save Draft"
+- Save in local storage and render from there in starting of application
+- Create new Board button
+    - Add board name
+    - Add board color
+    - When created'

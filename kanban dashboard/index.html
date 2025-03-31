@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Kanban</title>
+    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet"/>
+</head>
+<body>
+    <div class="intro">
+        <h1>
+            Maintain your Tasks at One Place
+        </h1>
+    </div>
+    <div class="buttons" id="choices-main">
+        <button class="btn" id="create-task-btn">
+            <span class="material-symbols-outlined">
+                add_task
+            </span>
+            Create Task
+        </button>
+        <button class="btn" id="create-board-btn">
+            <span class="material-symbols-outlined">
+                add_card
+            </span>
+            Create Board
+        </button>
+    </div>
+    <div class="kanban-board">
+        <div class="boards">
+            <div class="board" data-name="draft 1">
+                <div class="board-header">
+                    <div class="board-header-intro">
+                        <span class="board-color material-symbols-outlined">
+                            circle
+                        </span>
+                        <span class="board-name">Draft 1</span>
+                    </div>
+                    <div class="board-control">
+                        <button class="board-control-btn">
+                            <span class="material-symbols-outlined">
+                                edit_note
+                            </span>
+                        </button>
+                        <button class="board-control-btn">
+                            <span class="material-symbols-outlined">
+                                close
+                            </span>
+                        </button>
+                    </div>
+                </div>
+                <div class="board-desc">
+                    This is a quick intro about my board.
+                </div>
+                <div class="board-tasks">
+                    <div class="task">
+                        <div class="task-header">
+                            <input type="checkbox" name="isComplete" id="isTaskComplete">
+                            <span class="board-name">Draft 1</span>
+                        </div>
+                        <div class="task-content">Do something today</div>
+                        <div class="task-footer">
+                            <div class="buttons">
+                                <button class="btn-task" id="edit-task-btn">Edit</button>
+                                <button class="btn-task" id="delete-task-btn">Delete</button>
+                            </div>
+                            <div class="task-create-time-div">
+                                Task Created:
+                                <span class="task-create-time">03:00</span>
+                            </div> 
+                        </div>
+                    </div>
+                    
+                </div>
+
+                <div class="board-footer">
+                    <span class="task-count-div">
+                        Total Tasks: 
+                        <span class="task-count">1</span>
+                    </span>
+                    <span class="board-create-time-div">
+                        Date Created:
+                        <span class="board-create-time">03:00</span>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal modal1">
+        <button data-modal="Task" class="board-control-btn">
+            <span class="close-modal material-symbols-outlined">
+                close
+            </span>
+        </button>
+        <form action="" id="taskForm">
+            <fieldset>
+                <label for="newTask">Enter the task: </label>
+                <textarea name="newTask" id="newTask"></textarea>
+            </fieldset>
+            <fieldset>
+                <label for="boardOptions">Select Board for the Task: </label>
+                <select name="boardOptions" default="Draft 1" id="boardOptions">
+                    <option value="Draft 1">Draft 1</option>
+                    <option value="Draft 2">Draft 2</option>
+                    <option value="Draft 3">Draft 3</option>
+                </select>
+            </fieldset>
+            <button class="btn" type="submit">Create Task</button>
+        </form>
+    </div>
+    <div class="modal modal2">
+        <button data-modal="Board" class="board-control-btn">
+            <span class="close-modal material-symbols-outlined">
+                close
+            </span>
+        </button>
+        <form action="" id="boardForm">
+            <fieldset>
+                <label for="newBoard">Board Name: </label>
+                <textarea required name="newBoard" id="newBoard"></textarea>
+            </fieldset>
+            <fieldset>
+                <label for="newBoardDesc">Board Description: </label>
+                <textarea required name="newBoardDesc" id="newBoardDesc"></textarea>
+            </fieldset>
+            <fieldset>
+                <label for="boardColorOptions">Select Board Color: </label>
+                <select name="boardColorOptions" default="#cee6fc" id="boardColorOptions">
+                    <option value="#F8ECD7">Antique beige</option>
+                    <option value="#F8D5C1">Desert sand</option>
+                    <option value="#EDD1E0">Mimi pink</option>
+                    <option value="#F0DEDE">Misty rose</option>
+                    <option value="#F1EFF0">Anti-flash white</option>
+                </select>
+            </fieldset>
+            <button id="submitBoard" class="btn" type="submit">Create Board</button>
+        </form>
+    </div>
+    <script src="./index.js"></script>
+</body>
+</html>
