@@ -21,7 +21,7 @@ function format(str)
 
 function updateDate() {
     let today = new Date();
-    dateDiv.innerText = `${today.getDate()}-${format(today.getMonth())}-${today.getFullYear()}`;
+    dateDiv.innerText = `${today.getDate()}-${format(today.getMonth())+1}-${today.getFullYear()}`;
 }
 
 function updateTime() {   
