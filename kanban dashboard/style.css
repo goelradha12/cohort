@@ -52,9 +52,11 @@ body {
 }
 
 .board {
+    min-width: 400px;
+    flex-grow: 1;
+    max-width: 500px;
     display: grid;
     gap: 10px;
-    width: 400px;
     /* border: 1px solid; */
     border-radius: 10px;
     padding: 10px 10px;
@@ -115,6 +117,9 @@ body {
 .board-tasks {
     display: grid;
     gap: 20px;
+    min-height: 400px;
+    align-items: start;
+    align-content: start;
 }
 
 .btn {
@@ -143,14 +148,13 @@ body {
 
 .task-header,
 .task-footer {
-    padding: 20px 15px;
+    padding: 10px 15px;
     display: flex;
     justify-content: space-between;
 }
 .task-header {
     background-color: var(--clr-bg-light);
     cursor: move;
-    font-size: 1.2rem;
 }
 
 #isTaskComplete {
@@ -161,7 +165,7 @@ body {
 }
 
 .task-content {
-    padding: 20px 15px;
+    padding: 5px 15px;
 }
 
 .task-footer {
@@ -226,7 +230,9 @@ body {
     border-radius: 4px;
 }
 
-.close-modal {
+.close-modal,
+.close-modal4,
+.close-modal3 {
     position: absolute;
     top: 0;
     right: 0;
