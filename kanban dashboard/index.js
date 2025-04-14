@@ -39,6 +39,10 @@ const closeModalBtns = [...document.querySelectorAll("[data-modal]")];
 createTaskButton.addEventListener("click",(e)=>{
     console.log(e.target);
 
+    // emptying text field
+    let taskNameField = document.querySelector("#taskForm #newTask");
+    taskNameField.value = "";
+    
     // update available board list first
     let boardList = document.querySelector("#boardOptions");
     boardList.innerHTML = "";
@@ -52,21 +56,26 @@ createTaskButton.addEventListener("click",(e)=>{
         boardList.prepend(newOption);
     })
 
-    // show up the modal
-    modalTask.classList.toggle("modal-toggle");
+    // show up the modal, if board exists else show alert
+    if(boardListName.length > 0)
+    modalTask.classList.add("modal-toggle");
+    else{
+        alert("Create A board first");
+    }
 })
+
 createBoardButton.addEventListener("click",(e)=>{
     // console.log(e.target);
-    modalBoard.classList.toggle("modal-toggle");
+    modalBoard.classList.add("modal-toggle");
 })
 
 closeModalBtns.forEach(btn=>{
     btn.addEventListener("click",()=>{
         let name = btn.getAttribute("data-modal");
         if(name=="Task")
-            modalTask.classList.toggle("modal-toggle");
+            modalTask.classList.remove("modal-toggle");
         else if(name=="Board")
-            modalBoard.classList.toggle("modal-toggle");
+            modalBoard.classList.remove("modal-toggle");
     })
 })
 // -------------Handling Modal Toggles Ends-------------
@@ -388,6 +397,7 @@ formForBoard.addEventListener("submit",(e)=>{
     
     let dateCreated = getADate();
     createNewBoard(boardName,boardColor,boardDescription,dateCreated);
+    modalBoard.classList.remove("modal-toggle");
 })
 formForTask.addEventListener("submit",(e)=>{
     e.preventDefault();
@@ -396,6 +406,7 @@ formForTask.addEventListener("submit",(e)=>{
     let dateCreated = getADate();
     let status = false;
     createNewTask(taskName,taskBoard,dateCreated,status);
+    modalTask.classList.remove("modal-toggle");
 })
 
 // ------------Forms Handling for New Board/Task Ends-------------
@@ -468,8 +479,12 @@ function displayLocalStorageHistory() {
 
     // console.table(JSON.parse(localStorage.getItem("myItems")));
     let myItems = JSON.parse(localStorage.getItem("myItems"));
-    // console.log(myItems);
-    if(!myItems) return;
+
+    if(myItems.length<=0) {
+        // boardsDiv.innerText = "Start by creating new boards."
+        // console.log("hello")
+        return;
+    };
     // create boards first
     myItems.forEach(board=>{
         createNewBoard(board.Name,board.color,board.Description,board.dateCreated,board.taskCount);
