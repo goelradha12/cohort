@@ -13,3 +13,5 @@ export const TaskStatusEnum = {
     IN_PROGRESS : "in-progress",
     DONE : "done",
 }
+
+export const AvailableTaskStatus = Object.values(TaskStatusEnum);
