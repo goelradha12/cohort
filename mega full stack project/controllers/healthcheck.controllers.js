@@ -1,9 +1,11 @@
 import {ApiResponse} from "../utils/api.response.js"
 
 const healthCheck = (req,res) => {
-    res.status(200).json(
-        new ApiResponse(200,{message: "Server Running"})
-    )
+    res.send("Server running")
+    // console.log("Reached")
+    // res.status(200).json(
+    //     new ApiResponse(200,{message: "Server Running"})
+    // )
 }
 
 export {healthCheck}
