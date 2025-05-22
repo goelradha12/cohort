@@ -92,6 +92,9 @@ const registerUser = async (req,res) => {
 const verifyUser = async (req,res)=>{
     // get token from user
     const {token} = req.params;
+
+    // try console log with req.params!!
+
     // validate
 
     if(!token)
