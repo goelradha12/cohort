@@ -1,12 +1,12 @@
 import Mailgen from "mailgen";
 import nodemailer from "nodemailer";
 
-const sendMail = async (options) => {
+export const sendMail = async (options) => {
   const mailGenerator = new Mailgen({
     theme: "default",
     product: {
       name: "Task Manager",
-      link: "",
+      link: "testlink",
     },
   });
   // Generate an HTML email with the provided contents
@@ -36,13 +36,12 @@ const sendMail = async (options) => {
 
 // a factory function that will return a body object
 
-const emailVerificationMailGenContent = (username, verificationURL) => {
+export const emailVerificationMailGenContent = (username, verificationURL, URLExpiry) => {
   return {
     body: {
       name: username,
-      intro: `Welcome to our task Manager User ${username}`,
+      intro: `Click on below link before ${URLExpiry} to verify your email: `,
       action: {
-        instruction: "Click on below link to verify your email: ",
         button: {
           color: "#22BC66", // optional
           text: "Confirm your account",

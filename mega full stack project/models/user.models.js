@@ -1,12 +1,12 @@
 import mongoose, { Schema } from "mongoose";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import crypto from "crypto"
 
 const userSchema = new Schema(
   {
     name: {
       type: String,
-      required: [true, "Name is Required"],
       trim: true,
     },
     avatar: {
@@ -42,13 +42,13 @@ const userSchema = new Schema(
     refreshToken: {
       type: String,
     },
-    forgotPasswordTOken: {
+    forgotPasswordToken: {
       type: String,
     },
     forgotPasswordExpiry: {
       type: Date,
     },
-    emailVerificationTOken: {
+    emailVerificationToken: {
       type: String,
     },
     emailVerificationExpiry: {
