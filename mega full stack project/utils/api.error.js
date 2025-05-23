@@ -9,7 +9,7 @@ class apiError extends Error {
         super (message)
         this.statusCode = statusCode;
         this.message = message;
-        this.success = statusCode>400;  // #dimag
+        this.success = statusCode<400;  // #dimag
         this.errors = errors;
         if(stack) {
             this.stack = stack;
