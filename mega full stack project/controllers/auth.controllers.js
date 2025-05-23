@@ -99,3 +99,53 @@ export const registerUser = asyncHandler(async function (req, res) {
   }
 
 });
+
+export const verifyMail = asyncHandler(async function(req,res){
+  // get token from URL
+  const {token} = req.params;
+
+  try {
+    // check if such token exists.
+    const user = await User.findOne({
+      emailVerificationToken: token
+    })
+  
+    if(!user)
+    {
+      throw new apiError(401, "Invalid Token");
+    }
+
+    // check if it's recieved on time or not
+    user.emailVerificationToken = undefined;
+    if(Date.now()<user.emailVerificationExpiry)
+    {
+      throw new apiError(401, "Time Out to verify your token");
+    }
+    // make user verified and send positive response
+    user.isEmailVerified = true;
+
+    await user.save();
+    res.status(200).json(
+      new apiResponse(
+        200,
+        {username: user.username, isVerified: user.isEmailVerified},
+        "User Verified")
+    )
+
+  } catch (error) {
+     console.log(error)
+     if (error instanceof apiError) {
+            return res.status(error.statusCode).json({
+                statusCode: error.statusCode,
+                message: error.message,
+                success: false,
+            })
+      }
+
+     return res.status(500).json({
+            statusCode: 500,
+            success: false,
+            message: "Something went wrong while verifying the user",
+        })
+  }
+});
