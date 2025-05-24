@@ -3,7 +3,7 @@ import { User } from "../models/user.models.js";
 import { apiError } from "../utils/api.error.js";
 import { apiResponse } from "../utils/api.response.js";
 import { emailVerificationMailGenContent, sendMail } from "../utils/mail.js";
-import bcrypt from "bcryptjs";
+
 
 export const registerUser = asyncHandler(async function (req, res) {
   // recieve name, email and password
@@ -29,7 +29,7 @@ export const registerUser = asyncHandler(async function (req, res) {
       throw new apiError(401,"Email already exists");
     }
 
-    console.log("here")
+    // console.log("here")
     const newUser = new User({
       username, 
       email,
@@ -51,7 +51,7 @@ export const registerUser = asyncHandler(async function (req, res) {
       newUser.emailVerificationToken = hashedToken;
       newUser.emailVerificationExpiry =  tokenExpiry;
   
-      console.log("----",newUser,"----");
+      // console.log("----",newUser,"----");
       await newUser.save();
   
       if (!newUser) {
@@ -175,7 +175,7 @@ export const loginUser = asyncHandler(async function(req,res) {
 
     // verify password
     const isPassCorrect = await user.isPasswordCorrect(password);
-    console.log(isPassCorrect);
+    // console.log(isPassCorrect);
     if(isPassCorrect) {
       // add access token in cookies
       const accessToken = user.generateAccessToken();
@@ -201,6 +201,63 @@ export const loginUser = asyncHandler(async function(req,res) {
     
   } 
   catch (error) {
+    console.log(error)
+    if (error instanceof apiError) {
+      return res.status(error.statusCode).json({
+          statusCode: error.statusCode,
+          message: error.message,
+          success: false,
+      })
+    }
+
+    return res.status(500).json({
+        statusCode: 500,
+        success: false,
+        message: "Something went wrong while logging the User",
+    })
+  }
+})
+
+export const changeCurrPassword = asyncHandler(async function(req,res) {
+  // goal: recieve username or email and update new pass from old
+  // recieve username|email and old password, new password
+  const {username, email, oldPassword, newPassword} = req.body;
+
+  try {
+    // if such username or email exists, 
+    let user = undefined;
+    if(email)
+    {
+      user = await User.findOne({email})
+    }
+    else if (username)
+    {
+      user = await User.findOne({username})
+    }
+    
+    if(!user)
+    {
+      throw new apiError(401,"Invalid Username Or Email")
+    }
+      
+    // verify oldPassword
+    const isCorrect = await user.isPasswordCorrect(oldPassword);
+
+    if(!isCorrect)
+    {
+      throw new apiError(401,"Wrong password")
+    }
+    // update new password in db and save
+    user.password = newPassword;
+
+    await user.save();
+    res.status(200).json(
+       new apiResponse(
+          200,
+          {username:user.username, email: user.email},
+          "Password changed Successfully")
+    )
+  } catch (error) {
     console.log(error)
     if (error instanceof apiError) {
       return res.status(error.statusCode).json({
