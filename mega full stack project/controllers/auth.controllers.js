@@ -39,7 +39,8 @@ export const registerUser = asyncHandler(async function (req, res) {
     
     // send email for verification
     let verificationURL = process.env.BASE_URL + "/api/v1/users/verifyMail/" + hashedToken;
-    const mailGenContent = emailVerificationMailGenContent(newUser.username, verificationURL, newUser.emailVerificationExpiry)
+    let expiryDateFormatted = new Date(tokenExpiry);
+    const mailGenContent = emailVerificationMailGenContent(newUser.username, verificationURL, expiryDateFormatted.toLocaleString())
     sendMail({
         email: newUser.email,
         subject: "Email Verification Link",
@@ -65,7 +66,7 @@ export const registerUser = asyncHandler(async function (req, res) {
         Email: newUser.email,
         Avatar: newUser.avatar,
         isVerified: newUser.isEmailVerified,
-        emailVerificationToken: newUser.emailVerificationToken
+        // emailVerificationToken: newUser.emailVerificationToken
       },
       "User Registered Successfully"
     ))
@@ -118,7 +119,7 @@ export const verifyMail = asyncHandler(async function(req,res){
 
     // check if it's recieved on time or not
     user.emailVerificationToken = undefined;
-    if(Date.now()<user.emailVerificationExpiry)
+    if(Date.now()>user.emailVerificationExpiry)
     {
       throw new apiError(401, "Time Out to verify your token");
     }
@@ -270,7 +271,91 @@ export const changeCurrPassword = asyncHandler(async function(req,res) {
     return res.status(500).json({
         statusCode: 500,
         success: false,
-        message: "Something went wrong while logging the User",
+        message: "Something went wrong",
+    })
+  }
+})
+
+export const resendVerificationEmail = asyncHandler(async function(req,res) {
+  // Goal: send a mail to user with refresh token if he/she is not verified
+  // ask for email/username and password
+  const {username, email, password} = req.body;
+
+  try {
+    // if such username or email exists, 
+    let user = undefined;
+    if(email)
+    {
+      user = await User.findOne({email})
+    }
+    else if (username)
+    {
+      user = await User.findOne({username})
+    }
+    
+    if(!user)
+    {
+      throw new apiError(401,"Invalid Username Or Email")
+    }
+      
+    // verify password
+    const isCorrect = await user.isPasswordCorrect(password);
+    console.log(isCorrect);
+    if(!isCorrect)
+    {
+      throw new apiError(401,"Wrong password")
+    }
+    // if user is valid check if already verified
+    if(user.isEmailVerified)
+    {
+      throw new apiError(401,"Email Already Verified")
+    }
+
+    // send verification mail to the user
+    const {hashedToken, tokenExpiry} = user.generateTemporaryToken();
+    
+    // send email for verification
+    let verificationURL = process.env.BASE_URL + "/api/v1/users/verifyMail/" + hashedToken;
+    let expiryDateFormatted = new Date(tokenExpiry)
+    const mailGenContent = emailVerificationMailGenContent(user.username, verificationURL, expiryDateFormatted.toLocaleString())
+    sendMail({
+      email: user.email,
+      subject: "Email Verification Link",
+      mailGenContent
+    })
+      
+    // add token to database 
+    user.emailVerificationToken = hashedToken;
+    user.emailVerificationExpiry =  tokenExpiry;
+    // save changes
+    await user.save();
+
+    // send positive response
+    res.status(200).json( 
+    new apiResponse(
+    200,
+    {
+      Username: user.username,
+      Email: user.email,
+      isVerified: user.isEmailVerified,
+      emailVerificationToken: user.emailVerificationToken
+    },
+    "Mail Sent Successfully"
+  ))
+  } catch(error) {
+    console.log(error)
+    if (error instanceof apiError) {
+      return res.status(error.statusCode).json({
+        statusCode: error.statusCode,
+        message: error.message,
+        success: false,
+      })
+    }
+
+    return res.status(500).json({
+      statusCode: 500,
+      success: false,
+      message: "Something went wrong",
     })
   }
 })

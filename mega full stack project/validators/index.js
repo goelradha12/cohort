@@ -60,3 +60,15 @@ export const userChangePasswordValidator = () => {
       .withMessage("Maximum 25 digits Allowed"),
   ]
 }
+
+export const resendVerificationEmailValidator = () => {
+  return [
+    body("email")
+      .trim(),
+    body("username")
+      .trim(),
+    body("password")
+      .trim()
+      .notEmpty()
+      .withMessage("Password is Required")
+]}
