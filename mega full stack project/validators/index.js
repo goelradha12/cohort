@@ -30,10 +30,10 @@ export const userLoginValidator = () => {
   return [
     body("email")
       .trim()
-      .notEmpty()
-      .withMessage("Email is Required")
       .isEmail()
       .withMessage("Email is Invalid"),
+    body("username")
+      .trim(),
     body("password")
       .notEmpty()
       .isLength({ min: 6 })

@@ -3,6 +3,7 @@ import { User } from "../models/user.models.js";
 import { apiError } from "../utils/api.error.js";
 import { apiResponse } from "../utils/api.response.js";
 import { emailVerificationMailGenContent, sendMail } from "../utils/mail.js";
+import bcrypt from "bcryptjs";
 
 export const registerUser = asyncHandler(async function (req, res) {
   // recieve name, email and password
@@ -149,3 +150,70 @@ export const verifyMail = asyncHandler(async function(req,res){
         })
   }
 });
+
+export const loginUser = asyncHandler(async function(req,res) {
+  // Goal: add a jwt token in cookies
+  // recieve (email || username) && password from user
+  const {email,username,password} = req.body;
+
+  try {
+    // check if exists in db
+    let user = undefined;
+    if(email)
+    {
+      user = await User.findOne({email})
+    }
+    else if (username)
+    {
+      user = await User.findOne({username})
+    }
+
+    if(!user)
+    {
+      throw new apiError(401,"Invalid Username Or Email")
+    }
+
+    // verify password
+    const isPassCorrect = await user.isPasswordCorrect(password);
+    console.log(isPassCorrect);
+    if(isPassCorrect) {
+      // add access token in cookies
+      const accessToken = user.generateAccessToken();
+      const cookieOptions =  {
+            httpOnly: true,
+            secure: true,
+            maxAge: 26*60*60*1000,
+        }
+      res.cookie("accessToken",accessToken,cookieOptions)
+      // add refresh token in database
+      user.refreshToken = user.generateRefreshToken();
+      await user.save();
+      res.status(200).json(
+        new apiResponse(
+          200,
+          {username:user.username, email: user.email, refreshToken: user.refreshToken},
+          "User logged in Successfully")
+      )
+    }
+    else {
+      throw new apiError(401,"Wrong password")
+    }
+    
+  } 
+  catch (error) {
+    console.log(error)
+    if (error instanceof apiError) {
+      return res.status(error.statusCode).json({
+          statusCode: error.statusCode,
+          message: error.message,
+          success: false,
+      })
+    }
+
+    return res.status(500).json({
+        statusCode: 500,
+        success: false,
+        message: "Something went wrong while logging the User",
+    })
+  }
+})
