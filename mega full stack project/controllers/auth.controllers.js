@@ -153,7 +153,7 @@ export const verifyMail = asyncHandler(async function(req,res){
 });
 
 export const loginUser = asyncHandler(async function(req,res) {
-  // Goal: add a jwt token in cookies
+  // Goal: add two jwt tokens (access and refresh) in cookies
   // recieve (email || username) && password from user
   const {email,username,password} = req.body;
 
@@ -180,14 +180,16 @@ export const loginUser = asyncHandler(async function(req,res) {
     if(isPassCorrect) {
       // add access token in cookies
       const accessToken = user.generateAccessToken();
+      const refreshToken = user.generateRefreshToken();
       const cookieOptions =  {
             httpOnly: true,
             secure: true,
-            maxAge: 26*60*60*1000,
+            maxAge: 24*60*60*1000,
         }
       res.cookie("accessToken",accessToken,cookieOptions)
+      res.cookie("refreshToken",refreshToken,cookieOptions)
       // add refresh token in database
-      user.refreshToken = user.generateRefreshToken();
+      user.refreshToken = refreshToken;
       await user.save();
       res.status(200).json(
         new apiResponse(
