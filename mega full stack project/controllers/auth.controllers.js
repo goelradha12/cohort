@@ -3,7 +3,7 @@ import { User } from "../models/user.models.js";
 import { apiError } from "../utils/api.error.js";
 import { apiResponse } from "../utils/api.response.js";
 import { emailVerificationMailGenContent, forgotPasswordMailGenContent, sendMail } from "../utils/mail.js";
-
+import jwt from "jsonwebtoken";
 
 export const registerUser = asyncHandler(async function (req, res) {
   // recieve name, email and password
@@ -519,6 +519,165 @@ export const getUser = asyncHandler(async function(req,res) {
     }
   } 
   catch (error) {
+    console.log(error)
+    if (error instanceof apiError) {
+      return res.status(error.statusCode).json({
+        statusCode: error.statusCode,
+        message: error.message,
+        success: false,
+      })
+    }
+
+    return res.status(500).json({
+      statusCode: 500,
+      success: false,
+      message: "Something went wrong",
+    })
+  }
+})
+
+
+export const updateUserProfile = asyncHandler(async function (req, res) {
+  // goal: user can edit {name, avatar} in its profile
+  // Make sure user is logged in(has access token) before giving the access
+
+  // get newName, newAvatar
+  const { newName, newAvatar } = req.body;
+  try {
+    if (req.user) {
+      const myUser = await User.findOne({ _id: req.user._id });
+      if (!myUser) throw new apiError(401, "No such User Exists");
+
+      myUser.name = newName;
+      myUser.avatar.url = newAvatar;
+      
+      await myUser.save();
+      res.status(200).json(
+        new apiResponse(
+          200,
+          {
+            name: myUser.name,
+            avatar: myUser.avatar.url,
+            username: myUser.username,
+            email: myUser.email,
+            isEmailVerified: myUser.isEmailVerified,
+          },
+          "User updated Successfully",
+        ),
+      );
+    } else {
+      throw new apiError(401, "Invalid Token");
+    }
+  } catch (error) {
+    console.log(error);
+    if (error instanceof apiError) {
+      return res.status(error.statusCode).json({
+        statusCode: error.statusCode,
+        message: error.message,
+        success: false,
+      });
+    }
+
+    return res.status(500).json({
+      statusCode: 500,
+      success: false,
+      message: "Something went wrong",
+    });
+  }
+});
+
+export const refreshAccessToken =  asyncHandler(async function(req,res) {
+  // goal: when user gets on this URL, give him new access token if valid
+  const {refreshToken} = req.cookies;
+  // console.log(refreshToken)
+  try {
+    let user;
+    if(refreshToken)
+    {
+      // get userData, and check for user in db
+      jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, userData) => {
+        if (err) {
+          return res.status(401).json(
+            new apiError(401,"Invalid Token",err)
+          );
+        }
+        user = userData;
+      });
+      // console.log(user)
+      const myUser = await User.findOne({_id: user._id})
+      if(!myUser)
+        throw new apiError(401, "Invalid Token");
+      const accessToken = user.generateAccessToken();
+      const cookieOptions =  {
+        httpOnly: true,
+        secure: true,
+        maxAge: 24*60*60*1000,
+      }
+      res.cookie("accessToken",accessToken,cookieOptions)
+
+      res.status(200).json(
+        new apiResponse(
+          200,
+          "Access Token Refreshed Successfully")
+      )
+    } else {
+      throw new apiError(401,"Login Required")
+    }
+    } 
+    catch(error) {
+      console.log(error)
+      if (error instanceof apiError) {
+        return res.status(error.statusCode).json({
+          statusCode: error.statusCode,
+          message: error.message,
+          success: false,
+        })
+      }
+
+      return res.status(500).json({
+        statusCode: 500,
+        success: false,
+        message: "Something went wrong",
+      })
+    }
+})
+  
+export const logOutUser = asyncHandler(async function(req,res) {
+  // if user is logged in (check for refresh token), 
+  // remove jwt tokens (refresh token) from db and cookies
+  const {refreshToken} = req.cookies;
+  // console.log(refreshToken)
+  try {
+    let user;
+    if(refreshToken)
+    {
+      // get userData, and check for user in db
+      jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, userData) => {
+        if (err) {
+          return res.status(401).json(
+            new apiError(401,"Invalid Token",err)
+          );
+        }
+        user = userData;
+      });
+      // console.log(user)
+      const myUser = await User.findOne({_id: user._id})
+      if(!myUser)
+        throw new apiError(401, "Invalid Token");
+
+      // user exists, removing tokens
+      delete res.cookie.refreshToken
+      delete res.cookie.accessToken
+      myUser.refreshToken = undefined;
+      await myUser.save();
+      return res.status(200).json(
+        new apiResponse(200,"Logged Out Successfully")
+      )
+    }
+    else {
+      throw new apiError(401,"Already Logged Out")
+    }
+  } catch (error) {
     console.log(error)
     if (error instanceof apiError) {
       return res.status(error.statusCode).json({
