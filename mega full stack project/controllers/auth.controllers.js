@@ -178,6 +178,12 @@ export const loginUser = asyncHandler(async function(req,res) {
     const isPassCorrect = await user.isPasswordCorrect(password);
     // console.log(isPassCorrect);
     if(isPassCorrect) {
+
+      // login only if verified
+      const isUserVerified = user.isEmailVerified;
+      if(!isUserVerified)
+        throw new apiError(401,"Verify Email Before Login")
+
       // add access token in cookies
       const accessToken = user.generateAccessToken();
       const refreshToken = user.generateRefreshToken();
@@ -486,4 +492,46 @@ export const resetPassword = asyncHandler(async function(req,res) {
       })
   }
 
+})
+
+export const getUser = asyncHandler(async function(req,res) {
+  // if user is logged in (access token is there), send user profile
+  try {
+    if(req.user)
+    {
+
+      const myUser = await User.findOne({_id: req.user._id}) 
+      if(!myUser)
+        throw new apiError(401, "No such User Exists")
+
+      res.status(200).json(
+        new apiResponse(200,{
+          name: myUser.name,
+          avatar: myUser.avatar.url,
+          username: myUser.username,
+          email: myUser.email,
+          isEmailVerified: myUser.isEmailVerified
+        },"User Profile Shared Successfully")
+      )
+    }
+    else {
+      throw new apiError(401,"Invalid User")
+    }
+  } 
+  catch (error) {
+    console.log(error)
+    if (error instanceof apiError) {
+      return res.status(error.statusCode).json({
+        statusCode: error.statusCode,
+        message: error.message,
+        success: false,
+      })
+    }
+
+    return res.status(500).json({
+      statusCode: 500,
+      success: false,
+      message: "Something went wrong",
+    })
+  }
 })
