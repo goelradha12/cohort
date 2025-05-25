@@ -2,7 +2,7 @@ import { asyncHandler } from "../utils/async-handler.js";
 import { User } from "../models/user.models.js";
 import { apiError } from "../utils/api.error.js";
 import { apiResponse } from "../utils/api.response.js";
-import { emailVerificationMailGenContent, sendMail } from "../utils/mail.js";
+import { emailVerificationMailGenContent, forgotPasswordMailGenContent, sendMail } from "../utils/mail.js";
 
 
 export const registerUser = asyncHandler(async function (req, res) {
@@ -358,4 +358,130 @@ export const resendVerificationEmail = asyncHandler(async function(req,res) {
       message: "Something went wrong",
     })
   }
+})
+
+export const forgotPasswordRequest = asyncHandler(async function(req,res) {
+  // Goal: send a mail to user with forgotPass token as param accepting their mail
+  const {email, username} = req.body;
+  try {
+    // if such username or email exists, 
+    let user = undefined;
+    if(email)
+    {
+      user = await User.findOne({email})
+    }
+    else if (username)
+    {
+      user = await User.findOne({username})
+    }
+    
+    if(!user)
+    {
+      throw new apiError(401,"Invalid Username Or Email")
+    }
+
+    // create a forgotPasswordToken
+    const {hashedToken, tokenExpiry} = user.generateTemporaryToken();
+    const formattedDate = new Date(tokenExpiry);
+    const resetPassLink = process.env.BASE_URL + "/api/v1/users/resetPassword/" + hashedToken;
+    
+    // send it to user in his/her mail
+    const mailGenContent = forgotPasswordMailGenContent(user.username,resetPassLink,formattedDate.toLocaleString())
+    sendMail({
+      email: user.email,
+      subject: "Reset Password Link",
+      mailGenContent
+    })
+
+    // save it in db 
+    user.forgotPasswordToken = hashedToken;
+    user.forgotPasswordExpiry = tokenExpiry;
+    await user.save();
+
+    // send success message
+    return res.status(200).json(
+      new apiResponse(
+        200,
+        {
+          username: user.username,
+          email: user.email,
+          forgotPasswordToken: user.forgotPasswordToken,
+        },
+        "Mail sent to Reset Your Password")
+    )
+  } catch (error) {
+    console.log(error)
+    if (error instanceof apiError) {
+      return res.status(error.statusCode).json({
+        statusCode: error.statusCode,
+        message: error.message,
+        success: false,
+      })
+    }
+
+    return res.status(500).json({
+      statusCode: 500,
+      success: false,
+      message: "Something went wrong",
+    })
+  }
+})
+
+export const resetPassword = asyncHandler(async function(req,res) {
+  // Goal: update password with : token and : password
+  const {token} = req.params;
+  const {newPassword} = req.body;
+
+  try {
+
+    // get user with token
+    const user = await User.findOne({
+      forgotPasswordToken: token
+    })
+    if(!user)
+    {
+      throw new apiError(401, "Invalid Token")
+    }
+    
+    // store expiry and remove from db
+    const expiry = user.forgotPasswordExpiry;
+    user.forgotPasswordExpiry = undefined;
+    user.forgotPasswordToken = undefined;
+
+    if(expiry < Date.now())
+      throw new apiError(401, "Request TimeOut")
+
+    user.password = newPassword;
+
+    await user.save();
+
+    // send positive response
+    res.status(200).json(
+      new apiResponse(
+         200,
+        {
+          username: user.username,
+          email: user.email,
+          forgotPasswordToken: user.forgotPasswordToken,
+        },
+        "Password Resetted Successfully"
+      )   
+    )
+  } catch (error) {
+     console.log(error)
+      if (error instanceof apiError) {
+        return res.status(error.statusCode).json({
+          statusCode: error.statusCode,
+          message: error.message,
+          success: false,
+        })
+      }
+
+      return res.status(500).json({
+        statusCode: 500,
+        success: false,
+        message: "Something went wrong",
+      })
+  }
+
 })

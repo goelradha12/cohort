@@ -54,6 +54,22 @@ export const emailVerificationMailGenContent = (username, verificationURL, URLEx
   };
 };
 
+export const forgotPasswordMailGenContent = (username, url, URLExpiry) => {
+  return {
+    body: {
+      name: username,
+      intro: `Click on the link to reset your password before ${URLExpiry}`,
+      action: {
+        button: {
+          color: "#22BC66", // optional
+          text: "Reset your Password",
+          link: url,
+        }
+      },
+      outro: "Not You? Someone might have mistakingly entered your mail. Please, Ignore the mail in such case."
+    }
+  }
+}
 // sendMail({
 //     email: User.email,
 //     subject: "aaa",
