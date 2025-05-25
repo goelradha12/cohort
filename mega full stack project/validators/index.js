@@ -72,3 +72,21 @@ export const resendVerificationEmailValidator = () => {
       .notEmpty()
       .withMessage("Password is Required")
 ]}
+
+export const forgotPasswordRequestValidator = () => {
+  return [
+    body("email")
+      .trim(),
+    body("username")
+      .trim(),
+  ]
+}
+
+export const resetPasswordValidator = () => {
+  return [
+    body("newPassword")
+    .trim()
+    .notEmpty()
+    .withMessage("Password is Required")
+  ]
+}
