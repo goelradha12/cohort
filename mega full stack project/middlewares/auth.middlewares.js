@@ -1,4 +1,5 @@
 import jwt from "jsonwebtoken";
+import { apiError } from "../utils/api.error.js";
 
 
 export const isLoggedIn = (req,res,next) => {
@@ -8,16 +9,21 @@ export const isLoggedIn = (req,res,next) => {
     if (token) {
         jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
             if (err) {
-                return res.status(401).json(
-                    new apiError(401,"Invalid Token",err)
-                );
+                return res.status(401).json({
+                    status: 401,
+                    message: "Invalid Token",
+                    error: err,
+                    success: false
+                });
             }
             req.user = decoded;
             next();
         });
     } else {
-        return res.status(401).json(
-            new apiError(401,"Invalid Data",err)
-        );
+        return res.status(401).json({
+            status: 401,
+            message: "User not logged in",
+            success: false
+        });
     }
 }
