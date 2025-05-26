@@ -543,7 +543,11 @@ export const updateUserProfile = asyncHandler(async function (req, res) {
 
   // get newName, newAvatar
   const { newName, newAvatar } = req.body;
+
   try {
+    if(!(newName || newAvatar))
+      throw new apiError(401, "No data recieved to update")
+    
     if (req.user) {
       const myUser = await User.findOne({ _id: req.user._id });
       if (!myUser) throw new apiError(401, "No such User Exists");
@@ -607,7 +611,7 @@ export const refreshAccessToken =  asyncHandler(async function(req,res) {
       const myUser = await User.findOne({_id: user._id})
       if(!myUser)
         throw new apiError(401, "Invalid Token");
-      const accessToken = user.generateAccessToken();
+      const accessToken = myUser.generateAccessToken();
       const cookieOptions =  {
         httpOnly: true,
         secure: true,
@@ -666,8 +670,9 @@ export const logOutUser = asyncHandler(async function(req,res) {
         throw new apiError(401, "Invalid Token");
 
       // user exists, removing tokens
-      delete res.cookie.refreshToken
-      delete res.cookie.accessToken
+      res.clearCookie('refreshToken')
+      res.clearCookie('accessToken')
+
       myUser.refreshToken = undefined;
       await myUser.save();
       return res.status(200).json(
