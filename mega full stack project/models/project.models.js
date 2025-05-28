@@ -1,4 +1,4 @@
-import { mongo, Schema } from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
 const projectSchema = new Schema({
   name: {
@@ -15,7 +15,7 @@ const projectSchema = new Schema({
     ref: "User",
     required: true,
   },
-});
+},{ timestamps: true });
 
 const Project = mongoose.model("Project", projectSchema);
 
