@@ -1,7 +1,5 @@
 // getProjects, createProject, deleteProject, 
-// getProjectByID, updateProject, addMemberToProject,
-// updateMember, getProjectMembers, updateMemberRole
-// deleteMember
+// getProjectByID, updateProject
 import { Project } from "../models/project.models.js";
 import { User } from "../models/user.models.js";
 import { apiError } from "../utils/api.error.js";
@@ -126,6 +124,96 @@ export const deleteProject = asyncHandler(async function (req,res) {
     res.status(200).json(
         new apiResponse(200,"Project deleted successfully")
     )
+    } catch (error) {
+    console.log(error)
+    if (error instanceof apiError) {
+        return res.status(error.statusCode).json({
+            statusCode: error.statusCode,
+            message: error.message,
+            success: false,
+        })
+    }
+
+    return res.status(500).json({
+        statusCode: 500,
+        success: false,
+        message: "Something went wrong",
+    })
+    }
+})
+
+export const getProjectByID = asyncHandler(async function (req,res) {
+    try {
+        const {id} = req.body;
+        
+        if(!id)
+            throw new apiError(401,"ID is required")
+
+        const myProject = await Project.findOne({
+            _id: id,
+            createdBy: req.user._id
+        })
+
+        if(!myProject)
+            throw new apiError(401, "No such proejct exists")
+
+        res.status(200).json(
+            new apiResponse(200,myProject,"Project shared successfully")
+        )
+    } catch (error) {
+    console.log(error)
+    if (error instanceof apiError) {
+        return res.status(error.statusCode).json({
+            statusCode: error.statusCode,
+            message: error.message,
+            success: false,
+        })
+    }
+
+    return res.status(500).json({
+        statusCode: 500,
+        success: false,
+        message: "Something went wrong",
+    })
+    }
+})
+
+export const updateProject = asyncHandler(async function (req,res) {
+    // goal: update name or description of the project
+    try {
+        // get data
+        const {name, newName, newDescription} = req.body;
+
+        // check if such project exists
+        if(!name)
+            throw new apiError(401,"Project name is required")
+        const myProject = await Project.findOne({
+            createdBy: req.user._id,
+            name})
+        if(!myProject)
+            throw new apiError(401,"No such project exists")
+        
+        // if asked for name, update it
+        if(newName)
+            myProject.name = newName
+
+        // if asked for desc update it
+        if(newDescription)
+            myProject.description = newDescription
+
+        // save and send response
+        await myProject.save()
+
+        res.status(200).json(
+            new apiResponse(
+                200,
+                {name: myProject.name,
+                description: myProject.description,
+                createdAt: myProject.createdAt,
+                updatedAt: myProject.updatedAt,},
+                "Project details updated successfully")
+        )
+        
     } catch (error) {
     console.log(error)
     if (error instanceof apiError) {
