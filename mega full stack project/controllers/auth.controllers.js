@@ -545,15 +545,17 @@ export const updateUserProfile = asyncHandler(async function (req, res) {
   const { newName, newAvatar } = req.body;
 
   try {
-    if(!(newName || newAvatar))
+    if(!(newName || req.file))
       throw new apiError(401, "No data recieved to update")
     
     if (req.user) {
       const myUser = await User.findOne({ _id: req.user._id });
       if (!myUser) throw new apiError(401, "No such User Exists");
 
+      if(newName)
       myUser.name = newName;
-      myUser.avatar.url = newAvatar;
+      if(req.file)
+      myUser.avatar.url = req.file.path;
       
       await myUser.save();
       res.status(200).json(
