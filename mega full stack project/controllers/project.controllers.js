@@ -105,3 +105,41 @@ export const createProject = asyncHandler(async function (req,res) {
     })
     }
 })
+
+export const deleteProject = asyncHandler(async function (req,res) {
+    // Goal: delete a project by it's name
+    try {
+    const {name} = req.body;
+
+    if(!name)
+        throw new apiError(401,"Name required to delete a Project")
+    const myProject = await Project.findOne({
+        createdBy: req.user._id,
+        name,
+    })
+
+    if(!myProject)
+        throw new apiError(401,"No such project exists")
+    
+    await Project.deleteOne({_id: myProject._id})
+
+    res.status(200).json(
+        new apiResponse(200,"Project deleted successfully")
+    )
+    } catch (error) {
+    console.log(error)
+    if (error instanceof apiError) {
+        return res.status(error.statusCode).json({
+            statusCode: error.statusCode,
+            message: error.message,
+            success: false,
+        })
+    }
+
+    return res.status(500).json({
+        statusCode: 500,
+        success: false,
+        message: "Something went wrong",
+    })
+    }
+})
