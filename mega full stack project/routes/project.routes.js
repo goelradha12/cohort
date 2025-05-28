@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { isLoggedIn } from "../middlewares/auth.middlewares.js";
-import { createProject, getProjects } from "../controllers/project.controllers.js";
+import { createProject, deleteProject, getProjects } from "../controllers/project.controllers.js";
 import { validate } from "../middlewares/validator.middleware.js";
 import { createProjectValidator } from "../validators/index.js";
 
@@ -10,6 +10,7 @@ router.route("/").get((req,res)=>{
     return res.status(200).json({success: true})
 })
 
-router.route("/getProjects").get(isLoggedIn,getProjects)
 router.route("/createProject").post(isLoggedIn,createProjectValidator(),validate,createProject)
+router.route("/getProjects").get(isLoggedIn,getProjects)
+router.route("/deleteProject").post(isLoggedIn,deleteProject)
 export default router;
