@@ -90,3 +90,12 @@ export const resetPasswordValidator = () => {
     .withMessage("Password is Required")
   ]
 }
+
+export const createProjectValidator = () => {
+  return [
+    body("name")
+    .trim()
+    .notEmpty()
+    .withMessage("Project name is Required")
+  ]
+}
