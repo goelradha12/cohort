@@ -1,32 +1,26 @@
 // getProjects, createProject, deleteProject, 
 // getProjectByID, updateProject
 import { Project } from "../models/project.models.js";
-import { User } from "../models/user.models.js";
+import { ProjectMember } from "../models/projectmember.models.js";
 import { apiError } from "../utils/api.error.js";
 import { apiResponse } from "../utils/api.response.js";
 import { asyncHandler } from "../utils/async-handler.js";
+import { UserRolesEnum } from "../utils/constants.js";
 
 export const getProjects = asyncHandler(async function (req,res) {
 
     // Goal: A user can see all his projects
-    // 1. If user exists, find userID in db
-    const userID = req.user._id;
-    // console.log(userID)
     try {
-        if(!userID)
-        {
-            throw new apiError(401,"User doesn't Exists");
-        }
-        const myUser = await User.findOne({_id: userID})
-        if(!myUser)
-            throw new apiError(401,"User doesn't Exists");
-        
+        // 1. If user exists, find userID in db
+        const myUser = req.user;
+        // console.log(myUser)
         // 2. Find all the project from that userID
         let data = await Project.find({createdBy: myUser._id}).sort({updatedAt:-1});
 
         data = data.map((project,i)=>{
             return {
-                id: i,
+                key: i,
+                _id: project._id,
                 name: project.name,
                 description: project.description,
                 createdAt: project.createdAt,
@@ -57,7 +51,7 @@ export const getProjects = asyncHandler(async function (req,res) {
 })
 
 export const createProject = asyncHandler(async function (req,res) {
-    // goal: create a new project
+    // goal: create a new project, save user as admin in projectmember schema
     try {
         
         // 1. get the data
@@ -80,6 +74,15 @@ export const createProject = asyncHandler(async function (req,res) {
             newProject.description = description;
 
         await newProject.save();
+
+        // create a entry in projectmember
+        const newProjectMember = new ProjectMember({
+            user: userID,
+            project: newProject._id,
+            role: UserRolesEnum.ADMIN
+        })
+
+        await newProjectMember.save();
 
         // 4. Send response
         res.status(200).json(
@@ -107,13 +110,12 @@ export const createProject = asyncHandler(async function (req,res) {
 export const deleteProject = asyncHandler(async function (req,res) {
     // Goal: delete a project by it's name
     try {
-    const {name} = req.body;
+    const projectID = new mongoose.Types.ObjectId(`${req.params.projectID}`);
 
-    if(!name)
-        throw new apiError(401,"Name required to delete a Project")
+    if(!projectID)
+        throw new apiError(401,"ProjectID is required")
     const myProject = await Project.findOne({
-        createdBy: req.user._id,
-        name,
+        _id: projectID
     })
 
     if(!myProject)
@@ -144,13 +146,13 @@ export const deleteProject = asyncHandler(async function (req,res) {
 
 export const getProjectByID = asyncHandler(async function (req,res) {
     try {
-        const {id} = req.body;
+        const {projectID} = req.params;
         
-        if(!id)
-            throw new apiError(401,"ID is required")
+        if(!projectID)
+            throw new apiError(401,"projectID is required")
 
         const myProject = await Project.findOne({
-            _id: id,
+            _id: projectID,
             createdBy: req.user._id
         })
 
@@ -182,14 +184,14 @@ export const updateProject = asyncHandler(async function (req,res) {
     // goal: update name or description of the project
     try {
         // get data
-        const {name, newName, newDescription} = req.body;
+        const {newName, newDescription} = req.body;
+        const projectID = new mongoose.Types.ObjectId(`${req.params.projectID}`);
 
         // check if such project exists
-        if(!name)
-            throw new apiError(401,"Project name is required")
+        if(!projectID)
+            throw new apiError(401,"projectID is required")
         const myProject = await Project.findOne({
-            createdBy: req.user._id,
-            name})
+            _id: projectID})
         if(!myProject)
             throw new apiError(401,"No such project exists")
         
