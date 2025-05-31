@@ -6,6 +6,7 @@ export const isLoggedIn = (req,res,next) => {
     // send next() only if valid access token
 
     const token = req.cookies.accessToken;
+    // console.log(token);
     if (token) {
         jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
             if (err) {
