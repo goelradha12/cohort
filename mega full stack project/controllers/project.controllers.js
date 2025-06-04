@@ -1,5 +1,6 @@
 // getProjects, createProject, deleteProject, 
 // getProjectByID, updateProject
+import mongoose from "mongoose";
 import { Project } from "../models/project.models.js";
 import { ProjectMember } from "../models/projectmember.models.js";
 import { apiError } from "../utils/api.error.js";
@@ -15,18 +16,10 @@ export const getProjects = asyncHandler(async function (req,res) {
         const myUser = req.user;
         // console.log(myUser)
         // 2. Find all the project from that userID
-        let data = await Project.find({createdBy: myUser._id}).sort({updatedAt:-1});
-
-        data = data.map((project,i)=>{
-            return {
-                key: i,
-                _id: project._id,
-                name: project.name,
-                description: project.description,
-                createdAt: project.createdAt,
-                updatedAt: project.updatedAt,
-            }
-        })
+        let data = await ProjectMember.find({user: myUser._id})
+                            .populate("project","_id name description createdAt updatedAt")
+        
+    
         // 3. Send that json Data
         res.status(200).json(
             new apiResponse(200,data,"Projects sent successfully")
@@ -151,10 +144,7 @@ export const getProjectByID = asyncHandler(async function (req,res) {
         if(!projectID)
             throw new apiError(401,"projectID is required")
 
-        const myProject = await Project.findOne({
-            _id: projectID,
-            createdBy: req.user._id
-        })
+        const myProject = await Project.findById(new mongoose.Types.ObjectId(`${projectID}`))
 
         if(!myProject)
             throw new apiError(401, "No such proejct exists")

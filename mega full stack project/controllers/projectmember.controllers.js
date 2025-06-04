@@ -52,12 +52,16 @@ export const getProjectMembers = asyncHandler(async function (req, res) {
     const { projectID } = req.params;
 
     let memberList = await ProjectMember.find({ project: projectID })
+                      .populate("user","name avatar username")
 
     let data = memberList.map((member, i) => {
       return {
         key: i,
         memberId: member._id,
         userId: member.user,
+        userName: member.name,
+        userAvatar: member.avatar,
+        userUsername: member.username,
         projectId: member.project,
         role: member.role
       }
