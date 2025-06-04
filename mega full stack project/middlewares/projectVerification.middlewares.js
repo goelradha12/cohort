@@ -51,15 +51,15 @@ export const verifyProjectAccess = (roles = []) => asyncHandler(async (req, res,
     // Goal: take an array of roles and verify if the user
     // has a role (mentioned in array) for the project
     try {
-        const projectID = new mongoose.Types.ObjectId(`${req.params.projectID}`);
-        console.log(projectID)
-        if (!projectID)
+        const project = req.params.projectID;
+        if (!project)
             throw new apiError(401, "ProjectID is required")
+        const projectID = new mongoose.Types.ObjectId(`${project}`);
         // get role from userID and projectID
         const UserRole = await ProjectMember.findOne({
-            user: req.user._id,
+            user:  req.user._id,
             project: projectID
-        }).select(['role'])
+        })
 
         if(!UserRole)
             throw new apiError(401,"Access Denied")
@@ -69,7 +69,6 @@ export const verifyProjectAccess = (roles = []) => asyncHandler(async (req, res,
         console.log(isVerfied)
         if (isVerfied)
         {
-            console.log("verified")
             next();
         }
         else
@@ -94,7 +93,7 @@ export const verifyProjectAccess = (roles = []) => asyncHandler(async (req, res,
 
 export const verifyMember = asyncHandler(async (req,res,next) => {
     // Goal: take memberID from params and check if it is valid member
-    const {memberID,projectID} = req.params;
+    const memberID = new mongoose.Types.ObjectId(`${req.params.memberID}`);
     try {
         
         const myMember = ProjectMember.findById(memberID);
