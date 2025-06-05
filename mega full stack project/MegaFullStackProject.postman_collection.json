@@ -1,0 +1,4682 @@
+{
+	"info": {
+		"_postman_id": "a5e46813-dbe0-4add-8ff9-4d4f16833203",
+		"name": "MegaFullStackProject",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "43908400"
+	},
+	"item": [
+		{
+			"name": "User Auth Routes",
+			"item": [
+				{
+					"name": "update profile",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "newName",
+									"value": "User 1",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/v1/users/updateProfile/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"updateProfile",
+								""
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "response",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "newName",
+											"value": "User 1",
+											"type": "text"
+										}
+									],
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3000/api/v1/users/updateProfile/",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"v1",
+										"users",
+										"updateProfile",
+										""
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "http://localhost:3000"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "225"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"e1-x1/keI1o9TvibTVmJYHGeyEq6jE\""
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 28 May 2025 09:13:06 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 200,\n    \"data\": {\n        \"name\": \"User 1\",\n        \"avatar\": \"public\\\\images\\\\avatar-683418c2dd70da5172e4d708\",\n        \"username\": \"test17\",\n        \"email\": \"test17@gmail.com\",\n        \"isEmailVerified\": true\n    },\n    \"message\": \"User updated Successfully\",\n    \"success\": true\n}"
+						}
+					]
+				},
+				{
+					"name": "registerUser apiResponse",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"test14\",\r\n    \"email\": \"test14@gmail.com\",\r\n    \"password\": \"123456\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/v1/users/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "emailVerification",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/v1/users/verifyMail/0044956b0ec557196aab132e651a2ac7f237c99113573413f3f9e0f9816abe34",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"verifyMail",
+								"0044956b0ec557196aab132e651a2ac7f237c99113573413f3f9e0f9816abe34"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login with email/username",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"test11@gmail.com\",\r\n    \"password\": \"123456\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/v1/users/login/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"login",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getUserProfile",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"test11\",\r\n    \"password\": \"1234567\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/v1/users/getProfile/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"getProfile",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login with wrong password",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"test11\",\r\n    \"password\": \"1234564\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/v1/users/login/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"login",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "user logout",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/v1/users/logout",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"logout"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "change password",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"test11\",\r\n    \"oldPassword\": \"123456\",\r\n    \"newPassword\": \"1234567\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/v1/users/changePassword/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"changePassword",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "change password with email",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"test11@gmail.com\",\r\n    \"oldPassword\": \"123456\",\r\n    \"newPassword\": \"1234567\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/v1/users/changePassword/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"changePassword",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "resend verification email",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"test2@gmail.com\",\r\n    \"password\": \"123456\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/v1/users/resendVerificationEmail/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"resendVerificationEmail",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "resend verification with username",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"test3\",\r\n    \"password\": \"123456\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/v1/users/resendVerificationEmail/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"resendVerificationEmail",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "forgot password email/username",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"test2@gmail.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/v1/users/forgotPassword/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"forgotPassword",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "reset password",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"newPassword\": \"123456\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/v1/users/resetPassword/e434c709be9182fe3aecc4063338f4a82f4fdafcc71848128f68a519ed4abacb",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"resetPassword",
+								"e434c709be9182fe3aecc4063338f4a82f4fdafcc71848128f68a519ed4abacb"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update Profile",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"newName\": \"Suresh\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/v1/users/updateProfile/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"updateProfile",
+								""
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "response",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"newName\": \"Suresh\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3000/api/v1/users/updateProfile/",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"v1",
+										"users",
+										"updateProfile",
+										""
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "http://localhost:3000"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "166"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"a6-DFJqeCFB1w4ned/3EE4Rw4vRBVI\""
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 26 May 2025 05:57:01 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 200,\n    \"data\": {\n        \"name\": \"Suresh\",\n        \"username\": \"test11\",\n        \"email\": \"test11@gmail.com\",\n        \"isEmailVerified\": true\n    },\n    \"message\": \"User updated Successfully\",\n    \"success\": true\n}"
+						}
+					]
+				},
+				{
+					"name": "refresh access token Copy",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/v1/users/refreshAccessToken/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"refreshAccessToken",
+								""
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3000/api/v1/users/refreshAccessToken/",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"v1",
+										"users",
+										"refreshAccessToken",
+										""
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "http://localhost:3000"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Set-Cookie",
+									"value": "accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2ODMwYjM3MTYyYTIwYTkxN2JkN2Q0NmUiLCJlbWFpbCI6InRlc3QxMUBnbWFpbC5jb20iLCJ1c2VybmFtZSI6InRlc3QxMSIsImlhdCI6MTc0ODIzOTUxMywiZXhwIjoxNzQ4ODM5NTEzfQ.3YdLiCrYBGQxWlFWapM7AZ2nlsi1uJrzrCHV8Ed0PSM; Max-Age=86400; Path=/; Expires=Tue, 27 May 2025 06:05:13 GMT; HttpOnly; Secure"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "98"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"62-K6gGPTXFS3uT3Qhz+8021JefGcg\""
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 26 May 2025 06:05:13 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 200,\n    \"data\": \"Access Token Refreshed Successfully\",\n    \"message\": \"Success\",\n    \"success\": true\n}"
+						}
+					]
+				}
+			],
+			"description": "# Saves all the authentication routes:\n\n/api/v1/users\n\n| **Route** | **Request Type** | **Goal** | **Data Accepted** | **Response** |\n| --- | --- | --- | --- | --- |\n| /register | POST | Register a new user | username  <br>email  <br>password | Send mail to user for emailVerification and register user. |\n| /verifyMail/:token | GET | Verify entered email | \\- |  |\n| /login | POST | Login a verified user | email/username  <br>password | Add 2 tokens in cookies: access + refresh token |\n| /changePassword | POST | Change old password to new | username/email  <br>oldPassword  <br>newPassword |  |\n| /resendVerificationEmail | POST | Send email to user with new verifyEmail token | email/username  <br>password |  |\n| /forgotPassword | POST | Send mail (to verify user mail) to user to reset password | email/username | Send mail to user with reset password link |\n| /resetPassword/:token | POST | Save new password to db | newPassword |  |\n| /getProfile | GET | if user is loggedIn | \\- |  |\n| /logout | GET | Remove refresh and access token | \\- |  |\n| /refreshAccessToken | GET | Get new access Token from refresh token | \\- | new access token |\n| /updateProfile | POST | Update avatarUrl/ name of user | avatar/name |  |"
+		},
+		{
+			"name": "Project Routes",
+			"item": [
+				{
+					"name": "update project",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"newDescription\": \"One day we will do it for sure.\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/project/6839b1e7098781e371f11f0b/update",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"project",
+								"6839b1e7098781e371f11f0b",
+								"update"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "response",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"newDescription\": \"One day we will do it for sure.\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3000/project/6839b1e7098781e371f11f0b/update",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"project",
+										"6839b1e7098781e371f11f0b",
+										"update"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "http://localhost:3000"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "255"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"ff-PVAinDGS5TlDNoSP8/nVBv6pzwk\""
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 30 May 2025 13:47:53 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 200,\n    \"data\": {\n        \"name\": \"Code Mega Full Stack Project\",\n        \"description\": \"One day we will do it for sure.\",\n        \"createdAt\": \"2025-05-30T13:25:59.303Z\",\n        \"updatedAt\": \"2025-05-30T13:47:53.337Z\"\n    },\n    \"message\": \"Project details updated successfully\",\n    \"success\": true\n}"
+						}
+					]
+				},
+				{
+					"name": "get project by ID",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/project/6839b1e7098781e371f11f0b",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"project",
+								"6839b1e7098781e371f11f0b"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3000/project/6839b1e7098781e371f11f0b",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"project",
+										"6839b1e7098781e371f11f0b"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "http://localhost:3000"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "355"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"163-smnJ+tiaFPGXnsEcAbShhrSM3cE\""
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 30 May 2025 13:40:22 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 200,\n    \"data\": {\n        \"_id\": \"6839b1e7098781e371f11f0b\",\n        \"name\": \"Code Mega Full Stack Project\",\n        \"description\": \"This is a dream, but it's okay, let's take it one at a time.\",\n        \"createdBy\": \"6830b37162a20a917bd7d46e\",\n        \"createdAt\": \"2025-05-30T13:25:59.303Z\",\n        \"updatedAt\": \"2025-05-30T13:25:59.303Z\",\n        \"__v\": 0\n    },\n    \"message\": \"Project shared successfully\",\n    \"success\": true\n}"
+						}
+					]
+				},
+				{
+					"name": "delete project",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/project/683a7e48105fc42b233a9b12/delete",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"project",
+								"683a7e48105fc42b233a9b12",
+								"delete"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3000/project/683a7e48105fc42b233a9b12/delete",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"project",
+										"683a7e48105fc42b233a9b12",
+										"delete"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "http://localhost:3000"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "91"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"5b-+MbRGI6CLy4gjbYHTQXyoxae5Uo\""
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 31 May 2025 04:25:12 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 200,\n    \"data\": \"Project deleted successfully\",\n    \"message\": \"Success\",\n    \"success\": true\n}"
+						}
+					]
+				},
+				{
+					"name": "get Projects",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "// {\r\n//     \"name\": \"Code Mega Full Stack Project\",\r\n//     \"description\": \"This is a dream, but it's okay, let's take it one at a time.\"\r\n// }\r\n \r\n// http://localhost:3000/api/v1/users/login/\r\n// {\r\n//     \"email\": \"test11@gmail.com\",\r\n//     \"password\": \"1234567\"\r\n// }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/project/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"project",
+								""
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "// {\r\n//     \"name\": \"Code Mega Full Stack Project\",\r\n//     \"description\": \"This is a dream, but it's okay, let's take it one at a time.\"\r\n// }\r\n \r\n// http://localhost:3000/api/v1/users/login/\r\n// {\r\n//     \"email\": \"test11@gmail.com\",\r\n//     \"password\": \"1234567\"\r\n// }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3000/project/",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"project",
+										""
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "http://localhost:3000"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "573"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"23d-IHFokpL4qQ5b186Pk9AFvV+njVE\""
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 31 May 2025 03:07:32 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 200,\n    \"data\": [\n        {\n            \"key\": 0,\n            \"_id\": \"6839b1b9098781e371f11f00\",\n            \"name\": \"Code Mega Full Stack Project frontend\",\n            \"description\": \"This is a dream, but it's okay, let's take it one at a time.\",\n            \"createdAt\": \"2025-05-30T13:25:13.139Z\",\n            \"updatedAt\": \"2025-05-30T13:25:13.139Z\"\n        },\n        {\n            \"key\": 1,\n            \"_id\": \"6836e7621c4ed82916d50bb4\",\n            \"name\": \"Code Mega Full Stack Project Backend\",\n            \"description\": \"Backlog is covering up with time and it's getting exciting now!\",\n            \"createdAt\": \"2025-05-28T10:37:22.318Z\",\n            \"updatedAt\": \"2025-05-28T13:16:46.691Z\"\n        }\n    ],\n    \"message\": \"Projects sent successfully\",\n    \"success\": true\n}"
+						}
+					]
+				},
+				{
+					"name": "create Project",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Code Mega Full Stack Project\",\r\n    \"description\": \"This is a dream, but it's okay, let's take it one at a time.\"\r\n}\r\n\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/project/createProject",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"project",
+								"createProject"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "response",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"Code Mega Full Stack Project\",\r\n    \"description\": \"This is a dream, but it's okay, let's take it one at a time.\"\r\n}\r\n\r\n// http://localhost:3000/api/v1/users/login/\r\n// {\r\n//     \"email\": \"test11@gmail.com\",\r\n//     \"password\": \"1234567\"\r\n// }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3000/project/createProject",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"project",
+										"createProject"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "http://localhost:3000"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "354"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"162-LhBw2tVZCD4sc5loq7XWgWvCgc8\""
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 30 May 2025 13:25:59 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 200,\n    \"data\": {\n        \"name\": \"Code Mega Full Stack Project\",\n        \"description\": \"This is a dream, but it's okay, let's take it one at a time.\",\n        \"createdBy\": \"6830b37162a20a917bd7d46e\",\n        \"_id\": \"6839b1e7098781e371f11f0b\",\n        \"createdAt\": \"2025-05-30T13:25:59.303Z\",\n        \"updatedAt\": \"2025-05-30T13:25:59.303Z\",\n        \"__v\": 0\n    },\n    \"message\": \"Project added successfully\",\n    \"success\": true\n}"
+						}
+					]
+				}
+			],
+			"description": "User login is required first before working on any routes in this route.\n\nhttp://localhost:3000/api/v1/users/login\n\n{ \"email\": \"test11@gmail.com\",   \"password\": \"1234567\" }"
+		},
+		{
+			"name": "Project/Member Routes",
+			"item": [
+				{
+					"name": "New Request",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"newUserID\": \"683418c2dd70da5172e4d708\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/project/683b071c03e69f4317a14aba/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"project",
+								"683b071c03e69f4317a14aba",
+								""
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "response",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"newUserID\": \"683418c2dd70da5172e4d708\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3000/project/683b071c03e69f4317a14aba/683b071c03e69f4317a14abc/updateMember",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"project",
+										"683b071c03e69f4317a14aba",
+										"683b071c03e69f4317a14abc",
+										"updateMember"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "http://localhost:3000"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "209"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"d1-xEPdNNropK+FyHSnUzMDC/0Bis0\""
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 31 May 2025 14:00:24 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 200,\n    \"data\": {\n        \"_id\": \"683b071c03e69f4317a14abc\",\n        \"user\": \"683418c2dd70da5172e4d708\",\n        \"project\": \"683b071c03e69f4317a14aba\",\n        \"role\": \"admin\",\n        \"__v\": 0\n    },\n    \"message\": \"Member updated successfully\",\n    \"success\": true\n}"
+						}
+					]
+				},
+				{
+					"name": "updateMember",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"newUserID\": \"683418c2dd70da5172e4d708\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/project/683b071c03e69f4317a14aba/m/683b071c03e69f4317a14abc/updateMember",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"project",
+								"683b071c03e69f4317a14aba",
+								"m",
+								"683b071c03e69f4317a14abc",
+								"updateMember"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "response",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"newUserID\": \"683418c2dd70da5172e4d708\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3000/project/683b071c03e69f4317a14aba/683b071c03e69f4317a14abc/updateMember",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"project",
+										"683b071c03e69f4317a14aba",
+										"683b071c03e69f4317a14abc",
+										"updateMember"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "http://localhost:3000"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "209"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"d1-xEPdNNropK+FyHSnUzMDC/0Bis0\""
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 31 May 2025 14:00:24 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 200,\n    \"data\": {\n        \"_id\": \"683b071c03e69f4317a14abc\",\n        \"user\": \"683418c2dd70da5172e4d708\",\n        \"project\": \"683b071c03e69f4317a14aba\",\n        \"role\": \"admin\",\n        \"__v\": 0\n    },\n    \"message\": \"Member updated successfully\",\n    \"success\": true\n}"
+						}
+					]
+				},
+				{
+					"name": "updateMemberRole",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"newRole\": \"admin\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/project/683b071c03e69f4317a14aba/m/683b071c03e69f4317a14abc/updateMemberRole",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"project",
+								"683b071c03e69f4317a14aba",
+								"m",
+								"683b071c03e69f4317a14abc",
+								"updateMemberRole"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "response",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"newRole\": \"admin\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3000/project/683b071c03e69f4317a14aba/683b071c03e69f4317a14abc/updateMemberRole",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"project",
+										"683b071c03e69f4317a14aba",
+										"683b071c03e69f4317a14abc",
+										"updateMemberRole"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "http://localhost:3000"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "209"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"d1-JQ9Rh56Yq+fCKs0gn+wMKfu+6GQ\""
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 31 May 2025 13:56:23 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 200,\n    \"data\": {\n        \"_id\": \"683b071c03e69f4317a14abc\",\n        \"user\": \"6830b37162a20a917bd7d46e\",\n        \"project\": \"683b071c03e69f4317a14aba\",\n        \"role\": \"admin\",\n        \"__v\": 0\n    },\n    \"message\": \"Member updated successfully\",\n    \"success\": true\n}"
+						}
+					]
+				},
+				{
+					"name": "get member by ID",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/project/683b071c03e69f4317a14aba/m/683b071c03e69f4317a14abc",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"project",
+								"683b071c03e69f4317a14aba",
+								"m",
+								"683b071c03e69f4317a14abc"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3000/project/683b071c03e69f4317a14aba/683b071c03e69f4317a14abc",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"project",
+										"683b071c03e69f4317a14aba",
+										"683b071c03e69f4317a14abc"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "http://localhost:3000"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "208"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"d0-oQVV+rumdPPXx+s9UXxmp76X1II\""
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 31 May 2025 13:51:50 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 200,\n    \"data\": {\n        \"_id\": \"683b071c03e69f4317a14abc\",\n        \"user\": \"6830b37162a20a917bd7d46e\",\n        \"project\": \"683b071c03e69f4317a14aba\",\n        \"role\": \"admin\",\n        \"__v\": 0\n    },\n    \"message\": \"Member shared successfully\",\n    \"success\": true\n}"
+						}
+					]
+				},
+				{
+					"name": "get members",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": [
+						{
+							"name": "response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3000/project/683d5597454d27834578db1b/getMembers",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"project",
+										"683d5597454d27834578db1b",
+										"getMembers"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "http://localhost:3000"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "1186"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"4a2-KhrQchUrK1EwW6+ZorUDEwY+7Iw\""
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 02 Jun 2025 07:52:53 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 200,\n    \"data\": [\n        {\n            \"key\": 0,\n            \"memberId\": \"683d5597454d27834578db1d\",\n            \"userId\": {\n                \"_id\": \"6830b37162a20a917bd7d46e\",\n                \"avatar\": {\n                    \"localpath\": \"\",\n                    \"_id\": \"6830b37162a20a917bd7d46d\"\n                },\n                \"username\": \"test11\",\n                \"name\": \"Suresh\"\n            },\n            \"projectId\": \"683d5597454d27834578db1b\",\n            \"role\": \"admin\"\n        },\n        {\n            \"key\": 1,\n            \"memberId\": \"683d5744305938ad9c53508a\",\n            \"userId\": {\n                \"_id\": \"683079ff32aa7de40a84ab7a\",\n                \"avatar\": {\n                    \"url\": \"https://placehold.co/400x400?text=User+Avatar\",\n                    \"localpath\": \"\",\n                    \"_id\": \"683079ff32aa7de40a84ab79\"\n                },\n                \"username\": \"test2\"\n            },\n            \"projectId\": \"683d5597454d27834578db1b\",\n            \"role\": \"member\"\n        },\n        {\n            \"key\": 2,\n            \"memberId\": \"683d57a5305938ad9c53508f\",\n            \"userId\": {\n                \"_id\": \"68309013451301ce1ab45fd4\",\n                \"avatar\": {\n                    \"url\": \"https://placehold.co/400x400?text=User+Avatar\",\n                    \"localpath\": \"\",\n                    \"_id\": \"68309013451301ce1ab45fd3\"\n                },\n                \"username\": \"test3\"\n            },\n            \"projectId\": \"683d5597454d27834578db1b\",\n            \"role\": \"member\"\n        },\n        {\n            \"key\": 3,\n            \"memberId\": \"683d5825305938ad9c535094\",\n            \"userId\": {\n                \"_id\": \"683418c2dd70da5172e4d708\",\n                \"avatar\": {\n                    \"url\": \"public\\\\images\\\\avatar-683418c2dd70da5172e4d708\",\n                    \"localpath\": \"\",\n                    \"_id\": \"683418c2dd70da5172e4d707\"\n                },\n                \"username\": \"test17\",\n                \"name\": \"User 1\"\n            },\n            \"projectId\": \"683d5597454d27834578db1b\",\n            \"role\": \"member\"\n        }\n    ],\n    \"message\": \"Project member shared successfully\",\n    \"success\": true\n}"
+						}
+					]
+				},
+				{
+					"name": "add member with userID+ ?role",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userID\": \"683079ff32aa7de40a84ab7a\"\r\n}\r\n\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/project/683b071c03e69f4317a14aba/addMember",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"project",
+								"683b071c03e69f4317a14aba",
+								"addMember"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "response",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"userID\": \"683079ff32aa7de40a84ab7a\"\r\n}\r\n\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3000/project/683b071c03e69f4317a14aba/addMember",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"project",
+										"683b071c03e69f4317a14aba",
+										"addMember"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "http://localhost:3000"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "216"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"d8-5fa7ZBm/hRY8aBYegAYea337Ceg\""
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 31 May 2025 13:47:53 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 200,\n    \"data\": {\n        \"user\": \"683079ff32aa7de40a84ab7a\",\n        \"project\": \"683b071c03e69f4317a14aba\",\n        \"role\": \"member\",\n        \"_id\": \"683b08899da70fa90f2fbf3c\",\n        \"__v\": 0\n    },\n    \"message\": \"Project member added successfully\",\n    \"success\": true\n}"
+						}
+					]
+				}
+			],
+			"description": "project/:projectID/\n\nUser required to be loggedIn\n\nAll routes works on a specific projects\n\n[http://localhost:3000/api/v1/users/login](http://localhost:3000/api/v1/users/login)\n\n{ \"email\": \"[test11@gmail.com](https://mailto:test11@gmail.com)\", \"password\": \"1234567\" }"
+		},
+		{
+			"name": "notes routes",
+			"item": [
+				{
+					"name": "Member of a project accessing other note",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"newContent\": \"Complete by 25-6-2025\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/project/683d5597454d27834578db1b/notes/n/683d746f5ad4621a6af8afb1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"project",
+								"683d5597454d27834578db1b",
+								"notes",
+								"n",
+								"683d746f5ad4621a6af8afb1"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "getAllProjects",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{ \"email\": \"test3@gmail.com\", \"password\": \"123456\" }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3000/project/",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"project",
+										""
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "http://localhost:3000"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "402"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"192-mRxR2B/jhpuiaEDI7VlVoZ+FVQY\""
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 04 Jun 2025 01:44:24 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 200,\n    \"data\": [\n        {\n            \"_id\": \"683d57a5305938ad9c53508f\",\n            \"user\": \"68309013451301ce1ab45fd4\",\n            \"project\": {\n                \"_id\": \"683d5597454d27834578db1b\",\n                \"name\": \"Full Stack Project\",\n                \"description\": \"This is a dream, but it's okay, let's take it one at a time.\",\n                \"createdAt\": \"2025-06-02T07:41:11.830Z\",\n                \"updatedAt\": \"2025-06-02T07:41:11.830Z\"\n            },\n            \"role\": \"member\",\n            \"__v\": 0\n        }\n    ],\n    \"message\": \"Projects sent successfully\",\n    \"success\": true\n}"
+						},
+						{
+							"name": "get into specific project",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{ \"email\": \"test3@gmail.com\", \"password\": \"123456\" }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3000/project/683d5597454d27834578db1b/",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"project",
+										"683d5597454d27834578db1b",
+										""
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "http://localhost:3000"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "345"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"159-oYBvkU9I8NcIwaHoN+9kyjexzgQ\""
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 04 Jun 2025 01:43:40 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 200,\n    \"data\": {\n        \"_id\": \"683d5597454d27834578db1b\",\n        \"name\": \"Full Stack Project\",\n        \"description\": \"This is a dream, but it's okay, let's take it one at a time.\",\n        \"createdBy\": \"6830b37162a20a917bd7d46e\",\n        \"createdAt\": \"2025-06-02T07:41:11.830Z\",\n        \"updatedAt\": \"2025-06-02T07:41:11.830Z\",\n        \"__v\": 0\n    },\n    \"message\": \"Project shared successfully\",\n    \"success\": true\n}"
+						},
+						{
+							"name": "getAllNotes",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{ \"email\": \"test3@gmail.com\", \"password\": \"123456\" }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3000/project/683d5597454d27834578db1b/notes/getNotes",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"project",
+										"683d5597454d27834578db1b",
+										"notes",
+										"getNotes"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "http://localhost:3000"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "1149"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"47d-LT0F5EKdrC0IxVF1zwLgxyo1y/U\""
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 04 Jun 2025 01:46:33 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 200,\n    \"data\": [\n        {\n            \"key\": 0,\n            \"id\": \"683d746f5ad4621a6af8afb1\",\n            \"createdBy\": {\n                \"_id\": \"6830b37162a20a917bd7d46e\",\n                \"avatar\": {\n                    \"localpath\": \"\",\n                    \"_id\": \"6830b37162a20a917bd7d46d\"\n                },\n                \"username\": \"test11\",\n                \"name\": \"Suresh\"\n            },\n            \"content\": \"Complete by 2-6-2025\"\n        },\n        {\n            \"key\": 1,\n            \"id\": \"683d7568a132ee76277b2f2c\",\n            \"createdBy\": {\n                \"_id\": \"6830b37162a20a917bd7d46e\",\n                \"avatar\": {\n                    \"localpath\": \"\",\n                    \"_id\": \"6830b37162a20a917bd7d46d\"\n                },\n                \"username\": \"test11\",\n                \"name\": \"Suresh\"\n            },\n            \"content\": \"Be focused\"\n        },\n        {\n            \"key\": 2,\n            \"id\": \"683d75ee239c5e934fa42ef2\",\n            \"createdBy\": {\n                \"_id\": \"6830b37162a20a917bd7d46e\",\n                \"avatar\": {\n                    \"localpath\": \"\",\n                    \"_id\": \"6830b37162a20a917bd7d46d\"\n                },\n                \"username\": \"test11\",\n                \"name\": \"Suresh\"\n            },\n            \"content\": \"We can and We will.\"\n        },\n        {\n            \"key\": 3,\n            \"id\": \"683e647b1d6f59e73be771c5\",\n            \"createdBy\": {\n                \"_id\": \"6830b37162a20a917bd7d46e\",\n                \"avatar\": {\n                    \"localpath\": \"\",\n                    \"_id\": \"6830b37162a20a917bd7d46d\"\n                },\n                \"username\": \"test11\",\n                \"name\": \"Suresh\"\n            },\n            \"content\": \"I am just a note\"\n        },\n        {\n            \"key\": 4,\n            \"id\": \"683e91598b73107458d11f27\",\n            \"createdBy\": {\n                \"_id\": \"6830b37162a20a917bd7d46e\",\n                \"avatar\": {\n                    \"localpath\": \"\",\n                    \"_id\": \"6830b37162a20a917bd7d46d\"\n                },\n                \"username\": \"test11\",\n                \"name\": \"Suresh\"\n            },\n            \"content\": \"Adding another note\"\n        }\n    ],\n    \"message\": \"Notes shared successfully\",\n    \"success\": true\n}"
+						},
+						{
+							"name": "get a note by ID",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{ \"email\": \"test3@gmail.com\", \"password\": \"123456\" }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3000/project/683d5597454d27834578db1b/notes/n/683d746f5ad4621a6af8afb1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"project",
+										"683d5597454d27834578db1b",
+										"notes",
+										"n",
+										"683d746f5ad4621a6af8afb1"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "http://localhost:3000"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "286"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"11e-i5vkUjilmbVv4tJ9TcfYKk6qBJE\""
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 04 Jun 2025 01:48:59 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 200,\n    \"data\": {\n        \"id\": \"683d746f5ad4621a6af8afb1\",\n        \"createdBy\": {\n            \"_id\": \"6830b37162a20a917bd7d46e\",\n            \"avatar\": {\n                \"localpath\": \"\",\n                \"_id\": \"6830b37162a20a917bd7d46d\"\n            },\n            \"username\": \"test11\",\n            \"name\": \"Suresh\"\n        },\n        \"content\": \"Complete by 2-6-2025\"\n    },\n    \"message\": \"Note shared successfully\",\n    \"success\": true\n}"
+						},
+						{
+							"name": "delete note",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{ \"email\": \"test3@gmail.com\", \"password\": \"123456\" }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3000/project/683d5597454d27834578db1b/notes/n/683d746f5ad4621a6af8afb1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"project",
+										"683d5597454d27834578db1b",
+										"notes",
+										"n",
+										"683d746f5ad4621a6af8afb1"
+									]
+								}
+							},
+							"status": "Unauthorized",
+							"code": 401,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "http://localhost:3000"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "61"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"3d-tq7LG2Q0TmKWpRkPkkjz2LyDkJg\""
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 04 Jun 2025 01:52:21 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 401,\n    \"message\": \"Invalid Access\",\n    \"success\": false\n}"
+						},
+						{
+							"name": "update note",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"newContent\": \"Complete by 25-6-2025\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3000/project/683d5597454d27834578db1b/notes/n/683d746f5ad4621a6af8afb1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"project",
+										"683d5597454d27834578db1b",
+										"notes",
+										"n",
+										"683d746f5ad4621a6af8afb1"
+									]
+								}
+							},
+							"status": "Unauthorized",
+							"code": 401,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "http://localhost:3000"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "61"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"3d-tq7LG2Q0TmKWpRkPkkjz2LyDkJg\""
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 04 Jun 2025 01:53:46 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 401,\n    \"message\": \"Invalid Access\",\n    \"success\": false\n}"
+						}
+					]
+				},
+				{
+					"name": "createnote",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"content\": \"Adding another note\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/project/683d5597454d27834578db1b/notes/createNote",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"project",
+								"683d5597454d27834578db1b",
+								"notes",
+								"createNote"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "response",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"content\": \"Adding another note\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3000/project/683d5597454d27834578db1b/notes/createNote",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"project",
+										"683d5597454d27834578db1b",
+										"notes",
+										"createNote"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "http://localhost:3000"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "333"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"14d-GFlqES30jWJgGJG9SQCRAX5kY8g\""
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 03 Jun 2025 06:08:25 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 200,\n    \"data\": {\n        \"_id\": \"683e91598b73107458d11f27\",\n        \"project\": \"683d5597454d27834578db1b\",\n        \"createdBy\": {\n            \"_id\": \"6830b37162a20a917bd7d46e\",\n            \"avatar\": {\n                \"localpath\": \"\",\n                \"_id\": \"6830b37162a20a917bd7d46d\"\n            },\n            \"username\": \"test11\",\n            \"name\": \"Suresh\"\n        },\n        \"content\": \"Adding another note\",\n        \"__v\": 0\n    },\n    \"message\": \"Notes created successfully\",\n    \"success\": true\n}"
+						}
+					]
+				},
+				{
+					"name": "Creater of note",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"newContent\": \"Complete by 25-6-2025\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/project/683d5597454d27834578db1b/notes/n/683d746f5ad4621a6af8afb1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"project",
+								"683d5597454d27834578db1b",
+								"notes",
+								"n",
+								"683d746f5ad4621a6af8afb1"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "get all notes",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"newContent\": \"Complete by 25-6-2025\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3000/project/683d5597454d27834578db1b/notes/getNotes",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"project",
+										"683d5597454d27834578db1b",
+										"notes",
+										"getNotes"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "http://localhost:3000"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "1149"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"47d-LT0F5EKdrC0IxVF1zwLgxyo1y/U\""
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 04 Jun 2025 01:58:45 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 200,\n    \"data\": [\n        {\n            \"key\": 0,\n            \"id\": \"683d746f5ad4621a6af8afb1\",\n            \"createdBy\": {\n                \"_id\": \"6830b37162a20a917bd7d46e\",\n                \"avatar\": {\n                    \"localpath\": \"\",\n                    \"_id\": \"6830b37162a20a917bd7d46d\"\n                },\n                \"username\": \"test11\",\n                \"name\": \"Suresh\"\n            },\n            \"content\": \"Complete by 2-6-2025\"\n        },\n        {\n            \"key\": 1,\n            \"id\": \"683d7568a132ee76277b2f2c\",\n            \"createdBy\": {\n                \"_id\": \"6830b37162a20a917bd7d46e\",\n                \"avatar\": {\n                    \"localpath\": \"\",\n                    \"_id\": \"6830b37162a20a917bd7d46d\"\n                },\n                \"username\": \"test11\",\n                \"name\": \"Suresh\"\n            },\n            \"content\": \"Be focused\"\n        },\n        {\n            \"key\": 2,\n            \"id\": \"683d75ee239c5e934fa42ef2\",\n            \"createdBy\": {\n                \"_id\": \"6830b37162a20a917bd7d46e\",\n                \"avatar\": {\n                    \"localpath\": \"\",\n                    \"_id\": \"6830b37162a20a917bd7d46d\"\n                },\n                \"username\": \"test11\",\n                \"name\": \"Suresh\"\n            },\n            \"content\": \"We can and We will.\"\n        },\n        {\n            \"key\": 3,\n            \"id\": \"683e647b1d6f59e73be771c5\",\n            \"createdBy\": {\n                \"_id\": \"6830b37162a20a917bd7d46e\",\n                \"avatar\": {\n                    \"localpath\": \"\",\n                    \"_id\": \"6830b37162a20a917bd7d46d\"\n                },\n                \"username\": \"test11\",\n                \"name\": \"Suresh\"\n            },\n            \"content\": \"I am just a note\"\n        },\n        {\n            \"key\": 4,\n            \"id\": \"683e91598b73107458d11f27\",\n            \"createdBy\": {\n                \"_id\": \"6830b37162a20a917bd7d46e\",\n                \"avatar\": {\n                    \"localpath\": \"\",\n                    \"_id\": \"6830b37162a20a917bd7d46d\"\n                },\n                \"username\": \"test11\",\n                \"name\": \"Suresh\"\n            },\n            \"content\": \"Adding another note\"\n        }\n    ],\n    \"message\": \"Notes shared successfully\",\n    \"success\": true\n}"
+						},
+						{
+							"name": "get note by ID",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{ \"email\": \"test11@gmail.com\", \"password\": \"1234567\" }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3000/project/683d5597454d27834578db1b/notes/n/683d746f5ad4621a6af8afb1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"project",
+										"683d5597454d27834578db1b",
+										"notes",
+										"n",
+										"683d746f5ad4621a6af8afb1"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "http://localhost:3000"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "286"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"11e-i5vkUjilmbVv4tJ9TcfYKk6qBJE\""
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 04 Jun 2025 01:57:21 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 200,\n    \"data\": {\n        \"id\": \"683d746f5ad4621a6af8afb1\",\n        \"createdBy\": {\n            \"_id\": \"6830b37162a20a917bd7d46e\",\n            \"avatar\": {\n                \"localpath\": \"\",\n                \"_id\": \"6830b37162a20a917bd7d46d\"\n            },\n            \"username\": \"test11\",\n            \"name\": \"Suresh\"\n        },\n        \"content\": \"Complete by 2-6-2025\"\n    },\n    \"message\": \"Note shared successfully\",\n    \"success\": true\n}"
+						},
+						{
+							"name": "update a Note",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"newContent\": \"Complete by 25-6-2025\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3000/project/683d5597454d27834578db1b/notes/n/683d746f5ad4621a6af8afb1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"project",
+										"683d5597454d27834578db1b",
+										"notes",
+										"n",
+										"683d746f5ad4621a6af8afb1"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "http://localhost:3000"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "232"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"e8-wvbTsE13/c0qxkXNGGNAPOmrjwY\""
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 04 Jun 2025 02:11:30 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 200,\n    \"data\": {\n        \"_id\": \"683d746f5ad4621a6af8afb1\",\n        \"project\": \"683d5597454d27834578db1b\",\n        \"createdBy\": \"6830b37162a20a917bd7d46e\",\n        \"content\": \"Complete by 25-6-2025\",\n        \"__v\": 0\n    },\n    \"message\": \"Notes updated successfully\",\n    \"success\": true\n}"
+						},
+						{
+							"name": "delete a note",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"newContent\": \"Complete by 25-6-2025\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3000/project/683d5597454d27834578db1b/notes/n/683d746f5ad4621a6af8afb1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"project",
+										"683d5597454d27834578db1b",
+										"notes",
+										"n",
+										"683d746f5ad4621a6af8afb1"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "http://localhost:3000"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "81"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"51-t00MZFFkNQWH0KmI0+kuUAmCfrA\""
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 04 Jun 2025 02:12:34 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 200,\n    \"data\": {},\n    \"message\": \"Note deleted successfully\",\n    \"success\": true\n}"
+						}
+					]
+				}
+			],
+			"description": "All routes works on a specific projects:\n\n[http://localhost:3000/api/v1/users/login](http://localhost:3000/api/v1/users/login)\n\n{ \"email\": \"[test11@gmail.com](https://mailto:test11@gmail.com)\", \"password\": \"1234567\" }\n\n---\n\n[http://localhost:3000/project/createProject](http://localhost:3000/project/createProject)\n\n{\n\n\"name\": \"Full Stack Project\",\n\n\"description\": \"This is a dream, but it's okay, let's take it one at a time.\"\n\n}\n\nResponse gives projectID: 683d5597454d27834578db1b\n\n---\n\n[http://localhost:3000/project/683d5597454d27834578db1b/addMember](http://localhost:3000/project/683d5597454d27834578db1b/addMember)\n\n{ \"userID\": \"683079ff32aa7de40a84ab7a\"}: test2, test3, test17 (as project_admin)\n\n---\n\ncreated some notes with content\n\nStartFragment[http://localhost:3000/project/683d5597454d27834578db1b/notesEndFragment](http://localhost:3000/project/683d5597454d27834578db1b/notesEndFragment)"
+		},
+		{
+			"name": "task routes",
+			"item": [
+				{
+					"name": "New Request",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"newTitle\": \"Complete user auth\",\r\n    \"newDescription\": \"Add routers only\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/project/683d5597454d27834578db1b/tasks/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"project",
+								"683d5597454d27834578db1b",
+								"tasks",
+								""
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "login",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{ \"email\": \"test17@gmail.com\", \"password\": \"123456\" }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3000/api/v1/users/login",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"v1",
+										"users",
+										"login"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "http://localhost:3000"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Set-Cookie",
+									"value": "accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2ODM0MThjMmRkNzBkYTUxNzJlNGQ3MDgiLCJlbWFpbCI6InRlc3QxN0BnbWFpbC5jb20iLCJ1c2VybmFtZSI6InRlc3QxNyIsImlhdCI6MTc0OTEwNzUwNywiZXhwIjoxNzQ5NzA3NTA3fQ.IYW9eatpKhRWSv5sNcYq-d1P4PbsT3hPPhnaBxUpHLU; Max-Age=86400; Path=/; Expires=Fri, 06 Jun 2025 07:11:47 GMT; HttpOnly; Secure"
+								},
+								{
+									"key": "Set-Cookie",
+									"value": "refreshToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2ODM0MThjMmRkNzBkYTUxNzJlNGQ3MDgiLCJlbWFpbCI6InRlc3QxN0BnbWFpbC5jb20iLCJ1c2VybmFtZSI6InRlc3QxNyIsImlhdCI6MTc0OTEwNzUwNywiZXhwIjoxNzQ5NzEyMzA3fQ.AH32aV1Wm9f2d_XyU11QTw82HxKr515LEuNnGYq-BzQ; Max-Age=86400; Path=/; Expires=Fri, 06 Jun 2025 07:11:47 GMT; HttpOnly; Secure"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "382"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"17e-DxGHNgZujUS+IT5KZRTM3NadgYU\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 05 Jun 2025 07:11:47 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 200,\n    \"data\": {\n        \"username\": \"test17\",\n        \"email\": \"test17@gmail.com\",\n        \"refreshToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2ODM0MThjMmRkNzBkYTUxNzJlNGQ3MDgiLCJlbWFpbCI6InRlc3QxN0BnbWFpbC5jb20iLCJ1c2VybmFtZSI6InRlc3QxNyIsImlhdCI6MTc0OTEwNzUwNywiZXhwIjoxNzQ5NzEyMzA3fQ.AH32aV1Wm9f2d_XyU11QTw82HxKr515LEuNnGYq-BzQ\"\n    },\n    \"message\": \"User logged in Successfully\",\n    \"success\": true\n}"
+						},
+						{
+							"name": "allprojects",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{ \"email\": \"test17@gmail.com\", \"password\": \"123456\" }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3000/project",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"project"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "http://localhost:3000"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "732"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"2dc-euEHsluo1zu0Ych3evls6+cm/ig\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 05 Jun 2025 07:14:28 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 200,\n    \"data\": [\n        {\n            \"_id\": \"683b071c03e69f4317a14abc\",\n            \"user\": \"683418c2dd70da5172e4d708\",\n            \"project\": {\n                \"_id\": \"683b071c03e69f4317a14aba\",\n                \"name\": \"Code Mega Full Stack Project\",\n                \"description\": \"This is a dream, but it's okay, let's take it one at a time.\",\n                \"createdAt\": \"2025-05-31T13:41:48.486Z\",\n                \"updatedAt\": \"2025-05-31T13:41:48.486Z\"\n            },\n            \"role\": \"admin\",\n            \"__v\": 0\n        },\n        {\n            \"_id\": \"683d5825305938ad9c535094\",\n            \"user\": \"683418c2dd70da5172e4d708\",\n            \"project\": {\n                \"_id\": \"683d5597454d27834578db1b\",\n                \"name\": \"Full Stack Project\",\n                \"description\": \"This is a dream, but it's okay, let's take it one at a time.\",\n                \"createdAt\": \"2025-06-02T07:41:11.830Z\",\n                \"updatedAt\": \"2025-06-02T07:41:11.830Z\"\n            },\n            \"role\": \"member\",\n            \"__v\": 0\n        }\n    ],\n    \"message\": \"Projects sent successfully\",\n    \"success\": true\n}"
+						},
+						{
+							"name": "go to specific project",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{ \"email\": \"test17@gmail.com\", \"password\": \"123456\" }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3000/project/683d5597454d27834578db1b",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"project",
+										"683d5597454d27834578db1b"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "http://localhost:3000"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "345"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"159-oYBvkU9I8NcIwaHoN+9kyjexzgQ\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 05 Jun 2025 07:14:55 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 200,\n    \"data\": {\n        \"_id\": \"683d5597454d27834578db1b\",\n        \"name\": \"Full Stack Project\",\n        \"description\": \"This is a dream, but it's okay, let's take it one at a time.\",\n        \"createdBy\": \"6830b37162a20a917bd7d46e\",\n        \"createdAt\": \"2025-06-02T07:41:11.830Z\",\n        \"updatedAt\": \"2025-06-02T07:41:11.830Z\",\n        \"__v\": 0\n    },\n    \"message\": \"Project shared successfully\",\n    \"success\": true\n}"
+						},
+						{
+							"name": "check other members",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{ \"email\": \"test17@gmail.com\", \"password\": \"123456\" }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3000/project/683d5597454d27834578db1b/getMembers",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"project",
+										"683d5597454d27834578db1b",
+										"getMembers"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "http://localhost:3000"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "1186"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"4a2-KhrQchUrK1EwW6+ZorUDEwY+7Iw\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 05 Jun 2025 07:16:07 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 200,\n    \"data\": [\n        {\n            \"key\": 0,\n            \"memberId\": \"683d5597454d27834578db1d\",\n            \"userId\": {\n                \"_id\": \"6830b37162a20a917bd7d46e\",\n                \"avatar\": {\n                    \"localpath\": \"\",\n                    \"_id\": \"6830b37162a20a917bd7d46d\"\n                },\n                \"username\": \"test11\",\n                \"name\": \"Suresh\"\n            },\n            \"projectId\": \"683d5597454d27834578db1b\",\n            \"role\": \"admin\"\n        },\n        {\n            \"key\": 1,\n            \"memberId\": \"683d5744305938ad9c53508a\",\n            \"userId\": {\n                \"_id\": \"683079ff32aa7de40a84ab7a\",\n                \"avatar\": {\n                    \"url\": \"https://placehold.co/400x400?text=User+Avatar\",\n                    \"localpath\": \"\",\n                    \"_id\": \"683079ff32aa7de40a84ab79\"\n                },\n                \"username\": \"test2\"\n            },\n            \"projectId\": \"683d5597454d27834578db1b\",\n            \"role\": \"member\"\n        },\n        {\n            \"key\": 2,\n            \"memberId\": \"683d57a5305938ad9c53508f\",\n            \"userId\": {\n                \"_id\": \"68309013451301ce1ab45fd4\",\n                \"avatar\": {\n                    \"url\": \"https://placehold.co/400x400?text=User+Avatar\",\n                    \"localpath\": \"\",\n                    \"_id\": \"68309013451301ce1ab45fd3\"\n                },\n                \"username\": \"test3\"\n            },\n            \"projectId\": \"683d5597454d27834578db1b\",\n            \"role\": \"member\"\n        },\n        {\n            \"key\": 3,\n            \"memberId\": \"683d5825305938ad9c535094\",\n            \"userId\": {\n                \"_id\": \"683418c2dd70da5172e4d708\",\n                \"avatar\": {\n                    \"url\": \"public\\\\images\\\\avatar-683418c2dd70da5172e4d708\",\n                    \"localpath\": \"\",\n                    \"_id\": \"683418c2dd70da5172e4d707\"\n                },\n                \"username\": \"test17\",\n                \"name\": \"User 1\"\n            },\n            \"projectId\": \"683d5597454d27834578db1b\",\n            \"role\": \"member\"\n        }\n    ],\n    \"message\": \"Project member shared successfully\",\n    \"success\": true\n}"
+						},
+						{
+							"name": "create Task",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"title\": \"Complete notes controllers\",\r\n    \"description\": \"You need to complete routes, middlewares and validators as well\",\r\n    \"assignedToUsername\": \"test3\",\r\n    \"status\": \"in-progress\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3000/project/683d5597454d27834578db1b/tasks",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"project",
+										"683d5597454d27834578db1b",
+										"tasks"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "http://localhost:3000"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "473"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"1d9-BXtLXNjPHFuj7q/1NSykq7SLEC8\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 05 Jun 2025 07:43:25 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 200,\n    \"data\": {\n        \"title\": \"Complete notes controllers\",\n        \"description\": \"You need to complete routes, middlewares and validators as well\",\n        \"project\": \"683d5597454d27834578db1b\",\n        \"assignedTo\": \"68309013451301ce1ab45fd4\",\n        \"assignedBy\": \"683418c2dd70da5172e4d708\",\n        \"status\": \"in-progress\",\n        \"attachments\": [],\n        \"_id\": \"68414a9df85b1f56f4c5f8d6\",\n        \"createdAt\": \"2025-06-05T07:43:25.504Z\",\n        \"updatedAt\": \"2025-06-05T07:43:25.504Z\",\n        \"__v\": 0\n    },\n    \"message\": \"Task created Successfully\",\n    \"success\": true\n}"
+						},
+						{
+							"name": "get created tasks",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3000/project/683d5597454d27834578db1b/tasks/created",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"project",
+										"683d5597454d27834578db1b",
+										"tasks",
+										"created"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "http://localhost:3000"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "2876"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"b3c-cCV2dHCguVMgCkPujx7cr2wIlko\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 05 Jun 2025 07:57:25 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 200,\n    \"data\": [\n        {\n            \"_id\": \"684149d1444a3fa383d88ab4\",\n            \"title\": \"Complete user Authentication\",\n            \"description\": \"You need to complete routes, middlewares and validators as well\",\n            \"project\": \"683d5597454d27834578db1b\",\n            \"assignedTo\": {\n                \"_id\": \"68309013451301ce1ab45fd4\",\n                \"avatar\": {\n                    \"url\": \"https://placehold.co/400x400?text=User+Avatar\",\n                    \"localpath\": \"\",\n                    \"_id\": \"68309013451301ce1ab45fd3\"\n                },\n                \"username\": \"test3\",\n                \"email\": \"test3@gmail.com\"\n            },\n            \"assignedBy\": \"683418c2dd70da5172e4d708\",\n            \"status\": \"todo\",\n            \"attachments\": [],\n            \"createdAt\": \"2025-06-05T07:40:01.258Z\",\n            \"updatedAt\": \"2025-06-05T07:40:01.258Z\",\n            \"__v\": 0\n        },\n        {\n            \"_id\": \"684149e52f8dc37722b04a47\",\n            \"title\": \"Complete user Authentication\",\n            \"description\": \"You need to complete routes, middlewares and validators as well\",\n            \"project\": \"683d5597454d27834578db1b\",\n            \"assignedTo\": {\n                \"_id\": \"68309013451301ce1ab45fd4\",\n                \"avatar\": {\n                    \"url\": \"https://placehold.co/400x400?text=User+Avatar\",\n                    \"localpath\": \"\",\n                    \"_id\": \"68309013451301ce1ab45fd3\"\n                },\n                \"username\": \"test3\",\n                \"email\": \"test3@gmail.com\"\n            },\n            \"assignedBy\": \"683418c2dd70da5172e4d708\",\n            \"status\": \"todo\",\n            \"attachments\": [],\n            \"createdAt\": \"2025-06-05T07:40:21.992Z\",\n            \"updatedAt\": \"2025-06-05T07:40:21.992Z\",\n            \"__v\": 0\n        },\n        {\n            \"_id\": \"68414a9df85b1f56f4c5f8d6\",\n            \"title\": \"Complete notes controllers\",\n            \"description\": \"You need to complete routes, middlewares and validators as well\",\n            \"project\": \"683d5597454d27834578db1b\",\n            \"assignedTo\": {\n                \"_id\": \"68309013451301ce1ab45fd4\",\n                \"avatar\": {\n                    \"url\": \"https://placehold.co/400x400?text=User+Avatar\",\n                    \"localpath\": \"\",\n                    \"_id\": \"68309013451301ce1ab45fd3\"\n                },\n                \"username\": \"test3\",\n                \"email\": \"test3@gmail.com\"\n            },\n            \"assignedBy\": \"683418c2dd70da5172e4d708\",\n            \"status\": \"in-progress\",\n            \"attachments\": [],\n            \"createdAt\": \"2025-06-05T07:43:25.504Z\",\n            \"updatedAt\": \"2025-06-05T07:43:25.504Z\",\n            \"__v\": 0\n        },\n        {\n            \"_id\": \"68414ad7f85b1f56f4c5f8de\",\n            \"title\": \"Complete notes controllers\",\n            \"description\": \"You need to complete routes, middlewares and validators as well\",\n            \"project\": \"683d5597454d27834578db1b\",\n            \"assignedTo\": {\n                \"_id\": \"68309013451301ce1ab45fd4\",\n                \"avatar\": {\n                    \"url\": \"https://placehold.co/400x400?text=User+Avatar\",\n                    \"localpath\": \"\",\n                    \"_id\": \"68309013451301ce1ab45fd3\"\n                },\n                \"username\": \"test3\",\n                \"email\": \"test3@gmail.com\"\n            },\n            \"assignedBy\": \"683418c2dd70da5172e4d708\",\n            \"status\": \"in-progress\",\n            \"attachments\": [],\n            \"createdAt\": \"2025-06-05T07:44:23.455Z\",\n            \"updatedAt\": \"2025-06-05T07:44:23.455Z\",\n            \"__v\": 0\n        },\n        {\n            \"_id\": \"68414b0bf85b1f56f4c5f8e6\",\n            \"title\": \"Complete members controllers\",\n            \"description\": \"You need to complete routes, middlewares and validators as well\",\n            \"project\": \"683d5597454d27834578db1b\",\n            \"assignedTo\": {\n                \"_id\": \"683079ff32aa7de40a84ab7a\",\n                \"avatar\": {\n                    \"url\": \"https://placehold.co/400x400?text=User+Avatar\",\n                    \"localpath\": \"\",\n                    \"_id\": \"683079ff32aa7de40a84ab79\"\n                },\n                \"username\": \"test2\",\n                \"email\": \"test2@gmail.com\"\n            },\n            \"assignedBy\": \"683418c2dd70da5172e4d708\",\n            \"status\": \"in-progress\",\n            \"attachments\": [],\n            \"createdAt\": \"2025-06-05T07:45:15.942Z\",\n            \"updatedAt\": \"2025-06-05T07:45:15.942Z\",\n            \"__v\": 0\n        }\n    ],\n    \"message\": \"All created tasks Shared\",\n    \"success\": true\n}"
+						},
+						{
+							"name": "get assigned tasks",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3000/project/683d5597454d27834578db1b/tasks/assigned",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"project",
+										"683d5597454d27834578db1b",
+										"tasks",
+										"assigned"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "http://localhost:3000"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "81"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"51-F4oVdDoJGPRGJGhKPCoHnWtVQhY\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 05 Jun 2025 07:59:32 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 200,\n    \"data\": [],\n    \"message\": \"All Assigned tasks Shared\",\n    \"success\": true\n}"
+						},
+						{
+							"name": "get task by ID",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3000/project/683d5597454d27834578db1b/tasks/684149d1444a3fa383d88ab4",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"project",
+										"683d5597454d27834578db1b",
+										"tasks",
+										"684149d1444a3fa383d88ab4"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "http://localhost:3000"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "806"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"326-7w9zFmUcveByZaREa11REwm2uYY\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 05 Jun 2025 08:10:45 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 200,\n    \"data\": {\n        \"_id\": \"684149d1444a3fa383d88ab4\",\n        \"title\": \"Complete user Authentication\",\n        \"description\": \"You need to complete routes, middlewares and validators as well\",\n        \"project\": \"683d5597454d27834578db1b\",\n        \"assignedTo\": {\n            \"_id\": \"68309013451301ce1ab45fd4\",\n            \"avatar\": {\n                \"url\": \"https://placehold.co/400x400?text=User+Avatar\",\n                \"localpath\": \"\",\n                \"_id\": \"68309013451301ce1ab45fd3\"\n            },\n            \"username\": \"test3\",\n            \"email\": \"test3@gmail.com\"\n        },\n        \"assignedBy\": {\n            \"_id\": \"683418c2dd70da5172e4d708\",\n            \"avatar\": {\n                \"url\": \"public\\\\images\\\\avatar-683418c2dd70da5172e4d708\",\n                \"localpath\": \"\",\n                \"_id\": \"683418c2dd70da5172e4d707\"\n            },\n            \"username\": \"test17\",\n            \"email\": \"test17@gmail.com\",\n            \"name\": \"User 1\"\n        },\n        \"status\": \"todo\",\n        \"attachments\": [],\n        \"createdAt\": \"2025-06-05T07:40:01.258Z\",\n        \"updatedAt\": \"2025-06-05T07:40:01.258Z\",\n        \"__v\": 0\n    },\n    \"message\": \"Task shared\",\n    \"success\": true\n}"
+						},
+						{
+							"name": "update status",
+							"originalRequest": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"status\": \"done\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3000/project/683d5597454d27834578db1b/tasks/684149d1444a3fa383d88ab4/updateStatus",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"project",
+										"683d5597454d27834578db1b",
+										"tasks",
+										"684149d1444a3fa383d88ab4",
+										"updateStatus"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "http://localhost:3000"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "462"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"1ce-fpejFPDTd8xhgQAO7dxFigrJ7zo\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 05 Jun 2025 08:15:27 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 200,\n    \"data\": {\n        \"_id\": \"684149d1444a3fa383d88ab4\",\n        \"title\": \"Complete user Authentication\",\n        \"description\": \"You need to complete routes, middlewares and validators as well\",\n        \"project\": \"683d5597454d27834578db1b\",\n        \"assignedTo\": \"68309013451301ce1ab45fd4\",\n        \"assignedBy\": \"683418c2dd70da5172e4d708\",\n        \"status\": \"done\",\n        \"attachments\": [],\n        \"createdAt\": \"2025-06-05T07:40:01.258Z\",\n        \"updatedAt\": \"2025-06-05T08:15:27.528Z\",\n        \"__v\": 0\n    },\n    \"message\": \"Task Status updated\",\n    \"success\": true\n}"
+						},
+						{
+							"name": "update task content",
+							"originalRequest": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"newTitle\": \"Complete user auth\",\r\n    \"newDescription\": \"Add routers only\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3000/project/683d5597454d27834578db1b/tasks/684149d1444a3fa383d88ab4/",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"project",
+										"683d5597454d27834578db1b",
+										"tasks",
+										"684149d1444a3fa383d88ab4",
+										""
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "http://localhost:3000"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "397"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"18d-BbTepbUKtBy/vfCrdh4O9nYOUhM\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 05 Jun 2025 08:29:00 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 200,\n    \"data\": {\n        \"_id\": \"684149d1444a3fa383d88ab4\",\n        \"title\": \"Complete user auth\",\n        \"description\": \"Add routers only\",\n        \"project\": \"683d5597454d27834578db1b\",\n        \"assignedTo\": \"68309013451301ce1ab45fd4\",\n        \"assignedBy\": \"683418c2dd70da5172e4d708\",\n        \"status\": \"done\",\n        \"attachments\": [],\n        \"createdAt\": \"2025-06-05T07:40:01.258Z\",\n        \"updatedAt\": \"2025-06-05T08:29:00.156Z\",\n        \"__v\": 0\n    },\n    \"message\": \"Task shared\",\n    \"success\": true\n}"
+						},
+						{
+							"name": "delete a task",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"newTitle\": \"Complete user auth\",\r\n    \"newDescription\": \"Add routers only\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3000/project/683d5597454d27834578db1b/tasks/684149d1444a3fa383d88ab4/",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"project",
+										"683d5597454d27834578db1b",
+										"tasks",
+										"684149d1444a3fa383d88ab4",
+										""
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "http://localhost:3000"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "81"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"51-drTj89qP7b540A1Rqg0QUiTkbLM\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 05 Jun 2025 08:29:23 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 200,\n    \"data\": {},\n    \"message\": \"Task deleted successfully\",\n    \"success\": true\n}"
+						},
+						{
+							"name": "get all tasks",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"newTitle\": \"Complete user auth\",\r\n    \"newDescription\": \"Add routers only\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3000/project/683d5597454d27834578db1b/tasks/",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"project",
+										"683d5597454d27834578db1b",
+										"tasks",
+										""
+									]
+								}
+							},
+							"status": "Unauthorized",
+							"code": 401,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "http://localhost:3000"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "60"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"3c-R4Dw4+GA1Jc80gLK/7AtOITsmaI\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 05 Jun 2025 08:31:51 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 401,\n    \"message\": \"Access Denied\",\n    \"success\": false\n}"
+						}
+					]
+				},
+				{
+					"name": "create task",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"Complete members controllers\",\r\n    \"description\": \"You need to complete routes, middlewares and validators as well\",\r\n    \"assignedToUsername\": \"test2\",\r\n    \"status\": \"in-progress\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/project/683d5597454d27834578db1b/tasks",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"project",
+								"683d5597454d27834578db1b",
+								"tasks"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "user should be logged in and has access to the project, before accessing this route\n/*\n--------Tasks---------\ncreateTask: anyone\nupdateTask: (title, desc, attachments) only creater can + admin + project_admin\ndeleteTask: only creater access + admin + project_admin\nupdateTaskStatus: jisko assign kiya gya h vhi update kr skta h + admin + project_admin\ngetTasks: admin and project admin can see all tasks, \ngetAssignedTasks: all can see their assigned tasks\ngetCreatedTasks: all can see their assignedBy tasks\n*/"
+		},
+		{
+			"name": "subtask router",
+			"item": [
+				{
+					"name": "New Request",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"User login controller + middleware + validator\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/project/683d5597454d27834578db1b/tasks/684149e52f8dc37722b04a47/subtasks/6841ab5fdc8a3bc71dec57c3",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"project",
+								"683d5597454d27834578db1b",
+								"tasks",
+								"684149e52f8dc37722b04a47",
+								"subtasks",
+								"6841ab5fdc8a3bc71dec57c3"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "user login",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{ \"email\": \"test17@gmail.com\", \"password\": \"123456\" }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3000/api/v1/users/login",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"v1",
+										"users",
+										"login"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "http://localhost:3000"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Set-Cookie",
+									"value": "accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2ODM0MThjMmRkNzBkYTUxNzJlNGQ3MDgiLCJlbWFpbCI6InRlc3QxN0BnbWFpbC5jb20iLCJ1c2VybmFtZSI6InRlc3QxNyIsImlhdCI6MTc0OTEzMzc4NywiZXhwIjoxNzQ5NzMzNzg3fQ.Or2OENJyFLkiWEMDp89KAXnBk8FS447EbPf24MVlPpY; Max-Age=86400; Path=/; Expires=Fri, 06 Jun 2025 14:29:47 GMT; HttpOnly; Secure"
+								},
+								{
+									"key": "Set-Cookie",
+									"value": "refreshToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2ODM0MThjMmRkNzBkYTUxNzJlNGQ3MDgiLCJlbWFpbCI6InRlc3QxN0BnbWFpbC5jb20iLCJ1c2VybmFtZSI6InRlc3QxNyIsImlhdCI6MTc0OTEzMzc4NywiZXhwIjoxNzQ5NzM4NTg3fQ.otd22XQgrsTiED1Fb7QbOKG58A44uZBOefE8ZCrRCzo; Max-Age=86400; Path=/; Expires=Fri, 06 Jun 2025 14:29:48 GMT; HttpOnly; Secure"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "382"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"17e-z7QHHNmfkbRPdCjtCMah20siMTQ\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 05 Jun 2025 14:29:48 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 200,\n    \"data\": {\n        \"username\": \"test17\",\n        \"email\": \"test17@gmail.com\",\n        \"refreshToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2ODM0MThjMmRkNzBkYTUxNzJlNGQ3MDgiLCJlbWFpbCI6InRlc3QxN0BnbWFpbC5jb20iLCJ1c2VybmFtZSI6InRlc3QxNyIsImlhdCI6MTc0OTEzMzc4NywiZXhwIjoxNzQ5NzM4NTg3fQ.otd22XQgrsTiED1Fb7QbOKG58A44uZBOefE8ZCrRCzo\"\n    },\n    \"message\": \"User logged in Successfully\",\n    \"success\": true\n}"
+						},
+						{
+							"name": "get a task",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{ \"email\": \"test17@gmail.com\", \"password\": \"123456\" }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3000/project/683d5597454d27834578db1b/tasks/684149e52f8dc37722b04a47",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"project",
+										"683d5597454d27834578db1b",
+										"tasks",
+										"684149e52f8dc37722b04a47"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "http://localhost:3000"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "806"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"326-EYKg5t1KIHXwvm0n5SQF3IUlSrI\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 05 Jun 2025 14:32:16 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 200,\n    \"data\": {\n        \"_id\": \"684149e52f8dc37722b04a47\",\n        \"title\": \"Complete user Authentication\",\n        \"description\": \"You need to complete routes, middlewares and validators as well\",\n        \"project\": \"683d5597454d27834578db1b\",\n        \"assignedTo\": {\n            \"_id\": \"68309013451301ce1ab45fd4\",\n            \"avatar\": {\n                \"url\": \"https://placehold.co/400x400?text=User+Avatar\",\n                \"localpath\": \"\",\n                \"_id\": \"68309013451301ce1ab45fd3\"\n            },\n            \"username\": \"test3\",\n            \"email\": \"test3@gmail.com\"\n        },\n        \"assignedBy\": {\n            \"_id\": \"683418c2dd70da5172e4d708\",\n            \"avatar\": {\n                \"url\": \"public\\\\images\\\\avatar-683418c2dd70da5172e4d708\",\n                \"localpath\": \"\",\n                \"_id\": \"683418c2dd70da5172e4d707\"\n            },\n            \"username\": \"test17\",\n            \"email\": \"test17@gmail.com\",\n            \"name\": \"User 1\"\n        },\n        \"status\": \"todo\",\n        \"attachments\": [],\n        \"createdAt\": \"2025-06-05T07:40:21.992Z\",\n        \"updatedAt\": \"2025-06-05T07:40:21.992Z\",\n        \"__v\": 0\n    },\n    \"message\": \"Task shared\",\n    \"success\": true\n}"
+						},
+						{
+							"name": "create subtasks",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"title\": \"User login controller\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3000/project/683d5597454d27834578db1b/tasks/684149e52f8dc37722b04a47/subtasks",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"project",
+										"683d5597454d27834578db1b",
+										"tasks",
+										"684149e52f8dc37722b04a47",
+										"subtasks"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "http://localhost:3000"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "327"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"147-y0w9P1ro35kuz/dzdeBmZ1hOU00\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 05 Jun 2025 14:36:15 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 200,\n    \"data\": {\n        \"title\": \"User login controller\",\n        \"task\": \"684149e52f8dc37722b04a47\",\n        \"isCompleted\": false,\n        \"createdBy\": \"683418c2dd70da5172e4d708\",\n        \"_id\": \"6841ab5fdc8a3bc71dec57c3\",\n        \"createdAt\": \"2025-06-05T14:36:15.355Z\",\n        \"updatedAt\": \"2025-06-05T14:36:15.355Z\",\n        \"__v\": 0\n    },\n    \"message\": \"Subtask created successfully\",\n    \"success\": true\n}"
+						},
+						{
+							"name": "created subtask with isCompleted",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"title\": \"User logout controller\",\r\n    \"isCompleted\": \"true\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3000/project/683d5597454d27834578db1b/tasks/684149e52f8dc37722b04a47/subtasks",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"project",
+										"683d5597454d27834578db1b",
+										"tasks",
+										"684149e52f8dc37722b04a47",
+										"subtasks"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "http://localhost:3000"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "327"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"147-fmbPp48eG9UMXTYRSYshoMTNy/E\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 05 Jun 2025 14:42:15 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 200,\n    \"data\": {\n        \"title\": \"User logout controller\",\n        \"task\": \"684149e52f8dc37722b04a47\",\n        \"isCompleted\": true,\n        \"createdBy\": \"683418c2dd70da5172e4d708\",\n        \"_id\": \"6841acc7e970f11d2a5e550d\",\n        \"createdAt\": \"2025-06-05T14:42:15.176Z\",\n        \"updatedAt\": \"2025-06-05T14:42:15.176Z\",\n        \"__v\": 0\n    },\n    \"message\": \"Subtask created successfully\",\n    \"success\": true\n}"
+						},
+						{
+							"name": "getAllSubtasks",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"title\": \"User logout controller\",\r\n    \"isCompleted\": \"true\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3000/project/683d5597454d27834578db1b/tasks/684149e52f8dc37722b04a47/subtasks",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"project",
+										"683d5597454d27834578db1b",
+										"tasks",
+										"684149e52f8dc37722b04a47",
+										"subtasks"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "http://localhost:3000"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "820"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"334-1dQdlGaJonn2+MZP0jJnzBm+oEs\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 05 Jun 2025 14:51:42 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 200,\n    \"data\": [\n        {\n            \"_id\": \"6841ab5fdc8a3bc71dec57c3\",\n            \"title\": \"User login controller\",\n            \"task\": \"684149e52f8dc37722b04a47\",\n            \"isCompleted\": false,\n            \"createdBy\": \"683418c2dd70da5172e4d708\",\n            \"createdAt\": \"2025-06-05T14:36:15.355Z\",\n            \"updatedAt\": \"2025-06-05T14:36:15.355Z\",\n            \"__v\": 0\n        },\n        {\n            \"_id\": \"6841abd8dc8a3bc71dec57ca\",\n            \"title\": \"User login controller\",\n            \"task\": \"684149e52f8dc37722b04a47\",\n            \"isCompleted\": true,\n            \"createdBy\": \"683418c2dd70da5172e4d708\",\n            \"createdAt\": \"2025-06-05T14:38:16.886Z\",\n            \"updatedAt\": \"2025-06-05T14:38:16.886Z\",\n            \"__v\": 0\n        },\n        {\n            \"_id\": \"6841acc7e970f11d2a5e550d\",\n            \"title\": \"User logout controller\",\n            \"task\": \"684149e52f8dc37722b04a47\",\n            \"isCompleted\": true,\n            \"createdBy\": \"683418c2dd70da5172e4d708\",\n            \"createdAt\": \"2025-06-05T14:42:15.176Z\",\n            \"updatedAt\": \"2025-06-05T14:42:15.176Z\",\n            \"__v\": 0\n        }\n    ],\n    \"message\": \"Subtasks shared successfully\",\n    \"success\": true\n}"
+						},
+						{
+							"name": "getSubTaskByID",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"title\": \"User logout controller\",\r\n    \"isCompleted\": \"true\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3000/project/683d5597454d27834578db1b/tasks/684149e52f8dc37722b04a47/subtasks/6841ab5fdc8a3bc71dec57c3",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"project",
+										"683d5597454d27834578db1b",
+										"tasks",
+										"684149e52f8dc37722b04a47",
+										"subtasks",
+										"6841ab5fdc8a3bc71dec57c3"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "http://localhost:3000"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "327"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"147-DglcV3rZrUBL1I7HqGwzh+vJh1E\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 05 Jun 2025 14:53:07 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 200,\n    \"data\": {\n        \"_id\": \"6841ab5fdc8a3bc71dec57c3\",\n        \"title\": \"User login controller\",\n        \"task\": \"684149e52f8dc37722b04a47\",\n        \"isCompleted\": false,\n        \"createdBy\": \"683418c2dd70da5172e4d708\",\n        \"createdAt\": \"2025-06-05T14:36:15.355Z\",\n        \"updatedAt\": \"2025-06-05T14:36:15.355Z\",\n        \"__v\": 0\n    },\n    \"message\": \"Subtasks shared successfully\",\n    \"success\": true\n}"
+						},
+						{
+							"name": "subtask status update",
+							"originalRequest": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"isCompleted\": \"true\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3000/project/683d5597454d27834578db1b/tasks/684149e52f8dc37722b04a47/subtasks/6841ab5fdc8a3bc71dec57c3/status",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"project",
+										"683d5597454d27834578db1b",
+										"tasks",
+										"684149e52f8dc37722b04a47",
+										"subtasks",
+										"6841ab5fdc8a3bc71dec57c3",
+										"status"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "http://localhost:3000"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "334"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"14e-dGJW52oMsigJzUKylE1qbycm4h8\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 05 Jun 2025 14:55:08 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 200,\n    \"data\": {\n        \"_id\": \"6841ab5fdc8a3bc71dec57c3\",\n        \"title\": \"User login controller\",\n        \"task\": \"684149e52f8dc37722b04a47\",\n        \"isCompleted\": true,\n        \"createdBy\": \"683418c2dd70da5172e4d708\",\n        \"createdAt\": \"2025-06-05T14:36:15.355Z\",\n        \"updatedAt\": \"2025-06-05T14:55:08.414Z\",\n        \"__v\": 0\n    },\n    \"message\": \"Subtasks status updated successfully\",\n    \"success\": true\n}"
+						},
+						{
+							"name": "updateSubtaskTitle",
+							"originalRequest": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"title\": \"User login controller + middleware + validator\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3000/project/683d5597454d27834578db1b/tasks/684149e52f8dc37722b04a47/subtasks/6841ab5fdc8a3bc71dec57c3",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"project",
+										"683d5597454d27834578db1b",
+										"tasks",
+										"684149e52f8dc37722b04a47",
+										"subtasks",
+										"6841ab5fdc8a3bc71dec57c3"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "http://localhost:3000"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "358"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"166-vqYiBC15B9gsb2i8yHBmGdlVaUE\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 05 Jun 2025 14:57:23 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 200,\n    \"data\": {\n        \"_id\": \"6841ab5fdc8a3bc71dec57c3\",\n        \"title\": \"User login controller + middleware + validator\",\n        \"task\": \"684149e52f8dc37722b04a47\",\n        \"isCompleted\": true,\n        \"createdBy\": \"683418c2dd70da5172e4d708\",\n        \"createdAt\": \"2025-06-05T14:36:15.355Z\",\n        \"updatedAt\": \"2025-06-05T14:57:22.984Z\",\n        \"__v\": 0\n    },\n    \"message\": \"Subtasks title updated successfully\",\n    \"success\": true\n}"
+						},
+						{
+							"name": "deleteSubtask",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"title\": \"User login controller + middleware + validator\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3000/project/683d5597454d27834578db1b/tasks/684149e52f8dc37722b04a47/subtasks/6841ab5fdc8a3bc71dec57c3",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"project",
+										"683d5597454d27834578db1b",
+										"tasks",
+										"684149e52f8dc37722b04a47",
+										"subtasks",
+										"6841ab5fdc8a3bc71dec57c3"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "http://localhost:3000"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "84"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"54-FbDcA7seEao0khenSJTHTqSMrmY\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 05 Jun 2025 14:58:02 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 200,\n    \"data\": {},\n    \"message\": \"Subtask deleted successfully\",\n    \"success\": true\n}"
+						}
+					]
+				}
+			],
+			"description": "one should be logged in -> has access to the project -> has access to view the task\n\nEach such user can see the subtask.\n\nBut, a creater can only update, delete the subtask."
+		},
+		{
+			"name": "test route",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "healthCheck",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/v1/healthcheck",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"healthcheck"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
