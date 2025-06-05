@@ -9,12 +9,14 @@ updateSubTaskTitle: only creater can update
 updateSubTaskStatus: only creater can update
 */
 
-import { SubTask } from "../models/subtask.models";
-import { apiError } from "../utils/api.error";
-import { apiResponse } from "../utils/api.response";
-import { asyncHandler } from "../utils/async-handler";
+import mongoose from "mongoose";
+import { SubTask } from "../models/subtask.models.js";
+import { apiError } from "../utils/api.error.js";
+import { apiResponse } from "../utils/api.response.js";
+import { asyncHandler } from "../utils/async-handler.js";
+import { Task } from "../models/task.models.js";
 
-export const getAllSubtasks = asyncHandler(async (req, req, next) => {
+export const getAllSubtasks = asyncHandler(async (req, res, next) => {
     try {
         const taskID = new mongoose.Types.ObjectId(`${req.params.taskID}`);
         const myTask = await Task.findById(taskID);
@@ -47,11 +49,22 @@ export const getAllSubtasks = asyncHandler(async (req, req, next) => {
         });
     }
 });
-export const createSubTask = asyncHandler(async (req, req, next) => {
+export const createSubTask = asyncHandler(async (req, res, next) => {
     try {
         const { title, isCompleted } = req.body;
 
-        const newSubtask = new SubTask({ title });
+        const existingSubtask = await SubTask.findOne({
+            title,
+            createdBy: req.user._id,
+            task: req.params.taskID
+        })
+        if(existingSubtask)
+            throw new apiError(401,"Subtask already exists")
+        const newSubtask = new SubTask({ 
+            title,
+            createdBy: req.user._id,
+            task: req.params.taskID
+        });
 
         if (isCompleted)
             newSubtask.isCompleted = isCompleted
@@ -78,7 +91,7 @@ export const createSubTask = asyncHandler(async (req, req, next) => {
         });
     }
 });
-export const getSubtaskByID = asyncHandler(async (req, req, next) => {
+export const getSubtaskByID = asyncHandler(async (req, res, next) => {
     try {
         const taskID = new mongoose.Types.ObjectId(`${req.params.taskID}`);
         const subTaskID = new mongoose.Types.ObjectId(`${req.params.subTaskID}`);
@@ -112,12 +125,20 @@ export const getSubtaskByID = asyncHandler(async (req, req, next) => {
         });
     }
 });
-export const updateSubTaskTitle = asyncHandler(async (req, req, next) => {
+export const updateSubTaskTitle = asyncHandler(async (req, res, next) => {
     try {
         const subTaskID = new mongoose.Types.ObjectId(`${req.params.subTaskID}`);
         const mySubtask = await SubTask.findById(subTaskID)
         const {title} = req.body;
 
+        const existingSubtask = await SubTask.findOne({
+            title,
+            createdBy: req.user._id,
+            task: req.params.taskID
+        })
+        if(existingSubtask)
+            throw new apiError(401,"Subtask already exists")
+        
         mySubtask.title = title;
         await mySubtask.save();
 
@@ -142,7 +163,7 @@ export const updateSubTaskTitle = asyncHandler(async (req, req, next) => {
         });
     }
 });
-export const deleteSubTask = asyncHandler(async (req, req, next) => {
+export const deleteSubTask = asyncHandler(async (req, res, next) => {
     try {
         const subTaskID = new mongoose.Types.ObjectId(`${req.params.subTaskID}`);
         await SubTask.findByIdAndDelete(subTaskID);
@@ -166,7 +187,7 @@ export const deleteSubTask = asyncHandler(async (req, req, next) => {
         });
     }
 });
-export const updateTaskStatus = asyncHandler(async (req, req, next) => {
+export const updateTaskStatus = asyncHandler(async (req, res, next) => {
     try {
         const subTaskID = new mongoose.Types.ObjectId(`${req.params.subTaskID}`);
         const mySubtask = await SubTask.findById(subTaskID)
