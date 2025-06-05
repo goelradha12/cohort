@@ -2,12 +2,12 @@ import { Router } from "express";
 import { isLoggedIn } from "../middlewares/auth.middlewares.js";
 import { createProject, deleteProject, getProjectByID, getProjects, updateProject } from "../controllers/project.controllers.js";
 import { validate } from "../middlewares/validator.middleware.js";
-import { createProjectValidator } from "../validators/index.js";
-import { verifyMember, verifyProjectAccess, verifyUser } from "../middlewares/projectVerification.middlewares.js";
+import { createProjectValidator, createTaskValidator, updateTaskStatusValidator, updateTaskValidator } from "../validators/index.js";
+import { verifyMember, verifyProjectAccess, verifyTaskSpecialAccess, verifyUser } from "../middlewares/projectVerification.middlewares.js";
 import { UserRolesEnum } from "../utils/constants.js";
 import { addMemberToProject, deleteMember, getMemberByID, getProjectMembers, updateMember, updateMemberRole } from "../controllers/projectmember.controllers.js";
 import { createNote, deleteNote, getNote, getNoteByID, updateNote } from "../controllers/note.controllers.js";
-import { createNewTask, deleteATask, getAllTasks, getAssignedTask, getCreatedTask, getTaskByID, updateTaskStatus } from "../controllers/task.controllers.js";
+import { createNewTask, deleteATask, getAllTasks, getAssignedTask, getCreatedTask, getTaskByID, updateStatus, updateTask } from "../controllers/task.controllers.js";
 
 
 const router = Router();
@@ -25,10 +25,10 @@ router.route("/:projectID/update").post(isLoggedIn, verifyUser, verifyProjectAcc
 router.route("/:projectID/addMember").post(isLoggedIn, verifyUser, verifyProjectAccess(projectMemberAccessList), addMemberToProject)
 router.route("/:projectID/getMembers").get(isLoggedIn, verifyUser, verifyProjectAccess(projectGetMemberAccessList), getProjectMembers)
 
-router.route("/:projectID/:memberID").get(isLoggedIn, verifyUser, verifyProjectAccess(projectMemberAccessList), verifyMember, getMemberByID)
-router.route("/:projectID/:memberID/updateMember").post(isLoggedIn, verifyUser, verifyProjectAccess(projectMemberAccessList), verifyMember, updateMember)
-router.route("/:projectID/:memberID/updateMemberRole").post(isLoggedIn, verifyUser, verifyProjectAccess(projectMemberAccessList), verifyMember, updateMemberRole)
-router.route("/:projectID/:memberID/deleteMember").get(isLoggedIn, verifyUser, verifyProjectAccess(projectMemberAccessList), verifyMember, deleteMember)
+router.route("/:projectID/m/:memberID").get(isLoggedIn, verifyUser, verifyProjectAccess(projectMemberAccessList), verifyMember, getMemberByID)
+router.route("/:projectID/m/:memberID/updateMember").post(isLoggedIn, verifyUser, verifyProjectAccess(projectMemberAccessList), verifyMember, updateMember)
+router.route("/:projectID/m/:memberID/updateMemberRole").post(isLoggedIn, verifyUser, verifyProjectAccess(projectMemberAccessList), verifyMember, updateMemberRole)
+router.route("/:projectID/m/:memberID/deleteMember").get(isLoggedIn, verifyUser, verifyProjectAccess(projectMemberAccessList), verifyMember, deleteMember)
 
 
 // ------ Notes Routers -------
@@ -46,13 +46,21 @@ router.route("/:projectID/notes/n/:noteID").post(isLoggedIn, verifyUser, verifyP
 
 // ------ Task Routers -------
 
-router.route("/:projectID/tasks").get(getAllTasks)
-    .post(createNewTask)
+const taskProjectAccessList = [UserRolesEnum.ADMIN, UserRolesEnum.MEMBER, UserRolesEnum.PROJECT_ADMIN];
+const getAllTaskAccessList = [UserRolesEnum.ADMIN, UserRolesEnum.PROJECT_ADMIN];
+const getTaskByIDAccessList = ["assignedTo", "assignedBy", UserRolesEnum.ADMIN, UserRolesEnum.PROJECT_ADMIN];
+const deleteTaskAccessList = ["assignedBy", UserRolesEnum.ADMIN, UserRolesEnum.PROJECT_ADMIN];
+const updateTaskAccessList = ["assignedBy", "assignedTo", UserRolesEnum.ADMIN, UserRolesEnum.PROJECT_ADMIN];
 
-router.route("/:projectID/tasks/:taskID").get(getTaskByID)
-    .delete(deleteATask)
-    .patch(updateTaskStatus)
+router.route("/:projectID/tasks").get(isLoggedIn, verifyUser, verifyProjectAccess(getAllTaskAccessList), getAllTasks)
+    .post(isLoggedIn, verifyUser, verifyProjectAccess(taskProjectAccessList), createTaskValidator(), validate, createNewTask)
 
-router.route("/:projectID/tasks/assigned").get(getAssignedTask)
-router.route("/:projectID/tasks/created").get(getCreatedTask)
+router.route("/:projectID/tasks/assigned").get(isLoggedIn, verifyUser, verifyProjectAccess(taskProjectAccessList), getAssignedTask)
+router.route("/:projectID/tasks/created").get(isLoggedIn, verifyUser, verifyProjectAccess(taskProjectAccessList), getCreatedTask)
+
+router.route("/:projectID/tasks/:taskID").get(isLoggedIn, verifyUser, verifyTaskSpecialAccess(getTaskByIDAccessList), getTaskByID)
+    .delete(isLoggedIn, verifyUser, verifyTaskSpecialAccess(deleteTaskAccessList), deleteATask)
+    .patch(isLoggedIn, verifyUser, verifyTaskSpecialAccess(updateTaskAccessList), updateTaskValidator(), validate, updateTask)
+
+router.route("/:projectID/tasks/:taskID/updateStatus").patch(isLoggedIn, verifyUser, verifyProjectAccess(taskProjectAccessList), updateTaskStatusValidator(), validate, updateStatus)
 export default router;

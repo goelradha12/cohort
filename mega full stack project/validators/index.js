@@ -1,4 +1,5 @@
 import { body } from "express-validator";
+import { AvailableTaskStatus } from "../utils/constants.js";
 
 export const userRegistrationValidator = () => {
   return [
@@ -97,5 +98,53 @@ export const createProjectValidator = () => {
     .trim()
     .notEmpty()
     .withMessage("Project name is Required")
+  ]
+}
+
+export const createTaskValidator = () => {
+  return [
+    body("title")
+    .notEmpty()
+    .withMessage("Title is Required")
+    .isLength({max:100})
+    .withMessage("Max 100 char are allowed")
+    .isString()
+    .withMessage("String format is required"),
+    body("assignedToUsername")
+    .notEmpty()
+    .withMessage("Mention to whom this task is assigned"),
+    body("description")
+    .optional()
+    .isLength({max:1000})
+    .withMessage("Max 1000 char are allowed"),
+    body("status")
+    .optional()
+    .isIn(AvailableTaskStatus)
+    .withMessage("Invalid value recieved")
+  ]
+}
+
+export const updateTaskStatusValidator = () => {
+  return [
+    body("status")
+    .notEmpty()
+    .withMessage("Status value is required")
+    .isIn(AvailableTaskStatus)
+    .withMessage("Invalid value recieved")
+  ]
+}
+
+export const updateTaskValidator = () => {
+  return [
+    body("newTitle")
+    .optional()
+    .isLength({max:100})
+    .withMessage("Max 100 char are allowed")
+    .isString()
+    .withMessage("String format is required"),
+    body("newDescription")
+    .optional()
+    .isLength({max:1000})
+    .withMessage("Max 1000 char are allowed")
   ]
 }
