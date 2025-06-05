@@ -17,15 +17,7 @@ import { asyncHandler } from "../utils/async-handler.js";
 import { User } from "../models/user.models.js";
 import { ProjectMember } from "../models/projectmember.models.js";
 
-/*
---------SubTasks--------
-routes: /:taskID
-createSubTask: user with the access to task (assignedTo, assignedBy)
-getSubTask: user with the access to task (assignedTo, assignedBy)
-deleteSubTask: only creater can delete
-updateSubTaskTitle: only creater can update
-updateSubTaskStatus: only creater can update
-*/
+
 
 export const getAllTasks = asyncHandler(async function (req, res, next) {
     try {

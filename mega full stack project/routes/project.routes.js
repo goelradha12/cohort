@@ -2,12 +2,13 @@ import { Router } from "express";
 import { isLoggedIn } from "../middlewares/auth.middlewares.js";
 import { createProject, deleteProject, getProjectByID, getProjects, updateProject } from "../controllers/project.controllers.js";
 import { validate } from "../middlewares/validator.middleware.js";
-import { createProjectValidator, createTaskValidator, updateTaskStatusValidator, updateTaskValidator } from "../validators/index.js";
-import { verifyMember, verifyProjectAccess, verifyTaskSpecialAccess, verifyUser } from "../middlewares/projectVerification.middlewares.js";
+import { createProjectValidator, createSubtaskValidator, createTaskValidator, updateSubtaskStatusValidator, updateSubtaskValidator, updateTaskStatusValidator, updateTaskValidator } from "../validators/index.js";
+import { verifyMember, verifyProjectAccess, verifySubtaskCreater, verifyTaskSpecialAccess, verifyUser } from "../middlewares/projectVerification.middlewares.js";
 import { UserRolesEnum } from "../utils/constants.js";
 import { addMemberToProject, deleteMember, getMemberByID, getProjectMembers, updateMember, updateMemberRole } from "../controllers/projectmember.controllers.js";
 import { createNote, deleteNote, getNote, getNoteByID, updateNote } from "../controllers/note.controllers.js";
 import { createNewTask, deleteATask, getAllTasks, getAssignedTask, getCreatedTask, getTaskByID, updateStatus, updateTask } from "../controllers/task.controllers.js";
+import { createSubTask, deleteSubTask, getAllSubtasks, getSubtaskByID, updateSubTaskTitle, updateTaskStatus } from "../controllers/subtask.controllers.js";
 
 
 const router = Router();
@@ -63,4 +64,20 @@ router.route("/:projectID/tasks/:taskID").get(isLoggedIn, verifyUser, verifyTask
     .patch(isLoggedIn, verifyUser, verifyTaskSpecialAccess(updateTaskAccessList), updateTaskValidator(), validate, updateTask)
 
 router.route("/:projectID/tasks/:taskID/updateStatus").patch(isLoggedIn, verifyUser, verifyProjectAccess(taskProjectAccessList), updateTaskStatusValidator(), validate, updateStatus)
+
+
+// ------ Subtask Routers ------ 
+
+
+router.route("/:projectID/tasks/:taskID/subtasks")
+    .get(isLoggedIn, verifyUser, verifyTaskSpecialAccess(getTaskByIDAccessList), getAllSubtasks)
+    .post(isLoggedIn, verifyUser, verifyTaskSpecialAccess(getTaskByIDAccessList),verifyProjectAccess(taskProjectAccessList), createSubtaskValidator(), validate,  createSubTask)
+
+router.route("/:projectID/tasks/:taskID/subtasks/:subTaskID")
+    .get(isLoggedIn, verifyUser, verifyTaskSpecialAccess(getTaskByIDAccessList), getSubtaskByID)
+    .patch(isLoggedIn, verifyUser, verifySubtaskCreater, updateSubtaskValidator(), validate, updateSubTaskTitle)
+    .delete(isLoggedIn, verifyUser, verifySubtaskCreater, deleteSubTask)
+
+router.route("/:projectID/tasks/:taskID/subtasks/:subTaskID/status")
+    .patch(isLoggedIn, verifyUser, verifySubtaskCreater, updateSubtaskStatusValidator(), validate, updateTaskStatus)
 export default router;

@@ -148,3 +148,41 @@ export const updateTaskValidator = () => {
     .withMessage("Max 1000 char are allowed")
   ]
 }
+
+export const createSubtaskValidator = () => {
+  return [
+    body("title")
+    .notEmpty()
+    .withMessage("Title is required for subtaks")
+    .isLength({max:1000})
+    .withMessage("Max 1000 char are allowed")
+    .isString()
+    .withMessage("String format is required"),
+    body("isCompleted")
+    .optional()
+    .isBoolean()
+    .withMessage("Boolean value is required for task status")
+  ]
+}
+
+export const updateSubtaskValidator = () => {
+  return [
+    body("title")
+    .notEmpty()
+    .withMessage("Title is required for subtaks")
+    .isLength({max:1000})
+    .withMessage("Max 1000 char are allowed")
+    .isString()
+    .withMessage("String format is required")
+  ]
+}
+
+export const updateSubtaskStatusValidator = () => {
+  return [
+    body("isCompleted")
+    .notEmpty()
+    .withMessage("Iscompleted value is required")
+    .isBoolean()
+    .withMessage("Boolean value is required for task status")
+  ]
+}

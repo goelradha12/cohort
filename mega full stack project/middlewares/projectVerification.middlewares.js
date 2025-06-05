@@ -4,6 +4,7 @@ import { User } from "../models/user.models.js";
 import mongoose from "mongoose";
 import { ProjectMember } from "../models/projectmember.models.js";
 import { Task } from "../models/task.models.js";
+import { SubTask } from "../models/subtask.models.js";
 
 
 export const verifyUser = asyncHandler(async (req, res, next) => {
@@ -175,5 +176,42 @@ export const verifyTaskSpecialAccess = (roles = []) => asyncHandler(async (req,r
         message: "Something went wrong",
         success: false,
         });   
+    }
+})
+
+export const verifySubtaskCreater = asyncHandler(async (req, res, next) => {
+    try {
+        const taskID = new mongoose.Types.ObjectId(`${req.params.taskID}`);
+        const subTaskID = new mongoose.Types.ObjectId(`${req.params.subTaskID}`);
+        const userID = new mongoose.Types.ObjectId(`${req.user._id}`);
+
+        const myTask = await Task.findById(taskID);
+
+        if (!myTask)
+            throw new apiError(401, "Task doesn't exists")
+        if (!subTaskID)
+            throw new apiError(401, "Subtask ID is required")
+        const mySubtask = await SubTask.findById(subTaskID)
+
+        if(userID.equals(mySubtask.createdBy))
+            return next();
+        
+        else
+            throw new apiError(401,"Only creater can access the requested action")
+    } catch (error) {
+        console.log(error);
+        if (error instanceof apiError) {
+            return res.status(error.statusCode).json({
+                statusCode: error.statusCode,
+                message: error.message,
+                success: false,
+            });
+        }
+
+        return res.status(500).json({
+            statusCode: 500,
+            message: "Something went wrong while retrieving tasks",
+            success: false,
+        });
     }
 })
