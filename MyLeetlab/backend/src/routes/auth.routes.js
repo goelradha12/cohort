@@ -4,8 +4,8 @@ import { validate } from "../middlewares/validator.middleware.js"
 // import { forgotPasswordRequestValidator, resendVerificationEmailValidator, resetPasswordValidator, userChangePasswordValidator, userLoginValidator, userRegistrationValidator } from "../validators/index.js"
 // import { isLoggedIn } from "../middlewares/auth.middlewares.js";
 // import upload from "../middlewares/multer.middlewares.js";
-import { userRegistrationValidator } from "../validators/index.js"
-import { registerUser, verifyMail } from "../controllers/auth.controllers.js";
+import { resendVerificationEmailValidator, userChangePasswordValidator, userLoginValidator, userRegistrationValidator } from "../validators/index.js"
+import { changeCurrPassword, loginUser, registerUser, resendVerificationEmail, verifyMail } from "../controllers/auth.controllers.js";
 
 const router = Router();
 
@@ -15,9 +15,9 @@ router.route("/register").post(
     // (req,res,next)=>{console.log(req.body); return next()},
     registerUser);
 router.route("/verifyMail/:token").get(verifyMail);
-// router.route("/login").post(userLoginValidator(),validate,loginUser);
-// router.route("/changePassword").post(userChangePasswordValidator(),validate,changeCurrPassword);
-// router.route("/resendVerificationEmail").post(resendVerificationEmailValidator(),validate,resendVerificationEmail);
+router.route("/login").post(userLoginValidator(),validate,loginUser);
+router.route("/changePassword").post(userChangePasswordValidator(),validate,changeCurrPassword);
+router.route("/resendVerificationEmail").post(resendVerificationEmailValidator(),validate,resendVerificationEmail);
 // router.route("/forgotPassword").post(forgotPasswordRequestValidator(),validate,forgotPasswordRequest);
 // router.route("/resetPassword/:token").post(resetPasswordValidator(),validate,resetPassword);
 // router.route("/getProfile").get(isLoggedIn,getUser);

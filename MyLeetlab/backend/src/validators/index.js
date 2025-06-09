@@ -22,9 +22,11 @@ export const userRegistrationValidator = () => {
 export const userLoginValidator = () => {
   return [
     body("email")
-      .trim(),
-    body("username")
-      .trim(),
+      .trim()
+      .notEmpty()
+      .withMessage("Email is Required")
+      .isEmail()
+      .withMessage("Email is Invalid"),
     body("password")
       .notEmpty()
       .isLength({ min: 6 })
@@ -37,9 +39,11 @@ export const userLoginValidator = () => {
 export const userChangePasswordValidator = () => {
   return [
     body("email")
-      .trim(),
-    body("username")
-      .trim(),
+      .trim()
+      .notEmpty()
+      .withMessage("Email is Required")
+      .isEmail()
+      .withMessage("Email is Invalid"),
     body("oldPassword")
       .trim()
       .notEmpty()
@@ -57,9 +61,11 @@ export const userChangePasswordValidator = () => {
 export const resendVerificationEmailValidator = () => {
   return [
     body("email")
-      .trim(),
-    body("username")
-      .trim(),
+      .trim()
+      .notEmpty()
+      .withMessage("Email is Required")
+      .isEmail()
+      .withMessage("Email is Invalid"),
     body("password")
       .trim()
       .notEmpty()
