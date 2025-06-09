@@ -2,20 +2,13 @@ import { body } from "express-validator";
 
 export const userRegistrationValidator = () => {
   return [
-    body("username")
-      .trim()
-      .notEmpty()
-      .withMessage("Username is Required")
-      .isLength({ min: 3 })
-      .withMessage("Atleast 3 digits are Required")
-      .isLength({ max: 13 })
-      .withMessage("Maximum 13 digits Allowed"),
     body("email")
       .trim()
       .notEmpty()
       .withMessage("Email is Required")
       .isEmail()
-      .withMessage("Email is Invalid"),
+      .withMessage("Email is Invalid")
+      .toLowerCase(),
     body("password")
       .notEmpty()
       .withMessage("Password is Required")
