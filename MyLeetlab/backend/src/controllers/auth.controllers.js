@@ -6,7 +6,7 @@ import jwt from "jsonwebtoken";
 import { db } from "../libs/db.js";
 import { UserRole } from "../generated/prisma/index.js";
 import bcrypt from "bcryptjs";
-import { generateTemporaryTokens } from "../utils/generateTokens.js";
+import { generateAccessToken, generateRefreshToken, generateTemporaryTokens } from "../utils/generateTokens.js";
 
 export const registerUser = asyncHandler(async function (req, res) {
     // recieve name, email and password
@@ -142,21 +142,16 @@ export const verifyMail = asyncHandler(async function (req, res) {
     }
 });
 
-/*
+
 export const loginUser = asyncHandler(async function (req, res) {
     // Goal: add two jwt tokens (access and refresh) in cookies
     // recieve (email || username) && password from user
-    const { email, username, password } = req.body;
+    const { email, password } = req.body;
 
     try {
         // check if exists in db
-        let user = undefined;
-        if (email) {
-            user = await User.findUnique({ where:{email} })
-        }
-        else if (username) {
-            user = await User.findUnique({ username })
-        }
+        const user = await db.User.findUnique({ where: { email } })
+        
 
         if (!user) {
             throw new apiError(401, "Invalid Username Or Email")
@@ -174,8 +169,8 @@ export const loginUser = asyncHandler(async function (req, res) {
                 throw new apiError(401, "Verify Email Before Login")
 
             // add access token in cookies
-            const accessToken = user.generateAccessToken();
-            const refreshToken = user.generateRefreshToken();
+            const accessToken = generateAccessToken(user);
+            const refreshToken = generateRefreshToken(user);
             const cookieOptions = {
                 httpOnly: true,
                 sameSite: "strict",
@@ -185,12 +180,18 @@ export const loginUser = asyncHandler(async function (req, res) {
             res.cookie("accessToken", accessToken, cookieOptions)
             res.cookie("refreshToken", refreshToken, cookieOptions)
             // add refresh token in database
-            user.refreshToken = refreshToken;
-            await user.save();
+            await db.User.update({
+                where: {
+                    id: user.id
+                },
+                data: {
+                    refreshToken
+                }
+            })
             res.status(200).json(
                 new apiResponse(
                     200,
-                    { username: user.username, email: user.email, refreshToken: user.refreshToken },
+                    { username: user.username, email: user.email, isVerified: user.isEmailVerified, role: user.role, refreshToken: refreshToken },
                     "User logged in Successfully")
             )
         }
@@ -220,36 +221,36 @@ export const loginUser = asyncHandler(async function (req, res) {
 export const changeCurrPassword = asyncHandler(async function (req, res) {
     // goal: recieve username or email and update new pass from old
     // recieve username|email and old password, new password
-    const { username, email, oldPassword, newPassword } = req.body;
+    const { email, oldPassword, newPassword } = req.body;
 
     try {
-        // if such username or email exists, 
-        let user = undefined;
-        if (email) {
-            user = await User.findOne({ email })
-        }
-        else if (username) {
-            user = await User.findOne({ username })
-        }
-
+        // check if such email exists, 
+        const user = await db.User.findUnique({ where: {email} })
+    
         if (!user) {
             throw new apiError(401, "Invalid Username Or Email")
         }
 
         // verify oldPassword
-        const isCorrect = await user.isPasswordCorrect(oldPassword);
+        const isCorrect = await bcrypt.compare(oldPassword,user.password)
 
         if (!isCorrect) {
             throw new apiError(401, "Wrong password")
         }
         // update new password in db and save
-        user.password = newPassword;
+        await db.User.update({
+            where: {
+                id: user.id
+            },
+            data: {
+                password: newPassword
+            }
+        })
 
-        await user.save();
         res.status(200).json(
             new apiResponse(
                 200,
-                { username: user.username, email: user.email },
+                { email: user.email, isVerified: user.isEmailVerified, role: user.role },
                 "Password changed Successfully")
         )
     } catch (error) {
@@ -273,25 +274,20 @@ export const changeCurrPassword = asyncHandler(async function (req, res) {
 export const resendVerificationEmail = asyncHandler(async function (req, res) {
     // Goal: send a mail to user with refresh token if he/she is not verified
     // ask for email/username and password
-    const { username, email, password } = req.body;
+    const { email, password } = req.body;
 
     try {
         // if such username or email exists, 
-        let user = undefined;
-        if (email) {
-            user = await User.findOne({ email })
-        }
-        else if (username) {
-            user = await User.findOne({ username })
-        }
+        
+        const user = await db.User.findUnique({ where: { email } })
+        
 
         if (!user) {
             throw new apiError(401, "Invalid Username Or Email")
         }
 
         // verify password
-        const isCorrect = await user.isPasswordCorrect(password);
-        console.log(isCorrect);
+        const isCorrect = await bcrypt.compare(password, user.password);
         if (!isCorrect) {
             throw new apiError(401, "Wrong password")
         }
@@ -301,10 +297,22 @@ export const resendVerificationEmail = asyncHandler(async function (req, res) {
         }
 
         // send verification mail to the user
-        const { hashedToken, tokenExpiry } = user.generateTemporaryToken();
+        const { hashedToken, tokenExpiry } = generateTemporaryTokens();
 
+        // add token to database 
+        // save changes
+        await db.User.update({
+            where: {
+                id: user.id
+            },
+            data: {
+                emailVerificationToken: hashedToken,
+                emailVerificationExpiry: tokenExpiry
+            }
+        })
+        
         // send email for verification
-        let verificationURL = process.env.BASE_URL + "/api/v1/users/verifyMail/" + hashedToken;
+        let verificationURL = process.env.BASE_URL + "/api/v1/auth/verifyMail/" + hashedToken;
         let expiryDateFormatted = new Date(tokenExpiry)
         const mailGenContent = emailVerificationMailGenContent(user.username, verificationURL, expiryDateFormatted.toLocaleString())
         sendMail({
@@ -313,21 +321,14 @@ export const resendVerificationEmail = asyncHandler(async function (req, res) {
             mailGenContent
         })
 
-        // add token to database 
-        user.emailVerificationToken = hashedToken;
-        user.emailVerificationExpiry = tokenExpiry;
-        // save changes
-        await user.save();
 
         // send positive response
         res.status(200).json(
             new apiResponse(
                 200,
                 {
-                    Username: user.username,
                     Email: user.email,
-                    isVerified: user.isEmailVerified,
-                    emailVerificationToken: user.emailVerificationToken
+                    isVerified: user.isEmailVerified
                 },
                 "Mail Sent Successfully"
             ))
@@ -348,6 +349,8 @@ export const resendVerificationEmail = asyncHandler(async function (req, res) {
         })
     }
 })
+
+/*
 
 export const forgotPasswordRequest = asyncHandler(async function (req, res) {
     // Goal: send a mail to user with forgotPass token as param accepting their mail
