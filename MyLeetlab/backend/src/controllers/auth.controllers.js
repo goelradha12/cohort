@@ -350,31 +350,34 @@ export const resendVerificationEmail = asyncHandler(async function (req, res) {
     }
 })
 
-/*
-
 export const forgotPasswordRequest = asyncHandler(async function (req, res) {
     // Goal: send a mail to user with forgotPass token as param accepting their mail
-    const { email, username } = req.body;
+    const { email } = req.body;
     try {
-        // if such username or email exists, 
-        let user = undefined;
-        if (email) {
-            user = await User.findOne({ email })
-        }
-        else if (username) {
-            user = await User.findOne({ username })
-        }
-
+        // if such username or email exists,
+        const user = await db.User.findUnique({ where: { email } })
+        
         if (!user) {
-            throw new apiError(401, "Invalid Username Or Email")
+            throw new apiError(401, "Invalid Email")
         }
 
         // create a forgotPasswordToken
-        const { hashedToken, tokenExpiry } = user.generateTemporaryToken();
-        const formattedDate = new Date(tokenExpiry);
-        const resetPassLink = process.env.BASE_URL + "/api/v1/users/resetPassword/" + hashedToken;
+        const { hashedToken, tokenExpiry } = generateTemporaryTokens();
+        // save it in db 
+        const updatedUser = await db.User.update({
+            where: {
+                id: user.id
+            },
+            data: {
+                forgotPasswordToken: hashedToken,
+                forgotPasswordExpiry: tokenExpiry
+            }
+        })
+
 
         // send it to user in his/her mail
+        const formattedDate = new Date(tokenExpiry);
+        const resetPassLink = process.env.BASE_URL + "/api/v1/auth/resetPassword/" + hashedToken;
         const mailGenContent = forgotPasswordMailGenContent(user.username, resetPassLink, formattedDate.toLocaleString())
         sendMail({
             email: user.email,
@@ -382,20 +385,12 @@ export const forgotPasswordRequest = asyncHandler(async function (req, res) {
             mailGenContent
         })
 
-        // save it in db 
-        user.forgotPasswordToken = hashedToken;
-        user.forgotPasswordExpiry = tokenExpiry;
-        await user.save();
 
         // send success message
         return res.status(200).json(
             new apiResponse(
                 200,
-                {
-                    username: user.username,
-                    email: user.email,
-                    forgotPasswordToken: user.forgotPasswordToken,
-                },
+                { email: updatedUser.email, isVerified: updatedUser.isEmailVerified, role: updatedUser.role,name:updatedUser.username },
                 "Mail sent to Reset Your Password")
         )
     } catch (error) {
@@ -424,8 +419,9 @@ export const resetPassword = asyncHandler(async function (req, res) {
     try {
 
         // get user with token
-        const user = await User.findOne({
+        const user = await db.User.findFirst({ where: {
             forgotPasswordToken: token
+        }
         })
         if (!user) {
             throw new apiError(401, "Invalid Token")
@@ -433,24 +429,29 @@ export const resetPassword = asyncHandler(async function (req, res) {
 
         // store expiry and remove from db
         const expiry = user.forgotPasswordExpiry;
-        user.forgotPasswordExpiry = undefined;
-        user.forgotPasswordToken = undefined;
 
         if (expiry < Date.now())
             throw new apiError(401, "Request TimeOut")
 
-        user.password = newPassword;
-
-        await user.save();
+        await db.User.update({
+            where: {
+                id: user.id
+            },
+            data: {
+                forgotPasswordToken: null,
+                forgotPasswordExpiry: null,
+                password: newPassword
+            }
+        })
 
         // send positive response
         res.status(200).json(
             new apiResponse(
                 200,
                 {
-                    username: user.username,
-                    email: user.email,
-                    forgotPasswordToken: user.forgotPasswordToken,
+                    name: user.name,
+                    role: user.role,
+                    email: user.email
                 },
                 "Password Resetted Successfully"
             )
@@ -479,15 +480,14 @@ export const getUser = asyncHandler(async function (req, res) {
     try {
         if (req.user) {
 
-            const myUser = await User.findOne({ _id: req.user._id })
+            const myUser = await db.User.findUnique({ where:{ id: req.user._id} })
             if (!myUser)
                 throw new apiError(401, "No such User Exists")
 
             res.status(200).json(
                 new apiResponse(200, {
                     name: myUser.name,
-                    avatar: myUser.avatar.url,
-                    username: myUser.username,
+                    avatar: myUser.image,
                     email: myUser.email,
                     isEmailVerified: myUser.isEmailVerified
                 }, "User Profile Shared Successfully")
@@ -515,37 +515,50 @@ export const getUser = asyncHandler(async function (req, res) {
     }
 })
 
-
 export const updateUserProfile = asyncHandler(async function (req, res) {
     // goal: user can edit {name, avatar} in its profile
     // Make sure user is logged in(has access token) before giving the access
 
     // get newName, newAvatar
-    const { newName, newAvatar } = req.body;
+    const { newName, newImage } = req.body;
 
     try {
         if (!(newName || req.file))
             throw new apiError(401, "No data recieved to update")
 
         if (req.user) {
-            const myUser = await User.findOne({ _id: req.user._id });
+            const myUser = await db.User.findUnique({ where:{id: req.user._id} });
             if (!myUser) throw new apiError(401, "No such User Exists");
 
             if (newName)
-                myUser.name = newName;
-            if (req.file)
-                myUser.avatar.url = req.file.path;
+                await db.User.update({
+                    where: {
+                        id: myUser.id
+                    },
+                    data: {
+                        name: newName
+                    }
+                });
 
-            await myUser.save();
+            if (newImage)
+                await db.User.update({
+                    where: {
+                        id: myUser.id
+                    },
+                    data: {
+                        image: newImage
+                    }
+                });
+            const updatedUser = await db.User.findUnique({ where:{id: myUser.id} })
             res.status(200).json(
                 new apiResponse(
                     200,
                     {
-                        name: myUser.name,
-                        avatar: myUser.avatar.url,
-                        username: myUser.username,
-                        email: myUser.email,
-                        isEmailVerified: myUser.isEmailVerified,
+                        name: updatedUser.name,
+                        image: updatedUser.image,
+                        email: updatedUser.email,
+                        isEmailVerified: updatedUser.isEmailVerified,
+                        role: updatedUser.role
                     },
                     "User updated Successfully",
                 ),
@@ -571,6 +584,7 @@ export const updateUserProfile = asyncHandler(async function (req, res) {
     }
 });
 
+
 export const refreshAccessToken = asyncHandler(async function (req, res) {
     // goal: when user gets on this URL, give him new access token if valid
     const { refreshToken } = req.cookies;
@@ -588,10 +602,10 @@ export const refreshAccessToken = asyncHandler(async function (req, res) {
                 user = userData;
             });
             // console.log(user)
-            const myUser = await User.findOne({ _id: user._id })
+            const myUser = await db.User.findUnique({ where: {id: user._id} })
             if (!myUser)
                 throw new apiError(401, "Invalid Token");
-            const accessToken = myUser.generateAccessToken();
+            const accessToken = generateAccessToken(myUser);
             const cookieOptions = {
                 httpOnly: true,
                 secure: true,
@@ -626,6 +640,7 @@ export const refreshAccessToken = asyncHandler(async function (req, res) {
     }
 })
 
+
 export const logOutUser = asyncHandler(async function (req, res) {
     // if user is logged in (check for refresh token), 
     // remove jwt tokens (refresh token) from db and cookies
@@ -644,7 +659,7 @@ export const logOutUser = asyncHandler(async function (req, res) {
                 user = userData;
             });
             // console.log(user)
-            const myUser = await User.findOne({ _id: user._id })
+            const myUser = await db.User.findUnique({ where:{ id: user._id} })
             if (!myUser)
                 throw new apiError(401, "Invalid Token");
 
@@ -652,8 +667,15 @@ export const logOutUser = asyncHandler(async function (req, res) {
             res.clearCookie('refreshToken')
             res.clearCookie('accessToken')
 
-            myUser.refreshToken = undefined;
-            await myUser.save();
+            // removing refresh token from db
+            await db.User.update({
+                where: {
+                    id: myUser.id
+                },
+                data: {
+                    refreshToken: null
+                }
+            })
             return res.status(200).json(
                 new apiResponse(200, "Logged Out Successfully")
             )
@@ -678,4 +700,4 @@ export const logOutUser = asyncHandler(async function (req, res) {
         })
     }
 })
-    */
+    
