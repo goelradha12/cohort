@@ -78,6 +78,8 @@ export const checkAdmin = async (req,res,next) => {
         const userID = req.user._id;
         const myUser = await db.User.findUnique({ where: { id: userID } })
         if (!myUser) throw new apiError(401, "No such User Exists")
+        if(!myUser.isEmailVerified) throw new apiError(401, "Email is not verified")
+            
         if (myUser.isAdmin) {
             next();
         } else {

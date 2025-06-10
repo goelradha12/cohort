@@ -1,8 +1,5 @@
 import { Router } from "express"
 import { validate } from "../middlewares/validator.middleware.js"
-// import { changeCurrPassword, forgotPasswordRequest, getUser, loginUser, logOutUser, refreshAccessToken, registerUser, resendVerificationEmail, resetPassword, updateUserProfile, verifyMail } from "../controllers/auth.controllers.js"
-// import { forgotPasswordRequestValidator, resendVerificationEmailValidator, resetPasswordValidator, userChangePasswordValidator, userLoginValidator, userRegistrationValidator } from "../validators/index.js"
-// import { isLoggedIn } from "../middlewares/auth.middlewares.js";
 import upload from "../middlewares/multer.middlewares.js";
 import { forgotPasswordRequestValidator, resendVerificationEmailValidator, resetPasswordValidator, userChangePasswordValidator, userLoginValidator, userRegistrationValidator } from "../validators/index.js"
 import { changeCurrPassword, forgotPasswordRequest, getUser, loginUser, logOutUser, refreshAccessToken, registerUser, resendVerificationEmail, resetPassword, updateUserProfile, verifyMail } from "../controllers/auth.controllers.js";
