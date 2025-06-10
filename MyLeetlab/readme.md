@@ -16,11 +16,26 @@
 - Jugde 0
 
 ## API routes
-- Authentication
-- Problem Management
-- Code-Execution
-- Submission
-- Playlist
+### - Authentication
+- register, 
+- login, 
+- resetPassword, 
+- updatePassword, 
+- forgotPassword, 
+- verifyUser, 
+- resendVerificationEmail, 
+- refreshAccessToken, 
+- logout
+### - Problem Management (for Admin only)
+- create-problem,
+- update-problem/:id
+- get-problem/:id
+- get-all-problems
+- delete-problem/:id
+- get-solved-problem/:id
+### - Code-Execution
+### - Submission
+### - Playlist
 
 ## User flow
 2 Users:
