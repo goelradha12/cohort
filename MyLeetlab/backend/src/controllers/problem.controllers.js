@@ -1,5 +1,6 @@
 import { submitBatch } from "../libs/judge0lib.js";
 import { apiError } from "../utils/api.error.js";
+import { apiResponse } from "../utils/api.response.js";
 import { asyncHandler } from "../utils/async-handler.js";
 
 export const createProblem = asyncHandler(async function (req, res) {
@@ -43,6 +44,7 @@ export const createProblem = asyncHandler(async function (req, res) {
             // validate if all testcases are passed
 
             for(let i=0;i<results.length;i++){
+                console.log("-------result-------", results[i])
                 const result = results[i];
 
                 if(result.status.id !==3) {
@@ -71,6 +73,10 @@ export const createProblem = asyncHandler(async function (req, res) {
                 userId: myUser.id
             }
         })
+
+        return res.status(200).json(
+            apiResponse(200, newProblem, "Problem Created Successfully")
+        )
 
     } catch (error) {
         console.log(erorrs)
