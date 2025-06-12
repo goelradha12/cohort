@@ -1,6 +1,6 @@
 import express from "express"
-import { checkAdmin, isLoggedIn, isVerified } from "../middlewares/auth.middlewares"
-import { createProblem, deleteProblem, getAllProblems, getProblemByID, updateProblem } from "../controllers/problem.controllers"
+import { checkAdmin, isLoggedIn, isVerified } from "../middlewares/auth.middlewares.js"
+import { createProblem, deleteProblem, getAllProblems, getAllProblemsSolvedByUser, getProblemByID, updateProblem } from "../controllers/problem.controllers.js"
 
 const router = express.Router()
 

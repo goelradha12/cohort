@@ -14,7 +14,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum  UserRole {
+enum UserRole {
   ADMIN
   USER
 }
@@ -26,44 +26,41 @@ enum Difficulty {
 }
 
 model User {
-  id String @id @default(uuid())
-  name String?
-  email String @unique
-  image String?
-  password String
-  role UserRole @default(USER)
-  emailVerificationToken String?
+  id                      String    @id @default(uuid())
+  name                    String?
+  email                   String    @unique
+  image                   String?
+  password                String
+  role                    UserRole  @default(USER)
+  emailVerificationToken  String?
   emailVerificationExpiry DateTime?
-  refreshToken String?
-  isEmailVerified Boolean @default(false)
-  forgotPasswordToken String?
-  forgotPasswordExpiry DateTime?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  refreshToken            String?
+  isEmailVerified         Boolean   @default(false)
+  forgotPasswordToken     String?
+  forgotPasswordExpiry    DateTime?
+  createdAt               DateTime  @default(now())
+  updatedAt               DateTime  @updatedAt
 
   problems Problem[]
 }
 
 model Problem {
-  id String @id @default(uuid())
-  title String
-  description String
-  difficulty Difficulty @default(EASY)
-  tags String[]
-  userId String
-  examples Json
-  constraints String
-  hints String?
-  editor String?
-
-  testcases Json
-  codeSnippets Json
+  id                 String     @id @default(uuid())
+  title              String
+  description        String
+  difficulty         Difficulty @default(EASY)
+  tags               String[]
+  userId             String
+  examples           Json
+  constraints        String
+  hints              String?
+  editor             String?
+  testcases          Json
+  codeSnippets       Json
   referenceSolutions Json
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt          DateTime   @default(now())
+  updatedAt          DateTime   @updatedAt
 
   // relationships
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
 }
