@@ -7,23 +7,23 @@ import { asyncHandler } from "../utils/async-handler.js";
 export const createProblem = asyncHandler(async function (req, res) {
     try {
         // get data for req
-        const {title, description, difficulty, tags, examples, constraints, testcases, codeSnippets,  referenceSolutions} = req.body
+        const { title, description, difficulty, tags, examples, constraints, testcases, codeSnippets, referenceSolutions } = req.body
 
         // check access
         // check is user is admin and data is valid
-        const myUser = await db.User.findUnique({where: {id: req.user._id}})
-        if(myUser.role !== "ADMIN")
+        const myUser = await db.User.findUnique({ where: { id: req.user._id } })
+        if (myUser.role !== "ADMIN")
             throw new apiError(401, "Access Denied")
-        
+
 
         // loop through each reference solutions
-        for(const [language, solutionCode] of Object.entries(referenceSolutions)){
+        for (const [language, solutionCode] of Object.entries(referenceSolutions)) {
             const languageID = getJudge0LanguageID(language)
 
-            if(!languageID)
+            if (!languageID)
                 throw new apiError(400, `${language} is not supported`)
 
-            const submissions = testcases.map((testcase)=> {
+            const submissions = testcases.map((testcase) => {
                 const input = testcase.input
                 const output = testcase.output
 
@@ -44,15 +44,15 @@ export const createProblem = asyncHandler(async function (req, res) {
 
             // validate if all testcases are passed
 
-            for(let i=0;i<results.length;i++){
+            for (let i = 0; i < results.length; i++) {
                 console.log("-------result-------", results[i])
                 const result = results[i];
 
-                if(result.status.id !==3) {
+                if (result.status.id !== 3) {
                     return res.status(400).json({
                         statusCode: 400,
                         success: false,
-                        message: `Testcase ${i+1} failed for ${language}`   
+                        message: `Testcase ${i + 1} failed for ${language}`
                     })
                 }
 
@@ -81,8 +81,8 @@ export const createProblem = asyncHandler(async function (req, res) {
 
     } catch (error) {
         console.log(erorrs)
-        if(error instanceof apiError){
-            return res.status(error.statusCode).json({ 
+        if (error instanceof apiError) {
+            return res.status(error.statusCode).json({
                 statusCode: error.statusCode,
                 message: error.message,
                 success: false
@@ -100,14 +100,14 @@ export const getAllProblems = asyncHandler(async function (req, res) {
     try {
         const problems = await db.Problem.findMany()
 
-        if(!problems)
+        if (!problems)
             throw new apiError(404, "No Problems Found")
         return res.status(200).json(
             apiResponse(200, problems, "All Problems Fetched Successfully")
         )
     } catch (error) {
         console.log(erorrs)
-        if(error instanceof apiError){
+        if (error instanceof apiError) {
             return res.status(error.statusCode).json({
                 statusCode: error.statusCode,
                 message: error.message,
@@ -124,8 +124,8 @@ export const getAllProblems = asyncHandler(async function (req, res) {
 })
 export const getProblemByID = asyncHandler(async function (req, res) {
     try {
-        const {id} = req.params;
-        if(!id)
+        const { id } = req.params;
+        if (!id)
             throw new apiError(400, "Problem ID is required")
 
         const problem = await db.Problem.findUnique({
@@ -133,14 +133,14 @@ export const getProblemByID = asyncHandler(async function (req, res) {
                 id
             }
         })
-        if(!problem)
+        if (!problem)
             throw new apiError(404, "Problem Not Found")
         return res.status(200).json(
             apiResponse(200, problem, "Problem Fetched Successfully")
         )
     } catch (error) {
         console.log(erorrs)
-        if(error instanceof apiError){
+        if (error instanceof apiError) {
             return res.status(error.statusCode).json({
                 statusCode: error.statusCode,
                 message: error.message,
@@ -157,10 +157,10 @@ export const getProblemByID = asyncHandler(async function (req, res) {
 })
 export const updateProblem = asyncHandler(async function (req, res) {
     try {
-        
+
     } catch (error) {
         console.log(erorrs)
-        if(error instanceof apiError){
+        if (error instanceof apiError) {
             return res.status(error.statusCode).json({
                 statusCode: error.statusCode,
                 message: error.message,
@@ -177,10 +177,10 @@ export const updateProblem = asyncHandler(async function (req, res) {
 })
 export const deleteProblem = asyncHandler(async function (req, res) {
     try {
-        
+
     } catch (error) {
         console.log(erorrs)
-        if(error instanceof apiError){
+        if (error instanceof apiError) {
             return res.status(error.statusCode).json({
                 statusCode: error.statusCode,
                 message: error.message,
@@ -197,10 +197,10 @@ export const deleteProblem = asyncHandler(async function (req, res) {
 })
 export const getAllProblemsSolvedByUser = asyncHandler(async function (req, res) {
     try {
-        
+
     } catch (error) {
         console.log(erorrs)
-        if(error instanceof apiError){
+        if (error instanceof apiError) {
             return res.status(error.statusCode).json({
                 statusCode: error.statusCode,
                 message: error.message,
