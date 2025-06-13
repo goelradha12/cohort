@@ -1,3 +1,4 @@
+import { db } from "../libs/db.js";
 import { submitBatch } from "../libs/judge0lib.js";
 import { apiError } from "../utils/api.error.js";
 import { apiResponse } from "../utils/api.response.js";
@@ -97,7 +98,13 @@ export const createProblem = asyncHandler(async function (req, res) {
 })
 export const getAllProblems = asyncHandler(async function (req, res) {
     try {
-        
+        const problems = await db.Problem.findMany()
+
+        if(!problems)
+            throw new apiError(404, "No Problems Found")
+        return res.status(200).json(
+            apiResponse(200, problems, "All Problems Fetched Successfully")
+        )
     } catch (error) {
         console.log(erorrs)
         if(error instanceof apiError){
@@ -111,13 +118,26 @@ export const getAllProblems = asyncHandler(async function (req, res) {
         return res.status(500).json({
             statusCode: 500,
             success: false,
-            message: "Something went wrong",
+            message: "Something went wrong while fetching problems",
         })
     }
 })
 export const getProblemByID = asyncHandler(async function (req, res) {
     try {
-        
+        const {id} = req.params;
+        if(!id)
+            throw new apiError(400, "Problem ID is required")
+
+        const problem = await db.Problem.findUnique({
+            where: {
+                id
+            }
+        })
+        if(!problem)
+            throw new apiError(404, "Problem Not Found")
+        return res.status(200).json(
+            apiResponse(200, problem, "Problem Fetched Successfully")
+        )
     } catch (error) {
         console.log(erorrs)
         if(error instanceof apiError){
