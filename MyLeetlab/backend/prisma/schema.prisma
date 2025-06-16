@@ -42,6 +42,7 @@ model User {
   updatedAt               DateTime  @updatedAt
 
   problems Problem[]
+  submission Submission[]
 }
 
 model Problem {
@@ -63,4 +64,48 @@ model Problem {
 
   // relationships
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  submission Submission[]
+}
+
+model Submission {
+  id         String   @id @default(uuid())
+  userId     String
+  problemId  String
+  sourceCode       Json
+  language   String
+  status     String // Accepted, Wrong Answer
+  stdin String?
+  stdout String?
+  stderr String?
+  compileOutput String?
+  memory String?
+  time String?
+
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  // relationships
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  problem Problem @relation(fields: [problemId], references: [id], onDelete: Cascade)
+  testCaseResult TestCaseResult[]
+}
+
+model TestCaseResult {
+  id         String   @id @default(uuid())
+  submissionId String
+  testCase  Int
+  passed     Boolean
+  stdout String?
+  expected String
+  stderr String?
+  compileOutput String?
+  status String
+  memory String?
+  time String?
+
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  submission Submission @relation(fields: [submissionId], references: [id], onDelete: Cascade)
+  @@index([submissionId]) 
 }

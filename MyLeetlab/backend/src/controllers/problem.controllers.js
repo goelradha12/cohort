@@ -157,7 +157,91 @@ export const getProblemByID = asyncHandler(async function (req, res) {
 })
 export const updateProblem = asyncHandler(async function (req, res) {
     try {
+        // get all the data
+        const { title, description, difficulty, tags, examples, constraints, testcases, codeSnippets, referenceSolutions } = req.body
 
+        // check if problem exists
+        const problem = await db.Problem.findUnique({
+            where: {
+                id: req.params.id
+            }
+        })
+        if (!problem)
+            throw new apiError(404, "Problem Not Found")
+
+        // check access
+        // check is user is admin and data is valid
+        const myUser = await db.User.findUnique({ where: { id: req.user._id } })
+        if (myUser.role !== "ADMIN")
+            throw new apiError(401, "Access Denied")
+
+
+        // loop through each reference solutions
+        if (testcases || referenceSolutions) {
+
+            for (const [language, solutionCode] of Object.entries(referenceSolutions)) {
+                const languageID = getJudge0LanguageID(language)
+
+                if (!languageID)
+                    throw new apiError(400, `${language} is not supported`)
+
+                const submissions = testcases.map((testcase) => {
+                    const input = testcase.input
+                    const output = testcase.output
+
+                    return {
+                        source_code: solutionCode,
+                        language_id: languageID,
+                        stdin: input,
+                        expected_output: output
+                    }
+                })
+
+                const submissionResults = await submitBatch(submissions)
+
+                const tokens = submissionResults.map((res) => res.token)
+
+                // wait till all are executed
+                const results = await pollBatchResults(tokens)
+
+                // validate if all testcases are passed
+
+                for (let i = 0; i < results.length; i++) {
+                    console.log("-------result-------", results[i])
+                    const result = results[i];
+
+                    if (result.status.id !== 3) {
+                        return res.status(400).json({
+                            statusCode: 400,
+                            success: false,
+                            message: `Testcase ${i + 1} failed for ${language}`
+                        })
+                    }
+
+                }
+            }
+        }
+
+
+        const updatedProblem = await db.Problem.update({
+            where: {
+                id: problem.id
+            },
+            data: {
+                title,
+                description,
+                difficulty,
+                tags,
+                examples,
+                constraints,
+                testcases,
+                codeSnippets,
+                referenceSolutions
+            }
+        })
+
+        return res.status(200).json(
+            apiResponse(200, updatedProblem, "Problem Updated Successfully"))
     } catch (error) {
         console.log(erorrs)
         if (error instanceof apiError) {
@@ -177,7 +261,25 @@ export const updateProblem = asyncHandler(async function (req, res) {
 })
 export const deleteProblem = asyncHandler(async function (req, res) {
     try {
+        const { id } = req.params;
+        if (!id)
+            throw new apiError(400, "Problem ID is required")
 
+        const problem = await db.Problem.findUnique({
+            where: {
+                id
+            }
+        })
+        if (!problem)
+            throw new apiError(404, "Problem Not Found")
+
+        await db.Problem.delete({
+            where: { id }
+        })
+
+        return res.status(200).json(
+            apiResponse(200, {}, "Problem Deleted Successfully")
+        )
     } catch (error) {
         console.log(erorrs)
         if (error instanceof apiError) {
@@ -191,7 +293,7 @@ export const deleteProblem = asyncHandler(async function (req, res) {
         return res.status(500).json({
             statusCode: 500,
             success: false,
-            message: "Something went wrong",
+            message: "Something went wrong while delting problem",
         })
     }
 })
