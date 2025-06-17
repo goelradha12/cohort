@@ -1,5 +1,5 @@
 import { db } from "../libs/db.js";
-import { submitBatch } from "../libs/judge0lib.js";
+import { getJudge0LanguageID, pollBatchResults, submitBatch } from "../libs/judge0lib.js";
 import { apiError } from "../utils/api.error.js";
 import { apiResponse } from "../utils/api.response.js";
 import { asyncHandler } from "../utils/async-handler.js";
@@ -43,9 +43,9 @@ export const createProblem = asyncHandler(async function (req, res) {
             const results = await pollBatchResults(tokens)
 
             // validate if all testcases are passed
-
+            console.log("\n-------results-------\n", results)
             for (let i = 0; i < results.length; i++) {
-                console.log("-------result-------", results[i])
+                // console.log("-------result-------", results[i])
                 const result = results[i];
 
                 if (result.status.id !== 3) {
@@ -76,11 +76,11 @@ export const createProblem = asyncHandler(async function (req, res) {
         })
 
         return res.status(200).json(
-            apiResponse(200, newProblem, "Problem Created Successfully")
+            new apiResponse(200, newProblem, "Problem Created Successfully")
         )
 
     } catch (error) {
-        console.log(erorrs)
+        console.log(error)
         if (error instanceof apiError) {
             return res.status(error.statusCode).json({
                 statusCode: error.statusCode,
@@ -103,10 +103,10 @@ export const getAllProblems = asyncHandler(async function (req, res) {
         if (!problems)
             throw new apiError(404, "No Problems Found")
         return res.status(200).json(
-            apiResponse(200, problems, "All Problems Fetched Successfully")
+            new apiResponse(200, problems, "All Problems Fetched Successfully")
         )
     } catch (error) {
-        console.log(erorrs)
+        console.log(error)
         if (error instanceof apiError) {
             return res.status(error.statusCode).json({
                 statusCode: error.statusCode,
@@ -136,10 +136,10 @@ export const getProblemByID = asyncHandler(async function (req, res) {
         if (!problem)
             throw new apiError(404, "Problem Not Found")
         return res.status(200).json(
-            apiResponse(200, problem, "Problem Fetched Successfully")
+            new apiResponse(200, problem, "Problem Fetched Successfully")
         )
     } catch (error) {
-        console.log(erorrs)
+        console.log(error)
         if (error instanceof apiError) {
             return res.status(error.statusCode).json({
                 statusCode: error.statusCode,
@@ -236,14 +236,15 @@ export const updateProblem = asyncHandler(async function (req, res) {
                 constraints,
                 testcases,
                 codeSnippets,
-                referenceSolutions
+                referenceSolutions,
+                userId: myUser.id
             }
         })
 
         return res.status(200).json(
-            apiResponse(200, updatedProblem, "Problem Updated Successfully"))
+            new apiResponse(200, updatedProblem, "Problem Updated Successfully"))
     } catch (error) {
-        console.log(erorrs)
+        console.log(error)
         if (error instanceof apiError) {
             return res.status(error.statusCode).json({
                 statusCode: error.statusCode,
@@ -278,10 +279,10 @@ export const deleteProblem = asyncHandler(async function (req, res) {
         })
 
         return res.status(200).json(
-            apiResponse(200, {}, "Problem Deleted Successfully")
+            new apiResponse(200, {}, "Problem Deleted Successfully")
         )
     } catch (error) {
-        console.log(erorrs)
+        console.log(error)
         if (error instanceof apiError) {
             return res.status(error.statusCode).json({
                 statusCode: error.statusCode,

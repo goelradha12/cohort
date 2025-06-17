@@ -1,3 +1,5 @@
+import axios from "axios";
+
 export const getJudge0LanguageID = (language) => {
     const languageMap = {
         "PYTHON": 71,
@@ -23,9 +25,10 @@ export const pollBatchResults = async (tokens) => {
     {
         const {data} = await axios.get(`${process.env.JUDGE0_URL}/submissions/batch?tokens=${tokens.join(",")}&base64_encoded=false`)
 
+        // console.log("Polling Results: ", data);
         const results = data.submissions;
 
-        const isAllDone = results.every((result) => result.status !== 1 && result.status !== 2)
+        const isAllDone = results.every((result) => result.status.id !== 1 && result.status.id !== 2)
         
         if(isAllDone) return results
 

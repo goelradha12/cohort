@@ -489,7 +489,8 @@ export const getUser = asyncHandler(async function (req, res) {
                     name: myUser.name,
                     avatar: myUser.image,
                     email: myUser.email,
-                    isEmailVerified: myUser.isEmailVerified
+                    isEmailVerified: myUser.isEmailVerified,
+                    role: myUser.role
                 }, "User Profile Shared Successfully")
             )
         }

@@ -6,12 +6,14 @@ export const createProblemValidator = () => {
             .trim()
             .notEmpty()
             .withMessage("Title is Required")
-            ,
+            .isString()
+            .withMessage("Title must be a string"),
         body("description")
             .trim()
             .notEmpty()
             .withMessage("Description is Required")
-            ,
+            .isString()
+            .withMessage("Description must be a string"),
         body("difficulty")
         .trim()
         .optional()
@@ -21,10 +23,9 @@ export const createProblemValidator = () => {
         .trim()
         .notEmpty()
         .withMessage("Tags is Required")
-        .isString()
+        .isArray()
         .withMessage("Tags must be a string"),
         body("examples")
-        .trim()
         .notEmpty()
         .withMessage("Examples is Required"),
         body("constraints")
@@ -34,20 +35,13 @@ export const createProblemValidator = () => {
         .isString()
         .withMessage("Constraints must be a string"),
         body("testcases")
-        .trim()
         .notEmpty()
         .withMessage("Testcases are required"),
         body("codeSnippets")
-        .trim()
         .notEmpty()
-        .withMessage("CodeSnippets is Required")
-        .isJSON()
-        .withMessage("JSON format is required for codeSnippet"),
+        .withMessage("CodeSnippets is Required"),
         body("referenceSolutions")
-        .trim()
         .notEmpty()
         .withMessage("referenceSolutions is Required")
-        .isJSON()
-        .withMessage("JSON format is required for referenceSolutions")
     ]
 }

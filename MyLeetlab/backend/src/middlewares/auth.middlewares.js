@@ -80,12 +80,13 @@ export const checkAdmin = async (req,res,next) => {
         if (!myUser) throw new apiError(401, "No such User Exists")
         if(!myUser.isEmailVerified) throw new apiError(401, "Email is not verified")
             
-        if (myUser.isAdmin) {
+        if (myUser.role === "ADMIN") {
             next();
         } else {
-            throw new apiError(401, "User is not Admin");
+            throw new apiError(401, "Access Denied: User is not Admin");
         }
     } catch (error) {
+        console.log(error)
         if (error instanceof apiError) {
             return res.status(error.statusCode).json({
                 statusCode: error.statusCode,
