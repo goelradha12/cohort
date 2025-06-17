@@ -6,5 +6,6 @@ import { db } from "../libs/db.js";
     email: 'admin@leetlab.com',
     password: 'password',
     role: 'ADMIN',
+    isEmailVerified: true
   },
 }))();
