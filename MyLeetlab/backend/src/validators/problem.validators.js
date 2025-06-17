@@ -6,12 +6,12 @@ export const createProblemValidator = () => {
             .trim()
             .notEmpty()
             .withMessage("Title is Required")
-            .toString(),
+            ,
         body("description")
             .trim()
             .notEmpty()
             .withMessage("Description is Required")
-            .toString(),
+            ,
         body("difficulty")
         .trim()
         .optional()
