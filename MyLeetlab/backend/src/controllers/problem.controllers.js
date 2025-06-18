@@ -300,7 +300,19 @@ export const deleteProblem = asyncHandler(async function (req, res) {
 })
 export const getAllProblemsSolvedByUser = asyncHandler(async function (req, res) {
     try {
+        const userId = req.user._id;
+        const mySolvedProblems = await db.ProblemSolved.findMany({
+            where: {
+                userId
+            },
+            include: {
+                problem: true
+            }
+        })
 
+        return res.status(200).json(
+            new apiResponse(200, mySolvedProblems, "All Problems Fetched Successfully")
+        )
     } catch (error) {
         console.log(erorrs)
         if (error instanceof apiError) {

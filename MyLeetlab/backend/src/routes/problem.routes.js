@@ -8,9 +8,9 @@ const router = express.Router()
 
 router.route("/").get(isLoggedIn, isVerified, getAllProblems)
 router.route("/create-problem").post(isLoggedIn, checkAdmin, createProblemValidator(), validate, createProblem)
+router.route("/get-solved-problems").get(isLoggedIn, isVerified, getAllProblemsSolvedByUser)
 router.route("/:id").get(isLoggedIn, isVerified, getProblemByID)
         .put(isLoggedIn, checkAdmin, createProblemValidator(), validate, updateProblem)
         .delete(isLoggedIn, checkAdmin, deleteProblem)
-router.route("/get-solved-problems").get(isLoggedIn, isVerified, getAllProblemsSolvedByUser)
 
 export default router
