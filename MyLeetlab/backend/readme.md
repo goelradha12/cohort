@@ -66,4 +66,5 @@
 - run the code and then give submit route.
 - agar problem pahle hi solved h to use display krdo
 - store execute code status in a ENUM
-- Give user the count of how many users has solved the specific problem
+- show count of successfull submissions of all users on a specific problem,
+-- then show the percentage of successfull submission.

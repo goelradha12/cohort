@@ -33,6 +33,7 @@ export const getAllSubmission = asyncHandler(async (req, res) => {
 })
 
 export const getSubmissionCount = asyncHandler(async (req, res) => {
+    // goal: send how many users has submitted the problem 
     try {
         const problemId = req.params.problemId;
         const submissionCount = await db.Submission.count({
