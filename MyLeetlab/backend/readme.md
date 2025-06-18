@@ -34,7 +34,11 @@
 - delete-problem/:id
 - get-solved-problem/:id
 ### - Code-Execution
+- Execute-code
 ### - Submission
+- /get-all-submissions
+- get-submission/:problemId
+- get-submissions-count/:problemId
 ### - Playlist
 
 ## User flow
@@ -61,4 +65,5 @@
 - we can check how many testcases are passed.
 - run the code and then give submit route.
 - agar problem pahle hi solved h to use display krdo
-- store status in a ENUM
+- store execute code status in a ENUM
+- Give user the count of how many users has solved the specific problem
