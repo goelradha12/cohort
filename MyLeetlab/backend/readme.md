@@ -56,3 +56,9 @@
 -- Track problem solved already? Update as done in db
 -- Show results of each test case
 -- Fetch submissions with test cases as well.
+
+### future
+- we can check how many testcases are passed.
+- run the code and then give submit route.
+- agar problem pahle hi solved h to use display krdo
+- store status in a ENUM

@@ -9,6 +9,18 @@ export const getJudge0LanguageID = (language) => {
     return languageMap[language.toUpperCase()] || null;        
 }
 
+// get language name from it's ID
+export const getLanguageName = (language_id) => {
+  const languageName = {
+    74: "TYPESCRIPT",
+    71: "PYTHON",
+    62: "JAVA",
+    63: "JAVASCRIPT",
+  };
+
+  return languageName[language_id] || "Unknown";
+};
+
 const sleep = (ms) => {
     return new Promise((resolve) => {
         setTimeout(resolve, ms);
