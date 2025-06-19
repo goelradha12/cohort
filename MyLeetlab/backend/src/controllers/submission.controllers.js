@@ -1,3 +1,4 @@
+import { db } from "../libs/db.js";
 import { apiError } from "../utils/api.error.js";
 import { apiResponse } from "../utils/api.response.js";
 import { asyncHandler } from "../utils/async-handler.js"
@@ -12,7 +13,7 @@ export const getAllSubmission = asyncHandler(async (req, res) => {
         })
 
         return res.status(200).json(
-            apiResponse(200, mySubmission, "All Submissions Fetched Successfully")
+            new apiResponse(200, mySubmission, "All Submissions Fetched Successfully")
         )
     } catch (error) {
         console.log(error);
@@ -43,7 +44,7 @@ export const getSubmissionCount = asyncHandler(async (req, res) => {
         })
 
         res.status(200).json(
-            apiResponse(200, submissionCount, "Submission Count Fetched Successfully")
+            new apiResponse(200, submissionCount, "Submission Count Fetched Successfully")
         )
     } catch (error) {
         console.log(error);
@@ -76,7 +77,7 @@ export const getSubmissionForProblem = asyncHandler(async (req, res) => {
         })
 
         res.status(200).json(
-            apiResponse(200, mySubmission, "Submission Fetched Successfully")
+            new apiResponse(200, mySubmission, "Submission Fetched Successfully")
         )
     } catch (error) {
         console.log(error);
