@@ -177,28 +177,26 @@ export const addProblemToPlaylist = asyncHandler(async function (req, res) {
             throw new apiError(404, "Playlist Not Found")
 
 
-        // validated
+        // validating all problemIds
+        const problems = await db.Problem.findMany({
+            where: {
+                id: { in: problemIds }
+            }
+        });
 
+        if (problems.length !== problemIds.length) {
+            throw new apiError(404, "One or more problems not found");
+        }
 
-        const problemplaylist = await db.ProblemPlaylist.createMany({
-            data: problemIds.map(async (problemId) => {
-                const problem = await db.Problem.findUnique({
-                    where: {
-                        id: problemId
-                    }
-                })
-                if (!problem)
-                    throw new apiError(404, "Wrong input: Problem Not Found")
+        const data = problemIds.map((problemId) => ({
+            playlistId,
+            problemId
+        }));
 
-                return {
-                    playlistId,
-                    problemId
-                }
-            })
-        })
+        await db.ProblemPlaylist.createMany({ data });
 
         res.status(200).json(
-            new apiResponse(200, problemplaylist, "Problem added to playlist successfully")
+            new apiResponse(200, data, "Problem added to playlist successfully")
         )
     } catch (error) {
         console.log(error);
