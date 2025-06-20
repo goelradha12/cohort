@@ -11,7 +11,7 @@ import { generateAccessToken, generateRefreshToken, generateTemporaryTokens } fr
 export const registerUser = asyncHandler(async function (req, res) {
     // recieve name, email and password
     // console.log(req.body);
-    const { email, password } = req.body;
+    const { name, email, password } = req.body;
 
     try {
         // .. check if user exists, using username to make sure username is unique
@@ -31,6 +31,10 @@ export const registerUser = asyncHandler(async function (req, res) {
             password: password,
             role: UserRole.USER
         };
+
+        if(name)
+            newUserData.name = name;
+        // generate hashed and unhashed tokens
         const { hashedToken, tokenExpiry } = generateTemporaryTokens();
 
         // send email for verification

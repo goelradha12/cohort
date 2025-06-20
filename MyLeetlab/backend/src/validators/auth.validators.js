@@ -16,6 +16,13 @@ export const userRegistrationValidator = () => {
       .withMessage("Atleast 6 digits are Required")
       .isLength({ max: 25 })
       .withMessage("Maximum 25 digits Allowed"),
+    body("name")
+      .trim()
+      .optional()
+      .isString()
+      .withMessage("Name must be a string")
+      .isLength({ max: 25 })
+      .withMessage("Maximum 25 digits Allowed"),
   ];
 };
 
