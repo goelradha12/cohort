@@ -1,11 +1,34 @@
-import React from 'react'
+import React from "react";
+import { Routes, Route, Navigate } from "react-router-dom";
+import LoginPage from "./page/LoginPage";
+import SignUpPage from "./page/SignUpPage";
+import HomePage from "./page/HomePage";
 
 function App() {
+  // giving useful routes to the user as per the authentication
+  let authUser = null;
   return (
-    <div>
-      <h1>Hello world</h1>
-    </div>
-  )
+    <>
+      <div className="flex item-center justify-start flex-col">
+        <Routes>
+          <Route
+            path="/"
+            element={authUser ? <HomePage /> : <Navigate to="/login" />}
+          />
+
+          <Route
+            path="/login"
+            element={authUser ? <Navigate to="/" /> : <LoginPage />}
+          />
+
+          <Route
+            path="/signup"
+            element={authUser ? <Navigate to="/" /> : <SignUpPage />}
+          />
+        </Routes>
+      </div>
+    </>
+  );
 }
 
-export default App
+export default App;
