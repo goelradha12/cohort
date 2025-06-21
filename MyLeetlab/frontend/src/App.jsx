@@ -9,8 +9,7 @@ function App() {
   let authUser = null;
   return (
     <>
-      <div className="flex item-center justify-start flex-col">
-        <Routes>
+      <Routes>
           <Route
             path="/"
             element={authUser ? <HomePage /> : <Navigate to="/login" />}
@@ -26,7 +25,6 @@ function App() {
             element={authUser ? <Navigate to="/" /> : <SignUpPage />}
           />
         </Routes>
-      </div>
     </>
   );
 }
