@@ -5,7 +5,7 @@ export const sendMail = async (options) => {
   const mailGenerator = new Mailgen({
     theme: "default",
     product: {
-      name: "ChefLabs",
+      name: "Cook the Code",
       link: "testlink",
     },
   });
