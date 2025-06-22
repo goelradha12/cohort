@@ -11,14 +11,16 @@ import {
   Mail,
 } from "lucide-react";
 
-import {z} from "zod";
 import AuthImagePattern from '../components/AuthImagePattern';
 import { SignupSchema } from '../validators/authForm.validators.js';
+import { useAuthStore } from '../store/useAuthStore.js';
 
 const SignUpPage = () => {
 
   const [showPassword , setShowPassword] = useState(false);
-  const isSigninUp = false;
+  
+  // taking my custom state data from store
+  const { signup, isSigningUp } = useAuthStore();
 
   const {
     register,
@@ -31,6 +33,7 @@ const SignUpPage = () => {
   const onSubmit = async (data)=>{
    try {
     console.log("signup data" , data)
+    await signup(data)
    } catch (error) {
      console.error("SignUp failed:", error);
    }
@@ -139,9 +142,9 @@ const SignUpPage = () => {
             <button
               type="submit"
               className="btn btn-primary w-full"
-             disabled={isSigninUp}
+             disabled={isSigningUp}
             >
-               {isSigninUp ? (
+               {isSigningUp ? (
                 <>
                   <Loader2 className="h-5 w-5 animate-spin" />
                   Loading...
