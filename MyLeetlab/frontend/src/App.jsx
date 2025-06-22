@@ -1,13 +1,29 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import LoginPage from "./page/LoginPage";
 import SignUpPage from "./page/SignUpPage";
 import HomePage from "./page/HomePage";
 import { Toaster } from "react-hot-toast";
+import { useAuthStore } from "./store/useAuthStore";
+import { Loader } from "lucide-react";
 
 function App() {
   // giving useful routes to the user as per the authentication
-  let authUser = null;
+  const { authUser, checkAuth, isCheckingAuth } = useAuthStore();
+
+  // as soon as checkauth changes, use checkAuth function
+  // it will also update checkAuth on first render
+  useEffect(() => {
+    checkAuth()
+  }, [checkAuth])
+
+  // if something is loading, show loader only in page
+  if (isCheckingAuth && !authUser)
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <Loader className="size-10 animate-spin" />
+      </div>
+    )
   return (
     <>
 
