@@ -1,12 +1,12 @@
 import React, { useEffect } from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate, Outlet } from "react-router-dom";
 import LoginPage from "./page/LoginPage";
 import SignUpPage from "./page/SignUpPage";
 import HomePage from "./page/HomePage";
 import { Toaster } from "react-hot-toast";
 import { useAuthStore } from "./store/useAuthStore";
 import { Loader } from "lucide-react";
-
+import Layout from "./layout/Layout";
 function App() {
   // giving useful routes to the user as per the authentication
   const { authUser, checkAuth, isCheckingAuth } = useAuthStore();
@@ -14,6 +14,7 @@ function App() {
   // as soon as checkauth changes, use checkAuth function
   // it will also update checkAuth on first render
   useEffect(() => {
+    console.log(authUser)
     checkAuth()
   }, [checkAuth])
 
@@ -26,11 +27,11 @@ function App() {
     )
   return (
     <>
-
-      <Toaster/>
+      <Toaster />
       <Routes>
+        <Route path="/" element={<Layout />}>
           <Route
-            path="/"
+            index
             element={authUser ? <HomePage /> : <Navigate to="/login" />}
           />
 
@@ -43,7 +44,8 @@ function App() {
             path="/signup"
             element={authUser ? <Navigate to="/" /> : <SignUpPage />}
           />
-        </Routes>
+        </Route>
+      </Routes>
     </>
   );
 }
