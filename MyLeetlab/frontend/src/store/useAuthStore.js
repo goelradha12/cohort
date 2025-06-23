@@ -14,7 +14,7 @@ export const useAuthStore = create((set) => ({
             const response = await axiosInstance.get("/auth/getProfile");
             set({ authUser: response.data.data, isCheckingAuth: false });
         } catch (error) {
-            console.log(error);
+            // console.log(error);
             set({ authUser: null, isCheckingAuth: false });
         } finally {
             set({ isCheckingAuth: false });
@@ -29,10 +29,24 @@ export const useAuthStore = create((set) => ({
 
             toast.success(res.data.message); // reflecting a pop-up message
         } catch (error) {
-            console.log("Error signing up: ", error);
+            // console.log("Error signing up: ", error);
             toast.error("Error signing up");
         } finally {
             set({ isSigningUp: false });
         }
     },
+
+    login: async (data) => {
+        set({ isLoggingIn: true });
+        try {
+            const res = await axiosInstance.post("/auth/login", data);
+            set({ authUser: res.data.data });
+            toast.success(res.data.message);
+        } catch (error) {
+            console.log("Error logging in: ", error)
+            toast.error("Error Logging")
+        } finally {
+            set({ isLoggingIn: false })
+        }
+    }
 }));

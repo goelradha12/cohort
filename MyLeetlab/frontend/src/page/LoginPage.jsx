@@ -11,14 +11,14 @@ import {
   Mail,
 } from "lucide-react";
 
-import {z} from "zod";
 import AuthImagePattern from '../components/AuthImagePattern';
 import { LoginSchema } from '../validators/authForm.validators.js';
+import { useAuthStore } from '../store/useAuthStore.js';
 
 const SignUpPage = () => {
 
   const [showPassword , setShowPassword] = useState(false);
-  const isSigninUp = false;
+  const {isLoggingIn, login} = useAuthStore();
 
   const {
     register,
@@ -30,7 +30,8 @@ const SignUpPage = () => {
 
   const onSubmit = async (data)=>{
    try {
-    console.log("signup data" , data)
+    login(data);
+    console.log(data)
    } catch (error) {
      console.error("SignUp failed:", error);
    }
@@ -116,9 +117,9 @@ const SignUpPage = () => {
             <button
               type="submit"
               className="btn btn-primary w-full"
-             disabled={isSigninUp}
+             disabled={isLoggingIn}
             >
-               {isSigninUp ? (
+               {isLoggingIn ? (
                 <>
                   <Loader2 className="h-5 w-5 animate-spin" />
                   Loading...
