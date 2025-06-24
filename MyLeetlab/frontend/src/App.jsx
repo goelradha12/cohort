@@ -7,6 +7,8 @@ import { Toaster } from "react-hot-toast";
 import { useAuthStore } from "./store/useAuthStore";
 import { Loader } from "lucide-react";
 import Layout from "./layout/Layout";
+import AddProblem from "./page/AddProblem";
+import AdminRoute from "./components/AdminRoute";
 function App() {
   // giving useful routes to the user as per the authentication
   const { authUser, checkAuth, isCheckingAuth } = useAuthStore();
@@ -14,8 +16,8 @@ function App() {
   // as soon as checkauth changes, use checkAuth function
   // it will also update checkAuth on first render
   useEffect(() => {
-    console.log(authUser)
     checkAuth()
+    console.log(authUser)
   }, [checkAuth])
 
   // if something is loading, show loader only in page
@@ -27,6 +29,7 @@ function App() {
     )
   return (
     <>
+      {console.log(authUser)}
       <Toaster />
       <Routes>
         <Route path="/" element={<Layout />}>
@@ -34,17 +37,25 @@ function App() {
             index
             element={authUser ? <HomePage /> : <Navigate to="/login" />}
           />
+        </Route>
 
-          <Route
-            path="/login"
-            element={authUser ? <Navigate to="/" /> : <LoginPage />}
-          />
+        <Route
+          path="/login"
+          element={authUser ? <Navigate to="/" /> : <LoginPage />}
+        />
 
+        <Route
+          path="/signup"
+          element={authUser ? <Navigate to="/" /> : <SignUpPage />}
+        />
+
+        <Route element={<AdminRoute />}>
           <Route
-            path="/signup"
-            element={authUser ? <Navigate to="/" /> : <SignUpPage />}
+            path="/add-problem"
+            element={ <AddProblem /> }
           />
         </Route>
+
       </Routes>
     </>
   );
