@@ -177,6 +177,28 @@ const ProblemTable = ({ problems, solvedProblems }) => {
                     </tbody>
                 </table>
             </div>
+
+            {/* Pagination */}
+            <div className="flex justify-center mt-6 gap-2">
+                <button
+                    className="btn btn-sm btn-primary"
+                    onClick={() => setCurrentPage(prev => prev - 1)}
+                    disabled={currentPage === 1}
+                >
+                    Prev
+                </button>
+                <span className="btn btn-ghost btn-sm">
+
+                    {`${currentPage} / ${totalPages}`}
+                </span>
+                <button
+                    className="btn btn-sm btn-primary"
+                    onClick={() => setCurrentPage(prev => prev + 1)}
+                    disabled={currentPage === totalPages}
+                >
+                    Next
+                </button>
+            </div>
         </div>
     );
 };
