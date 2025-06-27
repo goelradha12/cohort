@@ -1,7 +1,8 @@
 import { create } from "zustand"
 import { axiosInstance } from "../lib/axios"
 import toast from "react-hot-toast"
-import axios from "axios"
+
+
 export const useProblemStore = create((set) => {
     return {
         problems: [],
@@ -13,8 +14,8 @@ export const useProblemStore = create((set) => {
         getAllProblem: async() => {
             try {
                 set({isProblemsLoading: true})
-                const response = axiosInstance.get("/problems/");
-
+                const response = await axiosInstance.get("/problems/");
+                console.log(response.data)
                 set({problems: response.data.data})
             } catch (error) {
                 console.log("Error fetching problems",error);
