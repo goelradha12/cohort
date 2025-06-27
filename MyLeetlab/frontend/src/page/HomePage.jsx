@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { useAuthStore } from '../store/useAuthStore.js';
 import { useProblemStore } from '../store/useProblemStore.js';
 import { Loader } from 'lucide-react';
@@ -7,13 +7,17 @@ import ProblemTable from '../components/ProblemTable';
 
 const HomePage = () => {
   const { authUser } = useAuthStore();
-  const { problems, getAllProblem, isProblemsLoading } = useProblemStore();
+  const { problems, getAllProblem, isProblemsLoading, solvedProblems, getSolvedProblemByUser } = useProblemStore();
 
   useEffect(
     () => { getAllProblem() }
     , [getAllProblem])
 
-  console.log(problems)
+  useEffect(
+    () => { getSolvedProblemByUser() }
+    , [getSolvedProblemByUser]
+  )
+
   if (isProblemsLoading) {
     return (
       <div className='flex items-center justify-center h-screen'>
@@ -38,7 +42,7 @@ const HomePage = () => {
 
       {
         problems.length ?
-          <ProblemTable problems={problems} />
+          <ProblemTable problems={problems} solvedProblems={solvedProblems} />
           :
           <p className='mt-10 text-center text-lg font-semibold text-gray-500 dark:text-gray-400 z-10 border border-primary px-4 py-2 rounded-md border-dashed'>
             No Problem Found
