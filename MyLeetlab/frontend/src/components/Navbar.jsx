@@ -38,9 +38,9 @@ const Navbar = () => {
                   />
                 ) : (
                   <img
-                    src={`https://ui-avatars.com/api/?name=${authUser?.name || "User"}`} 
+                    src={`https://avatar.iran.liara.run/public`} 
                     alt="User Avatar"
-                    className="object-cover border"
+                    className="object-cover"
                   />
                 )}
               </div>
