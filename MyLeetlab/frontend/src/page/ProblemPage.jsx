@@ -12,10 +12,13 @@ import {
     Share,
     Share2,
     ShareIcon,
+    Terminal,
     ThumbsUp,
     Users,
 } from "lucide-react";
 import { useAuthStore } from "../store/useAuthStore.js";
+import Editor from '@monaco-editor/react';
+import { EditorOptions } from "../components/EditorOptions.js";
 
 const ProblemPage = () => {
     const navigate = useNavigate();
@@ -28,7 +31,9 @@ const ProblemPage = () => {
         // console.log(`AuthUser: ${JSON.stringify(authUser)}, Problem: ${problem}`)
     }, [id]);
 
-    const [selectedLanguage, setSelectedLanguage] = useState();
+    const [selectedLanguage, setSelectedLanguage] = useState("");
+    const [editorTheme, setEditorTheme] = useState("vs-dark");
+    const [code, setCode] = useState("");
     // if problem is loading
     if (isProblemLoading) {
         return (
@@ -56,7 +61,7 @@ const ProblemPage = () => {
     }
     return (
         <div className="min-h-screen bg-gradient-to-br from-base-300 to-base-200 w-full">
-            <nav className="max-w-6xl mx-auto py-4">
+            <nav className="container mx-auto p-4">
                 <div className="flex items-center gap-1 pb-2">
                     <Home
                         onClick={() => navigate("/")}
@@ -90,8 +95,8 @@ const ProblemPage = () => {
                         </div>
                     </div>
                     <div className="flex items-center gap-4">
-                        <Bookmark className="w-6 h-6" />
-                        <Share2 className="w-6 h-6" />
+                        <Bookmark className="w-[50px] h-[50px]" />
+                        <Share2 className="w-[50px] h-[50px]" />
                         {/* Options to select language of editor */}
                         <select
                             className="select select-primary"
@@ -106,9 +111,40 @@ const ProblemPage = () => {
                                 return <option value={language}>{language}</option>;
                             })}
                         </select>
+                        <select name="EditorTheme" className="select select-primary" id="editorTheme" value={editorTheme} onChange={(e) => setEditorTheme(e.target.value)}>
+                            <option value="vs-dark">VS-Dark</option>
+                            <option value="light">Light</option>
+                            <option value="hc-black">HC-Black</option>
+                        </select>
                     </div>
                 </div>
             </nav>
+            {/* Nav ended ---------- Starting main page */}
+            <div className="container mx-auto p-4">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div className="card bg-base-100 shadow-xs">Col 1</div>
+                    <div className="card bg-base-100 shadow-xs">
+                        <div className="card-body p-0">
+                            <div className="tabs tabs-bordered">
+                                <button className="tab tab-active gap-2">
+                                    <Terminal className="w-4 h-4" />
+                                    Code Editor
+                                </button>
+                            </div>
+                            <div className="h-[600px] w-full">
+                                < Editor
+                                    height="100%"
+                                    language = {selectedLanguage.toLowerCase()}
+                                    options={EditorOptions}
+                                    theme={editorTheme}
+                                    value={code}
+                                    onChange={(value) => setCode(value || "")}
+                                />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     );
 };
