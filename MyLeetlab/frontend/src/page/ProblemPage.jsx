@@ -2,14 +2,15 @@ import { useEffect } from 'react'
 import { useParams } from 'react-router';
 import { useProblemStore } from '../store/useProblemStore';
 import { Loader } from 'lucide-react';
+import { useAuthStore } from '../store/useAuthStore';
 
 const ProblemPage = () => {
     const { id } = useParams();
     const { isProblemLoading, problem, getProblemById } = useProblemStore();
-
+    const { authUser } = useAuthStore();
     useEffect(() => {
         getProblemById(id)
-        console.log(JSON.stringify(problem), problem)
+        console.log(`AuthUser: ${JSON.stringify(authUser)}, problem: ${JSON.stringify(problem)}, Problem: ${problem}`)
     }, [id])
 
     if (isProblemLoading) {

@@ -19,7 +19,7 @@ function App() {
   useEffect(() => {
     checkAuth()
     console.log(authUser)
-  }, [checkAuth])
+  }, [])
 
   // if something is loading, show loader only in page
   if (isCheckingAuth && !authUser)
@@ -51,7 +51,7 @@ function App() {
         />
 
         <Route path="/problem/:id"
-          element={authUser ? <ProblemPage /> : <Navigate to={"/login"} />}
+          element={authUser && <ProblemPage />}
         />
 
         <Route element={<AdminRoute />}>
