@@ -9,6 +9,7 @@ import { Loader } from "lucide-react";
 import Layout from "./layout/Layout";
 import AddProblem from "./page/AddProblem";
 import AdminRoute from "./components/AdminRoute";
+import ProblemPage from "./page/ProblemPage";
 function App() {
   // giving useful routes to the user as per the authentication
   const { authUser, checkAuth, isCheckingAuth } = useAuthStore();
@@ -29,7 +30,7 @@ function App() {
     )
   return (
     <>
-      {console.log(authUser)}
+      {/* {console.log(authUser)} */}
       <Toaster />
       <Routes>
         <Route path="/" element={<Layout />}>
@@ -49,10 +50,14 @@ function App() {
           element={authUser ? <Navigate to="/" /> : <SignUpPage />}
         />
 
+        <Route path="/problem/:id"
+          element={authUser ? <ProblemPage /> : <Navigate to={"/login"} />}
+        />
+
         <Route element={<AdminRoute />}>
           <Route
             path="/add-problem"
-            element={ <AddProblem /> }
+            element={<AddProblem />}
           />
         </Route>
 

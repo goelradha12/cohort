@@ -31,7 +31,7 @@ const SignUpPage = () => {
   const onSubmit = async (data)=>{
    try {
     login(data);
-    console.log(data)
+    // console.log(data)
    } catch (error) {
      console.error("SignUp failed:", error);
    }

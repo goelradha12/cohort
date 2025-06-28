@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from "react";
 import { useAuthStore } from "../store/useAuthStore";
 import { Bookmark, PencilIcon, Plus, TrashIcon } from "lucide-react";
+import { Link } from "react-router";
 
 const ProblemTable = ({ problems, solvedProblems }) => {
     const { authUser } = useAuthStore();
@@ -128,7 +129,7 @@ const ProblemTable = ({ problems, solvedProblems }) => {
                                         />
 
                                     </td>
-                                    <td>{problem.title}</td>
+                                    <td> <Link className="hover:text-primary" to={`/problem/${problem.id}`}>{problem.title}</Link></td>
                                     <td>
                                         {problem.tags.map((tag) => (
                                             <span key={tag} className="badge border-1 border-primary mr-2">
