@@ -15,7 +15,6 @@ export const useProblemStore = create((set) => {
             try {
                 set({isProblemsLoading: true})
                 const response = await axiosInstance.get("/problems/");
-                console.log(response.data)
                 set({problems: response.data.data})
             } catch (error) {
                 console.log("Error fetching problems",error);
@@ -28,7 +27,6 @@ export const useProblemStore = create((set) => {
             try {
                 set({isProblemLoading: true});
                 const res = await axiosInstance.get(`/problems/${id}`)
-                console.log(res)
                 set({problem: res.data.data})
                 toast.success("Problem Fetched")
             } catch (error) {
