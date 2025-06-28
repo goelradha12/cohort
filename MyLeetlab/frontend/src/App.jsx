@@ -51,7 +51,7 @@ function App() {
         />
 
         <Route path="/problem/:id"
-          element={authUser && <ProblemPage />}
+          element={authUser ? <ProblemPage /> : <Navigate to="/login" />}
         />
 
         <Route element={<AdminRoute />}>
