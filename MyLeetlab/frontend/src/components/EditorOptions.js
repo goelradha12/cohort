@@ -79,7 +79,7 @@ export const EditorOptions = {
     unfoldOnClickAfterEndOfLine: false,
     fontFamily: "Consolas, 'Courier New', monospace",
     fontLigatures2: false,
-    fontSize: 14,
+    fontSize: 16,
     fontWeight: "normal",
     fontVariations: false,
     formatOnPaste: false,
@@ -143,8 +143,8 @@ export const EditorOptions = {
     overviewRulerBorder: true,
     overviewRulerLanes: 2,
     padding: {
-        top: 0,
-        bottom: 0,
+        top: 10,
+        bottom: 10,
     },
     pasteAs: {
         enabled: true,
@@ -170,7 +170,7 @@ export const EditorOptions = {
     renderLineHighlightOnlyWhenFocus: false,
     renderValidationDecorations: "editable",
     renderWhitespace: "selection",
-    revealHorizontalRightPadding: 15,
+    revealHorizontalRightPadding: 10,
     roundedSelection: true,
     rulers: [],
     scrollbar: {
