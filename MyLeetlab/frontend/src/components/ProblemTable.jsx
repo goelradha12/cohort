@@ -117,7 +117,7 @@ const ProblemTable = ({ problems, solvedProblems }) => {
                         {/* {console.log(currentProblems, problems, filteredProblems, solvedProblems)} */}
                         {currentProblems.length === 0 && <tr><td colSpan="5" className="text-center">No problems found</td></tr>}
                         {currentProblems.map((problem) => {
-                            const isSolved = solvedProblems.map((p) => p.id).includes(problem.id)
+                            const isSolved = solvedProblems.map((p) => p.problemId).includes(problem.id)
                             return (
                                 <tr key={problem.id}>
                                     <td>

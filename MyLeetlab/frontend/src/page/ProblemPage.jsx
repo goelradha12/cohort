@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useParams, useNavigate } from "react-router";
 import { useProblemStore } from "../store/useProblemStore.js";
 import {
@@ -41,6 +41,9 @@ const ProblemPage = () => {
     const [testcases, setTestcases] = useState([]);
     const { isExecutingCode, executionResult, executeCode, setExecutionResultNull, isRunningCode, runCode } = useExecuteCodeStore();
 
+    // to scroll to result div after code execution 
+    const ref = useRef(null);
+
     useEffect(() => {
         console.log(problem);
         if (problem) {
@@ -66,6 +69,7 @@ const ProblemPage = () => {
     }
     const handleRunCode = (e) => {
         e.preventDefault();
+        ref.current?.scrollIntoView({ behavior: 'smooth' });
         try {
             const language_id = getJudge0LanguageID(selectedLanguage);
             const stdin = problem.testcases.map((tc) => tc.input);
@@ -245,7 +249,7 @@ const ProblemPage = () => {
             <div className="container mx-auto p-4">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     {/* COl 1 */}
-                    <div className="card bg-base-100 shadow-xl h-[85vh] overflow-y-scroll">
+                    <div className="card bg-base-100 shadow-xl p-2">
                         <div className="card-body p-0">
                             {/* Tabs buttons */}
                             <div className="tabs tabs-bordered border-b-1 border-b-gray-200">
@@ -280,7 +284,7 @@ const ProblemPage = () => {
                                 </button>
                             </div>
                             {/* Tab infos using a utility function */}
-                            <div className="p-6">{renderTabContent()}</div>
+                            <div className="px-6 pb-6 pt-2 h-[85vh] overflow-y-scroll">{renderTabContent()}</div>
                         </div>
                     </div>
                     {/* COl 2 */}
@@ -307,7 +311,12 @@ const ProblemPage = () => {
                                 <div className="flex justify-between items-center">
                                     <button
                                         className={`btn btn-primary gap-2`}
-                                        onClick={(e) => handleSubmit(e)}
+                                        onClick={(e) => {
+                                            handleSubmit(e);
+                                            setTimeout(() => {
+                                                ref.current?.scrollIntoView({ behavior: 'smooth' });
+                                            }, 100);
+                                        }}
                                         disabled={isExecutingCode}
                                     >
                                         {isExecutingCode ?
@@ -321,7 +330,12 @@ const ProblemPage = () => {
                                     </button>
                                     <button
                                         className={`btn btn-secondary gap-2`}
-                                        onClick={(e) => handleRunCode(e)}
+                                        onClick={(e) => {
+                                            handleRunCode(e);
+                                            setTimeout(() => {
+                                                ref.current?.scrollIntoView({ behavior: 'smooth' });
+                                            }, 100);
+                                        }}
                                         disabled={isRunningCode}
                                     >
                                         {isRunningCode ?
@@ -341,7 +355,7 @@ const ProblemPage = () => {
             </div>
 
             {/* Editor and content ended ---------- Result + testcase area */}
-            <div className="container mx-auto card bg-base-100 shadow-xl my-6">
+            <div ref={ref} className="container mx-auto card bg-base-100 shadow-xl my-6">
                 <div className="card-body">
                     {executionResult ? (
                         <SubmissionResult submission={executionResult} />

@@ -15,7 +15,7 @@ const HomePage = () => {
 
   useEffect(
     () => { getSolvedProblemByUser() }
-    , [getSolvedProblemByUser]
+    , [getAllProblem]
   )
 
   if (isProblemsLoading) {
