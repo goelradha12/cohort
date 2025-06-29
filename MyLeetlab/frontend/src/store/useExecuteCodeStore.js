@@ -21,7 +21,7 @@ export const useExecuteCodeStore = create((set) => ({
         }
     },
 
-    runCode: async ({source_code, language_id, stdin, expected_outputs, problemId}) => {
+    runCode: async (source_code, language_id, stdin, expected_outputs, problemId) => {
         try {
             set({isRunningCode: true});
             const res = await axiosInstance.post("/execute-code/run", {source_code, language_id, stdin, expected_outputs, problemId});

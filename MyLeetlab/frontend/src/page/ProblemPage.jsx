@@ -38,7 +38,7 @@ const ProblemPage = () => {
     const [code, setCode] = useState("");
     const [activeTab, setActiveTab] = useState("description");
     const [testcases, setTestcases] = useState([]);
-    const { isExecutingCode, executionResult, executeCode } = useExecuteCodeStore();
+    const { isExecutingCode, executionResult, executeCode, runCodeResult, isRunningCode, runCode } = useExecuteCodeStore();
 
     useEffect(() => {
         console.log(problem);
@@ -57,11 +57,26 @@ const ProblemPage = () => {
             const expected_outputs = problem.testcases.map((tc) => tc.output);
             // console.log("data sent: ", { code, language_id, stdin, expected_outputs, id, selectedLanguage });
             executeCode(code, language_id, stdin, expected_outputs, id);
-            // console.log(executionResult)
+            console.log(executionResult)
         } catch (error) {
             console.log("Error executing code", error);
         }
     }
+    const handleRunCode = (e) => {
+        e.preventDefault();
+        try {
+            const language_id = getJudge0LanguageID(selectedLanguage);
+            const stdin = problem.testcases.map((tc) => tc.input);
+            const expected_outputs = problem.testcases.map((tc) => tc.output);
+            // console.log("data sent: ", { code, language_id, stdin, expected_outputs, id, selectedLanguage });
+            runCode(code, language_id, stdin, expected_outputs, id);
+            console.log(runCodeResult)
+        } catch (error) {
+            console.log("Error Running code", error);
+        }
+    }
+
+    
     const renderTabContent = () => {
         switch (activeTab) {
             case "description":
@@ -302,8 +317,19 @@ const ProblemPage = () => {
                                             `Submit Solution`}
 
                                     </button>
-                                    <button disabled className="btn btn-success gap-2">
-                                        Run Code
+                                    <button
+                                        className={`btn btn-secondary gap-2`}
+                                        onClick={(e)=>handleRunCode(e)}
+                                        disabled={isRunningCode}
+                                    >
+                                        {isRunningCode ?
+                                            <>
+                                                <Loader className="w-4 h-4" />
+                                                <span>Executing...</span>
+                                            </>
+                                            :
+                                            `Run Code`}
+
                                     </button>
                                 </div>
                             </div>
