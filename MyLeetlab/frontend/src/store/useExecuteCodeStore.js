@@ -6,7 +6,8 @@ export const useExecuteCodeStore = create((set) => ({
     isExecutingCode: false,
     executionResult: null,
     isRunningCode: false,
-    runCodeResult: null,
+
+    setExecutionResultNull: () => set({executionResult: null}),
     executeCode: async (source_code, language_id, stdin, expected_outputs, problemId) => {
         try {
             set({isExecutingCode: true});
@@ -15,9 +16,10 @@ export const useExecuteCodeStore = create((set) => ({
             toast.success(res.data.message || "Code executed successfully");
         } catch (error) {
             console.log("Error executing code: ", error);
+            set({executionResult: null});
             toast.error(error.response.data?.message || "Error executing code");
         } finally {
-            set({isExecutingCode: false});
+            set({isExecutingCode: false,});
         }
     },
 
@@ -25,10 +27,11 @@ export const useExecuteCodeStore = create((set) => ({
         try {
             set({isRunningCode: true});
             const res = await axiosInstance.post("/execute-code/run", {source_code, language_id, stdin, expected_outputs, problemId});
-            set({runCodeResult: res.data.data});
+            set({executionResult: res.data.data});
             toast.success(res.data.message || "Code executed successfully");
         } catch (error) {
             console.log("Error executing code: ", error);
+            set({executionResult: null});
             toast.error(error.response.data.message || "Error Running code");
         } finally {
             set({isRunningCode: false});
