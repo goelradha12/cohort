@@ -21,6 +21,7 @@ import Editor from '@monaco-editor/react';
 import { EditorOptions } from "../components/EditorOptions.js";
 import { useExecuteCodeStore } from "../store/useExecuteCodeStore.js";
 import { getJudge0LanguageID } from "../lib/utilFunctions.js";
+import SubmissionResult from "../components/SubmissionResult.jsx";
 
 const ProblemPage = () => {
     const navigate = useNavigate();
@@ -38,7 +39,7 @@ const ProblemPage = () => {
     const [code, setCode] = useState("");
     const [activeTab, setActiveTab] = useState("description");
     const [testcases, setTestcases] = useState([]);
-    const { isExecutingCode, executionResult, executeCode, runCodeResult, isRunningCode, runCode } = useExecuteCodeStore();
+    const { isExecutingCode, executionResult, executeCode, setExecutionResultNull, isRunningCode, runCode } = useExecuteCodeStore();
 
     useEffect(() => {
         console.log(problem);
@@ -46,6 +47,7 @@ const ProblemPage = () => {
             setSelectedLanguage(Object.keys(problem.codeSnippets)[0])
             setCode(Object.values(problem.codeSnippets)[0]);
             setTestcases(problem.testcases);
+            setExecutionResultNull();
         }
     }, [problem])
 
@@ -70,13 +72,13 @@ const ProblemPage = () => {
             const expected_outputs = problem.testcases.map((tc) => tc.output);
             // console.log("data sent: ", { code, language_id, stdin, expected_outputs, id, selectedLanguage });
             runCode(code, language_id, stdin, expected_outputs, id);
-            console.log(runCodeResult)
+            console.log(executionResult)
         } catch (error) {
             console.log("Error Running code", error);
         }
     }
 
-    
+
     const renderTabContent = () => {
         switch (activeTab) {
             case "description":
@@ -243,7 +245,7 @@ const ProblemPage = () => {
             <div className="container mx-auto p-4">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     {/* COl 1 */}
-                    <div className="card bg-base-100 shadow-xl h-[82vh] overflow-scroll">
+                    <div className="card bg-base-100 shadow-xl h-[85vh] overflow-y-scroll">
                         <div className="card-body p-0">
                             {/* Tabs buttons */}
                             <div className="tabs tabs-bordered border-b-1 border-b-gray-200">
@@ -301,11 +303,11 @@ const ProblemPage = () => {
                                     automaticLayout={true}
                                 />
                             </div>
-                            <div className="pb-5 px-2 border-t border-base-300 bg-base-200">
+                            <div className="pb-5 px-2">
                                 <div className="flex justify-between items-center">
                                     <button
                                         className={`btn btn-primary gap-2`}
-                                        onClick={(e)=>handleSubmit(e)}
+                                        onClick={(e) => handleSubmit(e)}
                                         disabled={isExecutingCode}
                                     >
                                         {isExecutingCode ?
@@ -319,7 +321,7 @@ const ProblemPage = () => {
                                     </button>
                                     <button
                                         className={`btn btn-secondary gap-2`}
-                                        onClick={(e)=>handleRunCode(e)}
+                                        onClick={(e) => handleRunCode(e)}
                                         disabled={isRunningCode}
                                     >
                                         {isRunningCode ?
@@ -328,7 +330,7 @@ const ProblemPage = () => {
                                                 <span>Executing...</span>
                                             </>
                                             :
-                                            `Run Code`}
+                                            `Test Code`}
 
                                     </button>
                                 </div>
@@ -341,27 +343,33 @@ const ProblemPage = () => {
             {/* Editor and content ended ---------- Result + testcase area */}
             <div className="container mx-auto card bg-base-100 shadow-xl my-6">
                 <div className="card-body">
-                    <div className="flex items-center justify-between mb-6">
-                        <h3 className="text-lg font-bold">Test Cases</h3>
-                    </div>
-                    <div>
-                        <table className="table table-zebra w-full">
-                            <thead>
-                                <tr>
-                                    <th>Input</th>
-                                    <th>Expected Output</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {testcases.map((testCase, index) => (
-                                    <tr key={index}>
-                                        <td className="font-mono">{testCase.input}</td>
-                                        <td className="font-mono">{testCase.output}</td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
+                    {executionResult ? (
+                        <SubmissionResult submission={executionResult} />
+                    ) : (
+                        <>
+                            <div className="flex items-center justify-between mb-6">
+                                <h3 className="text-lg font-bold">Test Cases</h3>
+                            </div>
+                            <div>
+                                <table className="table table-zebra w-full">
+                                    <thead>
+                                        <tr>
+                                            <th>Input</th>
+                                            <th>Expected Output</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {testcases.map((testCase, index) => (
+                                            <tr key={index}>
+                                                <td className="font-mono">{testCase.input}</td>
+                                                <td className="font-mono">{testCase.output}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </>
+                    )}
                 </div>
             </div>
         </div >
