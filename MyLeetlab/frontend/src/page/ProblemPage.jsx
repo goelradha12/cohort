@@ -22,6 +22,8 @@ import { EditorOptions } from "../components/EditorOptions.js";
 import { useExecuteCodeStore } from "../store/useExecuteCodeStore.js";
 import { getJudge0LanguageID } from "../lib/utilFunctions.js";
 import SubmissionResult from "../components/SubmissionResult.jsx";
+import SubmissionList from "../components/SubmissionList.jsx";
+import { useSubmissionStore } from "../store/useSubmissionStore.js";
 
 const ProblemPage = () => {
     const navigate = useNavigate();
@@ -40,12 +42,12 @@ const ProblemPage = () => {
     const [activeTab, setActiveTab] = useState("description");
     const [testcases, setTestcases] = useState([]);
     const { isExecutingCode, executionResult, executeCode, setExecutionResultNull, isRunningCode, runCode } = useExecuteCodeStore();
-
+    const { submissionsByProblemID, getSubmissionByProblemID, gettingSubmissionByProblemID } = useSubmissionStore();
     // to scroll to result div after code execution 
     const ref = useRef(null);
 
     useEffect(() => {
-        console.log(problem);
+        // console.log(problem);
         if (problem) {
             setSelectedLanguage(Object.keys(problem.codeSnippets)[0])
             setCode(Object.values(problem.codeSnippets)[0]);
@@ -53,6 +55,10 @@ const ProblemPage = () => {
             setExecutionResultNull();
         }
     }, [problem])
+
+    useEffect(() => {
+        getSubmissionByProblemID(id)
+    }, [id, isExecutingCode])
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -154,7 +160,22 @@ const ProblemPage = () => {
                         )}
                     </div>
                 )
-                break;
+            case "submissions":
+
+                console.log("All submissions to this problem: ", submissionsByProblemID)
+                return (gettingSubmissionByProblemID ?
+                    <div className="grid content-center justify-center justify-items-center gap-3 h-screen">
+                        <Loader className="size-10 animate-spin" />
+                        <span>Loading Submissions...</span>
+                    </div>
+                    :
+                    submissionsByProblemID.length === 0 ?
+                        <div className="p-2">
+                            <span>No Submissions Found</span>
+                        </div>
+                        :
+                    <SubmissionList submissions={submissionsByProblemID} />
+                )
 
             default:
                 break;
@@ -357,33 +378,39 @@ const ProblemPage = () => {
             {/* Editor and content ended ---------- Result + testcase area */}
             <div ref={ref} className="container mx-auto card bg-base-100 shadow-xl my-6">
                 <div className="card-body">
-                    {executionResult ? (
-                        <SubmissionResult submission={executionResult} />
-                    ) : (
-                        <>
-                            <div className="flex items-center justify-between mb-6">
-                                <h3 className="text-lg font-bold">Test Cases</h3>
-                            </div>
-                            <div>
-                                <table className="table table-zebra w-full">
-                                    <thead>
-                                        <tr>
-                                            <th>Input</th>
-                                            <th>Expected Output</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {testcases.map((testCase, index) => (
-                                            <tr key={index}>
-                                                <td className="font-mono">{testCase.input}</td>
-                                                <td className="font-mono">{testCase.output}</td>
+                    {(isExecutingCode || isRunningCode) ?
+                        <div className="flex items-center gap-2 justify-center">
+                            <Loader className="w-6 h-6 animate-spin" />
+                            <span className="text-lg">Executing...</span>
+                        </div>
+                        :
+                        executionResult ? (
+                            <SubmissionResult submission={executionResult} />
+                        ) : (
+                            <>
+                                <div className="flex items-center justify-between mb-6">
+                                    <h3 className="text-lg font-bold">Test Cases</h3>
+                                </div>
+                                <div>
+                                    <table className="table table-zebra w-full">
+                                        <thead>
+                                            <tr>
+                                                <th>Input</th>
+                                                <th>Expected Output</th>
                                             </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                            </div>
-                        </>
-                    )}
+                                        </thead>
+                                        <tbody>
+                                            {testcases.map((testCase, index) => (
+                                                <tr key={index}>
+                                                    <td className="font-mono">{testCase.input}</td>
+                                                    <td className="font-mono">{testCase.output}</td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </>
+                        )}
                 </div>
             </div>
         </div >
