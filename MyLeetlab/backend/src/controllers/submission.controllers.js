@@ -73,6 +73,9 @@ export const getSubmissionForProblem = asyncHandler(async (req, res) => {
             where: {
                 userId,
                 problemId
+            },
+            orderBy: {
+                createdAt: 'desc'
             }
         })
 
