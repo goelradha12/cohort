@@ -5,7 +5,7 @@ import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 import Editor from "@monaco-editor/react";
 import { sampledpData, sampleStringProblem } from "../samples/sampleProblem.js";
-import { BookOpen, CheckCircle2, Code2, Download, FileText, Lightbulb, Plus, Trash2 } from "lucide-react";
+import { BookOpen, CheckCircle2, ChevronRight, Code2, Download, FileText, Home, Lightbulb, Plus, Trash2 } from "lucide-react";
 import toast from "react-hot-toast";
 import { axiosInstance } from "../lib/axios.js";
 const CreateProblemForm = () => {
@@ -108,8 +108,25 @@ const CreateProblemForm = () => {
     }
     return (
         <div className='container mx-auto py-8 px-4 max-w-7xl'>
+            <div className="card mx-auto p-4">
+                <div className="flex items-center gap-1 pb-2">
+                                    <Home
+                                        onClick={() => navigation("/")}
+                                        className="cursor-pointer w-4 h-4"
+                                    />
+                                    <ChevronRight
+                                        onClick={() => navigation("/")}
+                                        className="cursor-pointer w-4 h-4"
+                                    />
+                                    <span
+                                        className="cursor-pointer font-normal"
+                                    >
+                                        Create Problem
+                                    </span>
+                                </div>
+            </div>
             <div className="card bg-base-100 shadow-xl">
-                <div className="card-body p-6 md:p-8">
+                <div className="card-body p-6 pt-10 md:p-8">
                     <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 md:mb-8 pb-4 border-b">
                         <h2 className="card-title text-2xl md:text-3xl flex items-center gap-3">
                             <FileText className="w-6 h-6 md:w-8 md:h-8 text-primary" />

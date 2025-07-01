@@ -34,13 +34,13 @@ const Navbar = () => {
                       authUser?.avatar
                     }
                     alt="User Avatar"
-                    className="object-cover"
+                    className="object-cover border-1 border-primary/20"
                   />
                 ) : (
                   <img
                     src={`https://avatar.iran.liara.run/public`} 
                     alt="User Avatar"
-                    className="object-cover"
+                    className="object-cover border-2 border-purple-50/60 rounded-full"
                   />
                 )}
               </div>
