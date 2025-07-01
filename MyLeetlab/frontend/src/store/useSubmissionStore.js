@@ -6,6 +6,7 @@ export const useSubmissionStore = create((set)=> {
     return {
         submissions: [],
         problemSubmissionCountByAllUser: 0,
+        successProbSubCountByAll: 0,
         submissionsByProblemID: [],
         gettingSubmissions: false,
         gettingProblemSubCountByAllUser: false,
@@ -47,7 +48,16 @@ export const useSubmissionStore = create((set)=> {
             } finally {
                 set({gettingSubmissionByProblemID: false});
             }
-        }
+        },
 
+        getSuccessProbSubCountByAll: async (id) => {
+            try {
+                const response = await axiosInstance(`submission/success-submission-count/${id}`);
+                console.log(response.data.data)
+                set({successProbSubCountByAll: response.data.data});
+            } catch (error) {
+                console.log("Error fetching submissions: ",error);
+            }
+        }
     }
 })

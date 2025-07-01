@@ -64,6 +64,38 @@ export const getSubmissionCount = asyncHandler(async (req, res) => {
     }
 })
 
+export const getSuccessfulSubmissionCount = asyncHandler(async (req, res) => {
+    // goal: send how many users has submitted the problem successfully
+    try {
+        const problemId = req.params.problemId;
+        const submissionCount = await db.Submission.count({
+            where: {
+                problemId,
+                status: "ACCEPTED"
+            }
+        })
+        // console.log(submissionCount)
+        res.status(200).json(
+            new apiResponse(200, submissionCount, "Submission Count Fetched Successfully")
+        )
+    } catch (error) {
+        console.log(error);
+        if (error instanceof apiError) {
+            return res.status(error.statusCode).json({
+                statusCode: error.statusCode,
+                message: error.message,
+                success: false
+            })
+        }
+
+        return res.status(500).json({
+            statusCode: 500,
+            success: false,
+            message: "etching submission count failed"
+        })
+    }
+})
+
 export const getSubmissionForProblem = asyncHandler(async (req, res) => {
     try {
         const userId = req.user._id;

@@ -50,7 +50,7 @@ const SubmissionList = ({ submissions, updateCode, setSelectedLanguage }) => {
                             updateCode(submission.sourceCode);
                             setSelectedLanguage(submission.language)
                         }}
-                        title="View Submitted Code"
+                        title="View in Editor"
                     >
                         <div className="card-body p-4">
                             <div className="flex items-center justify-between">

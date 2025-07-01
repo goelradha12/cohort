@@ -6,10 +6,13 @@ import {
     ChevronRight,
     Clock,
     Code2,
+    Dot,
     FileText,
     Home,
     Lightbulb,
     Loader,
+    LockKeyhole,
+    LockKeyholeOpen,
     MessageSquare,
     Share2,
     Terminal,
@@ -34,7 +37,7 @@ const ProblemPage = () => {
     useEffect(() => {
         getProblemById(id);
         // console.log(`AuthUser: ${JSON.stringify(authUser)}, Problem: ${problem}`)
-    }, [id]);
+    }, []);
 
     const [selectedLanguage, setSelectedLanguage] = useState("");
     const [editorTheme, setEditorTheme] = useState("vs-dark");
@@ -42,9 +45,17 @@ const ProblemPage = () => {
     const [activeTab, setActiveTab] = useState("description");
     const [testcases, setTestcases] = useState([]);
     const { isExecutingCode, executionResult, executeCode, setExecutionResultNull, isRunningCode, runCode } = useExecuteCodeStore();
-    const { submissionsByProblemID, getSubmissionByProblemID, gettingSubmissionByProblemID } = useSubmissionStore();
+    const { submissionsByProblemID, getSubmissionByProblemID, gettingSubmissionByProblemID } = useSubmissionStore(); // submissions
+    const {
+        problemSubmissionCountByAllUser,
+        gettingProblemSubCountByAllUser,
+        getProblemSubCountByAllUser } = useSubmissionStore(); // counts
+    const { getSuccessProbSubCountByAll, successProbSubCountByAll } = useSubmissionStore();
     // to scroll to result div after code execution 
     const ref = useRef(null);
+
+    const { solvedProblems, getSolvedProblemByUser } = useProblemStore();
+
 
     useEffect(() => {
         // console.log(problem);
@@ -57,9 +68,27 @@ const ProblemPage = () => {
     }, [problem])
 
     useEffect(() => {
-        getSubmissionByProblemID(id)
-    }, [id, isExecutingCode])
+        if(!isExecutingCode)
+        {
+            getProblemSubCountByAllUser(id)
+            getSuccessProbSubCountByAll(id)
+            getSubmissionByProblemID(id)
+            getSolvedProblemByUser()
+        }
+    }, [isExecutingCode])
 
+    const isProblemSolved = useMemo(() => {
+        if (!problem || solvedProblems.length === 0) return false;
+        // console.log(solvedProblems.map((p) => p.problem.id).includes(problem.id))
+        return solvedProblems.map((p) => p.problem.id).includes(problem.id)
+
+    }, [solvedProblems, problem])
+
+    const successRateOfProblem = useMemo(() => {
+        // console.log(problemSubmissionCountByAllUser, successProbSubCountByAll)
+        if (!problem || !problemSubmissionCountByAllUser || !successProbSubCountByAll) return 0;
+        return (successProbSubCountByAll/problemSubmissionCountByAllUser * 100).toFixed(2);
+    },[problemSubmissionCountByAllUser, problem])
     const handleSubmit = (e) => {
         e.preventDefault();
         try {
@@ -162,7 +191,7 @@ const ProblemPage = () => {
                 )
             case "submissions":
 
-                console.log("All submissions to this problem: ", submissionsByProblemID)
+                // console.log("All submissions to this problem: ", submissionsByProblemID)
                 return (gettingSubmissionByProblemID ?
                     <div className="grid content-center justify-center justify-items-center gap-3 h-screen">
                         <Loader className="size-10 animate-spin" />
@@ -174,9 +203,57 @@ const ProblemPage = () => {
                             <span>No Submissions Found</span>
                         </div>
                         :
-                    <SubmissionList submissions={submissionsByProblemID} updateCode={setCode} setSelectedLanguage={setSelectedLanguage} />
+                        <SubmissionList submissions={submissionsByProblemID} updateCode={setCode} setSelectedLanguage={setSelectedLanguage} />
                 )
 
+            case "hints":
+                return (
+                    <div className="p-2">
+                        <span>{problem.hints ? problem.hints : "No Hints Found"}</span>
+                    </div>
+                )
+
+            case "solution":
+                console.log(solvedProblems)
+                return (
+                    <div className="p-2">
+                        <p className="pb-4 opacity-60">{isProblemSolved ? "" : "Submit your code before accessing solutions"}</p>
+                        {/* show soln only if problem submitted at least once */}
+                        <span>{problem.referenceSolutions && Object.keys(problem.referenceSolutions).length !== 0 ?
+                            <>
+                                {Object.keys(problem.referenceSolutions).map(
+                                    (lang, idx) => (
+                                        <div
+                                            key={lang}
+                                            className=" cursor-pointer hover:bg-base-300 bg-base-200 p-6 rounded-xl mb-6 font-mono shadow-lg"
+                                            title="View in Editor"
+                                            onClick={() => {
+                                                if (isProblemSolved) {
+                                                    setSelectedLanguage(lang);
+                                                    setCode(problem.referenceSolutions[lang]);
+                                                }
+                                            }}
+                                        >
+                                            <div className="flex justify-between">
+                                                <div className="text-indigo-500 text-base font-semibold">
+                                                    {lang}
+                                                </div>
+                                                <div>
+                                                    {isProblemSolved ? (
+                                                        <LockKeyholeOpen className="text-success w-4 h-4" />
+                                                    ) : (
+                                                        <LockKeyhole className="text-error w-4 h-4" />
+                                                    )}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )
+                                )}
+                            </>
+                            :
+                            "No Solution Found"}</span>
+                    </div>
+                )
             default:
                 break;
         }
@@ -205,7 +282,7 @@ const ProblemPage = () => {
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-base-300 to-base-200 w-full">
-            <nav className="container mx-auto p-4">
+            <nav className="container mx-auto p-4 pt-6">
                 <div className="flex items-center gap-1 pb-2">
                     <Home
                         onClick={() => navigate("/")}
@@ -230,11 +307,18 @@ const ProblemPage = () => {
                             </div>
                             <div className="flex items-center">
                                 <Users className="w-4 h-4" />
-                                <span className="ml-1">{10} Submissions</span>
+                                <div className="ml-1 flex items-center gap-1">
+                                    {gettingProblemSubCountByAllUser ?
+                                        <Loader className="w-4 h-4 animate-spin" />
+                                        :
+                                        problemSubmissionCountByAllUser
+                                    }
+                                    <span>Submissions</span>
+                                </div>
                             </div>
                             <div className="flex items-center">
                                 <ThumbsUp className="w-4 h-4" />
-                                <span className="ml-1">{95}% Success Rate</span>
+                                <span className="ml-1">{successRateOfProblem}% Success Rate</span>
                             </div>
                         </div>
                     </div>
@@ -290,11 +374,11 @@ const ProblemPage = () => {
                                     Submissions
                                 </button>
                                 <button
-                                    className={`tab gap-2 ${activeTab === "discussion" && "tab-active"}`}
-                                    onClick={() => setActiveTab("discussion")}
+                                    className={`tab gap-2 ${activeTab === "solution" && "tab-active"}`}
+                                    onClick={() => setActiveTab("solution")}
                                 >
                                     <MessageSquare className="w-4 h-4" />
-                                    Discussion
+                                    Solutions
                                 </button>
                                 <button
                                     className={`tab gap-2 ${activeTab === "hints" && "tab-active"}`}
@@ -305,7 +389,7 @@ const ProblemPage = () => {
                                 </button>
                             </div>
                             {/* Tab infos using a utility function */}
-                            <div className="px-6 pb-6 pt-2 h-[85vh] overflow-y-scroll">{renderTabContent()}</div>
+                            <div className="px-6 pb-6 pt-2 h-[83vh] overflow-y-scroll">{renderTabContent()}</div>
                         </div>
                     </div>
                     {/* COl 2 */}
@@ -317,7 +401,7 @@ const ProblemPage = () => {
                                     Code Editor
                                 </button>
                             </div>
-                            <div className="h-[70vh] w-full">
+                            <div className="h-[68vh] w-full">
                                 < Editor
                                     height="100%"
                                     value={code}
