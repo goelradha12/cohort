@@ -11,6 +11,7 @@ import AddProblem from "./page/AddProblem";
 import AdminRoute from "./components/AdminRoute";
 import ProblemPage from "./page/ProblemPage";
 import ThemeToggleButton from "./components/ThemeToggleButton";
+import PageNotFound from "./page/PageNotFound";
 function App() {
   // giving useful routes to the user as per the authentication
   const { authUser, checkAuth, isCheckingAuth } = useAuthStore();
@@ -63,6 +64,9 @@ function App() {
           />
         </Route>
 
+        <Route path="/404-page-not-found" element={<PageNotFound />} />
+
+        <Route path="*" element={<Navigate to="/404-page-not-found" />} />
       </Routes>
     </>
   );
