@@ -174,7 +174,7 @@ const ProblemPage = () => {
                             <span>No Submissions Found</span>
                         </div>
                         :
-                    <SubmissionList submissions={submissionsByProblemID} />
+                    <SubmissionList submissions={submissionsByProblemID} updateCode={setCode} setSelectedLanguage={setSelectedLanguage} />
                 )
 
             default:

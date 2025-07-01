@@ -6,7 +6,7 @@ import {
     Calendar,
 } from "lucide-react";
 
-const SubmissionList = ({ submissions }) => {
+const SubmissionList = ({ submissions, updateCode, setSelectedLanguage }) => {
     const safeParse = (data) => {
         try {
             return JSON.parse(data);
@@ -45,7 +45,12 @@ const SubmissionList = ({ submissions }) => {
                 return (
                     <div
                         key={submission.id}
-                        className="card bg-base-200 shadow-lg hover:shadow-xl transition-shadow rounded-lg"
+                        className="card bg-base-200 shadow-lg hover:shadow-xl transition-shadow cursor-pointer rounded-lg"
+                        onClick={() => {
+                            updateCode(submission.sourceCode);
+                            setSelectedLanguage(submission.language)
+                        }}
+                        title="View Submitted Code"
                     >
                         <div className="card-body p-4">
                             <div className="flex items-center justify-between">
@@ -63,7 +68,7 @@ const SubmissionList = ({ submissions }) => {
                                                 <span className="font-semibold text-error">Wrong Answer</span>
                                             </>
                                         )}
-                                        </div>
+                                    </div>
                                     <div className="badge badge-outline">{submission.language}</div>
                                 </div>
 
