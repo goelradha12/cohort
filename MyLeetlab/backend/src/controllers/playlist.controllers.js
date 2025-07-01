@@ -188,6 +188,17 @@ export const addProblemToPlaylist = asyncHandler(async function (req, res) {
             throw new apiError(404, "One or more problems not found");
         }
 
+        // check if a problem is already in playlist
+        const problemPlaylist = await db.ProblemPlaylist.findMany({
+            where: {
+                problemId: { in: problemIds },
+                playlistId
+            }
+        })
+
+        if (problemPlaylist.length > 0)
+            throw new apiError(400, "Problem already in playlist")
+        
         const data = problemIds.map((problemId) => ({
             playlistId,
             problemId
