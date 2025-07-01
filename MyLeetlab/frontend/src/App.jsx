@@ -10,6 +10,7 @@ import Layout from "./layout/Layout";
 import AddProblem from "./page/AddProblem";
 import AdminRoute from "./components/AdminRoute";
 import ProblemPage from "./page/ProblemPage";
+import ThemeToggleButton from "./components/ThemeToggleButton";
 function App() {
   // giving useful routes to the user as per the authentication
   const { authUser, checkAuth, isCheckingAuth } = useAuthStore();
@@ -32,6 +33,7 @@ function App() {
     <>
       {/* {console.log(authUser)} */}
       <Toaster />
+      <ThemeToggleButton />
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route
