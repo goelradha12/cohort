@@ -12,6 +12,7 @@ import AdminRoute from "./components/AdminRoute";
 import ProblemPage from "./page/ProblemPage";
 import ThemeToggleButton from "./components/ThemeToggleButton";
 import PageNotFound from "./page/PageNotFound";
+import Profile from "./page/Profile";
 function App() {
   // giving useful routes to the user as per the authentication
   const { authUser, checkAuth, isCheckingAuth } = useAuthStore();
@@ -41,6 +42,10 @@ function App() {
             index
             element={authUser ? <HomePage /> : <Navigate to="/login" />}
           />
+
+          <Route 
+          path="/profile"
+          element={authUser ? <Profile /> : <Navigate to="/login" />} />
         </Route>
 
         <Route
