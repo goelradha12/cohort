@@ -64,10 +64,11 @@ export const registerUser = asyncHandler(async function (req, res) {
             new apiResponse(
                 200,
                 {
-                    Email: newUser.email,
-                    Avatar: newUser.avatar,
-                    isVerified: newUser.isEmailVerified,
-                    role: newUser.role
+                    name: myUser.name,
+                    avatar: myUser.image,
+                    email: myUser.email,
+                    isEmailVerified: myUser.isEmailVerified,
+                    role: myUser.role
                     // emailVerificationToken: newUser.emailVerificationToken
                 },
                 "User Registered Successfully"
@@ -195,7 +196,7 @@ export const loginUser = asyncHandler(async function (req, res) {
             res.status(200).json(
                 new apiResponse(
                     200,
-                    { username: user.username, email: user.email, isVerified: user.isEmailVerified, role: user.role, refreshToken: refreshToken },
+                    { name: user.name, createdAt: user.createdAt, id: user.id, email: user.email, isVerified: user.isEmailVerified, role: user.role, avatar: user.image },
                     "User logged in Successfully")
             )
         }
@@ -494,7 +495,9 @@ export const getUser = asyncHandler(async function (req, res) {
                     avatar: myUser.image,
                     email: myUser.email,
                     isEmailVerified: myUser.isEmailVerified,
-                    role: myUser.role
+                    role: myUser.role,
+                    createdAt: myUser.createdAt,
+                    updatedAt: myUser.updatedAt
                 }, "User Profile Shared Successfully")
             )
         }
@@ -560,7 +563,7 @@ export const updateUserProfile = asyncHandler(async function (req, res) {
                     200,
                     {
                         name: updatedUser.name,
-                        image: updatedUser.image,
+                        avatar: updatedUser.image,
                         email: updatedUser.email,
                         isEmailVerified: updatedUser.isEmailVerified,
                         role: updatedUser.role
