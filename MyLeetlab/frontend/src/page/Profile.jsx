@@ -2,19 +2,26 @@ import React, { useEffect, useState } from 'react'
 import { useAuthStore } from '../store/useAuthStore'
 import { useSubmissionStore } from '../store/useSubmissionStore'
 import { useProblemStore } from '../store/useProblemStore'
+import { Loader } from 'lucide-react'
+import { usePlaylistStore } from '../store/usePlaylistStore'
+import Heatmap from '../components/Heatmap'
+import "../App.css"
 
 const Profile = () => {
     const { authUser } = useAuthStore()
-    const { getAllSubmission, submissions, gettingSubmissions } = useSubmissionStore()
+    const { getAllSubmission, submissions } = useSubmissionStore()
+    const { playlists, fetchPlaylists, isFetchingPlaylists } = usePlaylistStore()
     const { getSolvedProblemByUser, solvedProblems } = useProblemStore()
-    const [ wrongSubmissionCount, setWrongSubmissionCount ] = useState(0)
-    const [ correctSubmissionCount, setCorrectSubmissionCount ] = useState(0)
+    const [wrongSubmissionCount, setWrongSubmissionCount] = useState(0)
+    const [correctSubmissionCount, setCorrectSubmissionCount] = useState(0)
+    const [subimissionDates, setSubimissionDates] = useState([])
+
     useEffect(() => {
         getAllSubmission()
         getSolvedProblemByUser()
-        
+        fetchPlaylists()
     }, [getAllSubmission])
-    
+
     useEffect(() => {
         // a function to find correct and wrong submissions by user
         let correct = 0;
@@ -30,12 +37,30 @@ const Profile = () => {
         setCorrectSubmissionCount(correct);
         setWrongSubmissionCount(wrong);
     }, [submissions])
+
+    useEffect(() => {
+        if (submissions) {
+
+            // calculate number of submission on each day
+            const submissionDateList = submissions.map(submission => {
+                const date = new Date(submission.createdAt)
+                return {
+                    year: date.getFullYear(),
+                    month: date.toLocaleString('default', { month: 'short' }),
+                    day: date.getDate()
+                };
+            })
+            setSubimissionDates(submissionDateList)
+
+        }
+    }, [submissions])
+
     return (
         <div className=''>
-            <div className="container mx-auto p-4">
+            <div className="container mx-auto p-4 mb-10">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     {/* COl 1 */}
-                    <div className="card bg-base-100 shadow-xl p-4 border-success/50 border-1 justify-around">
+                    <div className="card bg-base-100 shadow-xl p-4 border-success/20 border-1 justify-around">
                         <div>
                             <h1 className='text-2xl font-semibold pb-2 pl-4'>Profile</h1>
                         </div>
@@ -67,7 +92,7 @@ const Profile = () => {
 
                     </div>
                     {/* COl 2 */}
-                    <div className="card bg-base-100 shadow-xl p-4 border-success/50 border-1">
+                    <div className="card bg-base-100 shadow-xl p-4 border-success/20 border-1">
                         <div className='grid items-center justify-center'>
                             {authUser.avatar ?
                                 "Yes" : <img
@@ -100,6 +125,65 @@ const Profile = () => {
                             </table>
                         </div>
                     </div>
+                </div>
+                <div className="container p-4 border-success/20 border-1 shadow-xl mx-auto card mt-10">
+                    <h2 className=' pb-2 pl-4'>
+                        <span className="text-xl font-semibold"> Submission Heatmap </span>
+                        <span className='text-success text-md '>{"( " + new Date().getFullYear() + " )"}</span>
+                    </h2>
+
+                    <div className="graph p-4 m-4 text-sm">
+                        <ul className="months">
+                            <li>Jan</li>
+                            <li>Feb</li>
+                            <li>Mar</li>
+                            <li>Apr</li>
+                            <li>May</li>
+                            <li>Jun</li>
+                            <li>Jul</li>
+                            <li>Aug</li>
+                            <li>Sep</li>
+                            <li>Oct</li>
+                            <li>Nov</li>
+                            <li>Dec</li>
+                        </ul>
+                        <ul className="days">
+                            <li>Sun</li>
+                            <li>Mon</li>
+                            <li>Tue</li>
+                            <li>Wed</li>
+                            <li>Thu</li>
+                            <li>Fri</li>
+                            <li>Sat</li>
+                        </ul>
+                        {<Heatmap allDates={subimissionDates} />}
+                    </div>
+                </div>
+                <div className="container p-4 border-success/20 border-1 shadow-xl mx-auto card mt-10">
+                    <h2 className='text-xl font-semibold pb-2 pl-4'>Playlists</h2>
+
+                    <table className='table'>
+                        <thead>
+                            <tr>
+                                <th>Playlist Name</th>
+                                <th>Problem Count</th>
+                                <th>Description</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {playlists.map((playlist) => (
+                                <tr key={playlist.id}>
+                                    <td>{playlist.name}</td>
+                                    <td>{playlist.problem.length}</td>
+                                    <td>{playlist.description.slice(0, 50) + "..."}</td>
+                                    <td>
+                                        View, Edit, Delete
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
