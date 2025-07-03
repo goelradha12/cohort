@@ -6,6 +6,7 @@ import { Loader } from 'lucide-react'
 import { usePlaylistStore } from '../store/usePlaylistStore'
 import Heatmap from '../components/Heatmap'
 import "../App.css"
+import DisplayPlaylistModal from '../components/modals/DisplayPlaylistModal'
 
 const Profile = () => {
     const { authUser } = useAuthStore()
@@ -16,11 +17,17 @@ const Profile = () => {
     const [correctSubmissionCount, setCorrectSubmissionCount] = useState(0)
     const [subimissionDates, setSubimissionDates] = useState([])
 
+    // For viewing playlist modal
+    const [isDisplayPlaylistModalOpen, setIsDisplayPlaylistModalOpen] = useState(false)
+    const [selectedPlaylistId, setSelectedPlaylistId] = useState(null)
+
     useEffect(() => {
-        getAllSubmission()
-        getSolvedProblemByUser()
-        fetchPlaylists()
-    }, [getAllSubmission])
+        if(authUser){
+            getAllSubmission()
+            getSolvedProblemByUser()
+            fetchPlaylists()
+        } 
+    }, [])
 
     useEffect(() => {
         // a function to find correct and wrong submissions by user
@@ -55,6 +62,18 @@ const Profile = () => {
         }
     }, [submissions])
 
+    const handleViewPlaylist = (e, id) => {
+        e.preventDefault();
+        setSelectedPlaylistId(id)
+        setIsDisplayPlaylistModalOpen(true)
+        console.log("Button Clicked: ", e.target, id);
+    }
+    const handleEditPlaylist = (e, id) => {
+        console.log("Button Clicked: ", e.target, id);
+    }
+    const handleDeletePlaylist = (e, id) => {
+        console.log("Button Clicked: ", e.target, id);
+    }
     return (
         <div className=''>
             <div className="container mx-auto p-4 mb-10">
@@ -132,7 +151,7 @@ const Profile = () => {
                         <span className='text-success text-md '>{"( " + new Date().getFullYear() + " )"}</span>
                     </h2>
 
-                    <div className="graph p-4 m-4 text-sm">
+                    <div className="graph p-4 m-4 text-sm overflow-x-scroll">
                         <ul className="months">
                             <li>Jan</li>
                             <li>Feb</li>
@@ -172,20 +191,26 @@ const Profile = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {playlists.map((playlist) => (
-                                <tr key={playlist.id}>
-                                    <td>{playlist.name}</td>
-                                    <td>{playlist.problem.length}</td>
-                                    <td>{playlist.description.slice(0, 50) + "..."}</td>
-                                    <td>
-                                        View, Edit, Delete
-                                    </td>
-                                </tr>
-                            ))}
+                            {isFetchingPlaylists ?
+                                <tr><td colSpan={4}>Fetching Playlists...</td></tr>
+                                :
+                                playlists.map((playlist) => (
+                                    <tr key={playlist.id}>
+                                        <td>{playlist.name}</td>
+                                        <td>{playlist.problem.length}</td>
+                                        <td>{playlist.description.slice(0, 50) + "..."}</td>
+                                        <td className='flex gap-2'>
+                                            <button onClick={(e) => handleViewPlaylist(e, playlist.id)} className='btn btn-sm btn-outline'>View</button>
+                                            <button onClick={(e) => handleEditPlaylist(e, playlist.id)} className='btn btn-sm btn-outline'>Edit</button>
+                                            <button onClick={(e) => handleDeletePlaylist(e, playlist.id)} className='btn btn-sm btn-outline btn-error'>Delete</button>
+                                        </td>
+                                    </tr>
+                                ))}
                         </tbody>
                     </table>
                 </div>
             </div>
+            <DisplayPlaylistModal isOpen={isDisplayPlaylistModalOpen} onClose={()=>setIsDisplayPlaylistModalOpen(false)} playlistId={selectedPlaylistId} />
         </div>
     )
 }

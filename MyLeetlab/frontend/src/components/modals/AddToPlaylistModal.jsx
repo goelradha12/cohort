@@ -1,7 +1,7 @@
 
 import { useForm } from "react-hook-form";
 import { Loader, Plus, X } from "lucide-react";
-import { usePlaylistStore } from "../store/usePlaylistStore";
+import { usePlaylistStore } from "../../store/usePlaylistStore";
 import { useEffect, useState } from "react";
 
 const AddToPlaylistModal = ({ isOpen, onClose, problemId }) => {

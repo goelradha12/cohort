@@ -2,9 +2,9 @@ import React, { useMemo, useState } from "react";
 import { useAuthStore } from "../store/useAuthStore";
 import { Bookmark, PencilIcon, Plus, TrashIcon } from "lucide-react";
 import { Link } from "react-router";
-import CreatePlaylistModal from "./CreatePlaylistModal";
+import CreatePlaylistModal from "./modals/CreatePlaylistModal";
 import { usePlaylistStore } from "../store/usePlaylistStore";
-import AddToPlaylistModal from "./AddToPlaylistModal";
+import AddToPlaylistModal from "./modals/AddToPlaylistModal";
 
 const ProblemTable = ({ problems, solvedProblems }) => {
     const { authUser } = useAuthStore();
