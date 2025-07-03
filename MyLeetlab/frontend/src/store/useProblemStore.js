@@ -11,41 +11,41 @@ export const useProblemStore = create((set) => {
         isProblemsLoading: false,
         isProblemLoading: false,
 
-        getAllProblem: async() => {
+        getAllProblem: async () => {
             try {
-                set({isProblemsLoading: true})
+                set({ isProblemsLoading: true })
                 const response = await axiosInstance.get("/problems/");
-                set({problems: response.data.data})
+                set({ problems: response.data.data })
             } catch (error) {
-                console.log("Error fetching problems",error);
+                console.log("Error fetching problems", error);
                 toast.error("Error fetching all problems")
             } finally {
-                set({isProblemsLoading: false})
+                set({ isProblemsLoading: false })
             }
         },
-        getProblemById: async(id) => {
+        getProblemById: async (id) => {
             try {
-                set({isProblemLoading: true});
+                set({ isProblemLoading: true });
                 const res = await axiosInstance.get(`/problems/${id}`)
-                set({problem: res.data.data})
+                set({ problem: res.data.data })
                 toast.success("Problem Fetched")
             } catch (error) {
-                console.log("Error getting the problem: ",error)
-                set({problem: null})
+                console.log("Error getting the problem: ", error)
+                set({ problem: null })
                 // displaying error msgs from backend
-                toast.error(error.response.data.message || "Error fetching Problem")  
+                toast.error(error.response.data.message || "Error fetching Problem")
             } finally {
-                set({isProblemLoading: false})
+                set({ isProblemLoading: false })
             }
         },
-        getSolvedProblemByUser: async() => {
+        getSolvedProblemByUser: async () => {
             try {
                 const res = await axiosInstance.get("/problems/get-solved-problems");
-                console.log("Solved Problems: ",res.data.data);
-                set({solvedProblems: res.data.data})
+                // console.log("Solved Problems: ",res.data.data);
+                set({ solvedProblems: res.data.data })
             } catch (error) {
-                console.log("Error getting the problem: ",error)
-            } 
+                console.log("Error getting the problem: ", error)
+            }
         }
     }
 

@@ -17,7 +17,7 @@ const EditPlaylistModal = ({ isOpen, onClose, playlist }) => {
         return null;
     return (
         <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-50">
-            {console.log(playlist)}
+            {/* {console.log(playlist)} */}
             <div className="bg-base-100 rounded-lg shadow-xl w-full max-w-md">
                 <div className="flex justify-between items-center p-4 border-b border-base-300">
                     <h3 className="text-xl font-bold">Edit Playlist</h3>

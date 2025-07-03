@@ -26,12 +26,12 @@ const Profile = () => {
     const [selectedPlaylistForEdit, setSelectedPlaylistForEdit] = useState({})
 
     useEffect(() => {
-        if(authUser){
+        if (authUser) {
             getAllSubmission()
             getSolvedProblemByUser()
-        } 
+        }
     }, [])
-    
+
     useEffect(() => {
         fetchPlaylists()
     }, [selectedPlaylistId])
@@ -75,7 +75,7 @@ const Profile = () => {
         setIsDisplayPlaylistModalOpen(true)
     }
     const handleEditPlaylist = (e, id, name, description) => {
-        setSelectedPlaylistForEdit({id, name, description})
+        setSelectedPlaylistForEdit({ id, name, description })
         setIsEditPlaylistModalOpen(true)
     }
     const handleDeletePlaylist = async (e, id) => {
@@ -222,8 +222,8 @@ const Profile = () => {
                     </table>
                 </div>
             </div>
-            <DisplayPlaylistModal isOpen={isDisplayPlaylistModalOpen} onClose={()=>setIsDisplayPlaylistModalOpen(false)} playlistId={selectedPlaylistId} />
-            <EditPlaylistModal isOpen={isEditPlaylistModalOpen} onClose={()=>setIsEditPlaylistModalOpen(false)} playlist={selectedPlaylistForEdit} />
+            <DisplayPlaylistModal isOpen={isDisplayPlaylistModalOpen} onClose={() => setIsDisplayPlaylistModalOpen(false)} playlistId={selectedPlaylistId} />
+            <EditPlaylistModal isOpen={isEditPlaylistModalOpen} onClose={() => setIsEditPlaylistModalOpen(false)} playlist={selectedPlaylistForEdit} />
         </div>
     )
 }
