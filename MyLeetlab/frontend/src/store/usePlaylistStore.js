@@ -32,10 +32,10 @@ export const usePlaylistStore = create((set)=> ({
         }
     },
 
-    removeProblemFromPlaylist: async (playlistId, problemIds) => {
+    removeProblemFromPlaylist: async (playlistId, data) => {
         try {
-            console.log(problemIds)
-            const response = await axiosInstance.delete(`/playlist/${playlistId}/remove-problem`,{problemIds});
+            console.log("Store:",data)
+            const response = await axiosInstance.patch(`/playlist/${playlistId}/remove-problem`, data);
             toast.success(response?.data?.message || "Problem removed")
         } catch (error) {
             console.log("Error fetching playlists: ",error);
