@@ -54,6 +54,16 @@ export const usePlaylistStore = create((set)=> ({
         } 
     },
 
+    editAPlaylist: async (id, data) => {
+      try {
+        const response = await axiosInstance.patch(`/playlist/${id}`, data);
+        toast.success(response?.data?.message || "Playlist edited successfully");
+      }  catch(error) {
+        console.log("Error fetching playlists: ",error);
+        toast.error(error.response?.data?.message || "Error editing the playlist");
+      }
+    },
+
     fetchAPlaylist: async (id) => {
         try {
             set({isFetchingPlaylist: true});
