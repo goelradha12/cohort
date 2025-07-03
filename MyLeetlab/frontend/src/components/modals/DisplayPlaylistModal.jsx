@@ -16,7 +16,7 @@ const DisplayPlaylistModal = ({ isOpen, onClose, playlistId }) => {
 
     useEffect(() => {
         if (isOpen) {
-            console.log("Fetching: ", playlistId);
+            // console.log("Fetching: ", playlistId);
             fetchAPlaylist(playlistId);
         }
     }, [isOpen]);
@@ -24,7 +24,7 @@ const DisplayPlaylistModal = ({ isOpen, onClose, playlistId }) => {
     const handleRemoveProblem = async (e) => {
         e.preventDefault();
         if (!selectedProblemIdForEdit) return
-        let data = {problemIds: [selectedProblemIdForEdit]};
+        let data = { problemIds: [selectedProblemIdForEdit] };
         await removeProblemFromPlaylist(playlistId, data);
         await fetchAPlaylist(playlistId);
     };
@@ -39,8 +39,8 @@ const DisplayPlaylistModal = ({ isOpen, onClose, playlistId }) => {
         <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-50">
             <div className="bg-base-100 rounded-lg shadow-xl w-full mx-[10%]">
                 <div className="flex justify-between items-center p-4 border-b border-base-300">
-                    {console.log(playlist)}
-                    <h2 className="font-bold text-lg">{playlist? playlist.name : "Fetching"}</h2>
+                    {/* {console.log(playlist)} */}
+                    <h2 className="font-bold text-lg">{playlist ? playlist.name : "Fetching"}</h2>
                     <button
                         onClick={onClose}
                         className="btn btn-ghost btn-sm btn-circle"
