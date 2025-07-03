@@ -71,7 +71,7 @@ const DisplayPlaylistModal = ({ isOpen, onClose, playlistId }) => {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {playlist.problem.map((problem) => (
+                                        {playlist.problem?.map((problem) => (
                                             <tr key={problem.id}>
                                                 <td>{problem.problem.title}</td>
                                                 <td>{new Date(problem.createdAt).toLocaleString()}</td>

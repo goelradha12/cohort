@@ -11,7 +11,7 @@ import DisplayPlaylistModal from '../components/modals/DisplayPlaylistModal'
 const Profile = () => {
     const { authUser } = useAuthStore()
     const { getAllSubmission, submissions } = useSubmissionStore()
-    const { playlists, fetchPlaylists, isFetchingPlaylists } = usePlaylistStore()
+    const { playlists, fetchPlaylists, isFetchingPlaylists, deleteAPlaylist } = usePlaylistStore()
     const { getSolvedProblemByUser, solvedProblems } = useProblemStore()
     const [wrongSubmissionCount, setWrongSubmissionCount] = useState(0)
     const [correctSubmissionCount, setCorrectSubmissionCount] = useState(0)
@@ -25,9 +25,12 @@ const Profile = () => {
         if(authUser){
             getAllSubmission()
             getSolvedProblemByUser()
-            fetchPlaylists()
         } 
     }, [])
+    
+    useEffect(() => {
+        fetchPlaylists()
+    }, [selectedPlaylistId])
 
     useEffect(() => {
         // a function to find correct and wrong submissions by user
@@ -66,13 +69,17 @@ const Profile = () => {
         e.preventDefault();
         setSelectedPlaylistId(id)
         setIsDisplayPlaylistModalOpen(true)
-        console.log("Button Clicked: ", e.target, id);
     }
     const handleEditPlaylist = (e, id) => {
         console.log("Button Clicked: ", e.target, id);
     }
-    const handleDeletePlaylist = (e, id) => {
-        console.log("Button Clicked: ", e.target, id);
+    const handleDeletePlaylist = async (e, id) => {
+        const confirmation = window.confirm("Are you sure you want to delete this playlist?")
+        if (confirmation) {
+            setSelectedPlaylistId(id)
+            await deleteAPlaylist(selectedPlaylistId)
+            console.log("Button Clicked: ", e.target, id);
+        }
     }
     return (
         <div className=''>

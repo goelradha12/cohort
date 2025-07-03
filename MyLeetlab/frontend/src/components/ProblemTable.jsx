@@ -68,7 +68,7 @@ const ProblemTable = ({ problems, solvedProblems }) => {
         <div className="w-full max-w-6xl mx-auto mt-10">
             <div className="flex justify-between items-center mb-6">
                 <h2 className="text-2xl font-bold">Problems</h2>
-                <button className="btn btn-primary gap-2" onClick={()=>{setIsCreatePlaylistModalOpen(true)}}>
+                <button className="btn btn-primary gap-2 cursor-pointer" onClick={()=>{setIsCreatePlaylistModalOpen(true)}}>
                     <Plus className="w-4 h-4" />
                     Create Playlist
                 </button>
