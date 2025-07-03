@@ -19,6 +19,6 @@ router.route("/:playlistId/add-problem")
     .post(isLoggedIn, isVerified, addProblemToPlaylistValidator(), validate, addProblemToPlaylist)
 
 router.route("/:playlistId/remove-problem")
-    .delete(isLoggedIn, isVerified, removeProblemFromPlaylistValidator(), validate, removeProblemFromPlaylist)
+    .patch(isLoggedIn, isVerified, removeProblemFromPlaylistValidator(), validate, removeProblemFromPlaylist)
 
 export default router;

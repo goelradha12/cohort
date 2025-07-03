@@ -12,10 +12,10 @@ const DisplayPlaylistModal = ({ isOpen, onClose, playlistId }) => {
     } = usePlaylistStore();
     const navigate = useNavigate();
     const [selectedProblemId, setSelectedProblemId] = useState(null);
+    const [selectedProblemIdForEdit, setSelectedProblemIdForEdit] = useState(null);
 
     useEffect(() => {
-        if(isOpen)
-        {
+        if (isOpen) {
             console.log("Fetching: ", playlistId);
             fetchAPlaylist(playlistId);
         }
@@ -23,12 +23,14 @@ const DisplayPlaylistModal = ({ isOpen, onClose, playlistId }) => {
 
     const handleRemoveProblem = async (e) => {
         e.preventDefault();
-        if(!selectedProblemId) return
-        await removeProblemFromPlaylist(playlistId, [selectedProblemId]);
+        if (!selectedProblemIdForEdit) return
+        let data = {problemIds: [selectedProblemIdForEdit]};
+        await removeProblemFromPlaylist(playlistId, data);
+        await fetchAPlaylist(playlistId);
     };
     const handleViewProblem = (e) => {
         e.preventDefault();
-        if(!selectedProblemId) return
+        if (!selectedProblemId) return
         navigate(`/problem/${selectedProblemId}`);
     };
 
@@ -36,6 +38,16 @@ const DisplayPlaylistModal = ({ isOpen, onClose, playlistId }) => {
     return (
         <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-50">
             <div className="bg-base-100 rounded-lg shadow-xl w-full mx-[10%]">
+                <div className="flex justify-between items-center p-4 border-b border-base-300">
+                    {console.log(playlist)}
+                    <h2 className="font-bold text-lg">{playlist? playlist.name : "Fetching"}</h2>
+                    <button
+                        onClick={onClose}
+                        className="btn btn-ghost btn-sm btn-circle"
+                    >
+                        <X className="w-5 h-5" />
+                    </button>
+                </div>
                 {isFetchingPlaylist ? (
                     <div className="flex justify-center items-center h-full gap-2 p-4">
                         <Loader className="w-5 h-5 animate-spin" />
@@ -43,16 +55,6 @@ const DisplayPlaylistModal = ({ isOpen, onClose, playlistId }) => {
                     </div>
                 ) : playlist ? (
                     <>
-                        <div className="flex justify-between items-center p-4 border-b border-base-300">
-                            {console.log(playlist)}
-                            <h2 className="font-bold text-lg">{playlist.name}</h2>
-                            <button
-                                onClick={onClose}
-                                className="btn btn-ghost btn-sm btn-circle"
-                            >
-                                <X className="w-5 h-5" />
-                            </button>
-                        </div>
                         <div className="h-[70vh] overflow-y-scroll">
                             <div className="p-6 space-y-4 border-b border-base-300">
                                 <h3 className="text-lg font-normal">Description: </h3>
@@ -78,12 +80,10 @@ const DisplayPlaylistModal = ({ isOpen, onClose, playlistId }) => {
                                                 <td className="flex gap-4">
                                                     <button
                                                         onClick={(e) => {
-                                                            setSelectedProblemId(problem.problemId)
+                                                            setSelectedProblemIdForEdit(problem.problemId)
                                                             handleRemoveProblem(e);
                                                         }}
                                                         className="btn btn-error btn-sm"
-                                                        title="double click to remove"
-                                                        disabled
                                                     >
                                                         Remove
                                                     </button>
@@ -108,8 +108,8 @@ const DisplayPlaylistModal = ({ isOpen, onClose, playlistId }) => {
                 ) : (
                     <>
                         <div className="flex justify-center items-center h-full gap-2 p-4">
-                        Playlist Doesn't Exists
-                    </div>
+                            Playlist Doesn't Exists
+                        </div>
                     </>
                 )}
             </div>
