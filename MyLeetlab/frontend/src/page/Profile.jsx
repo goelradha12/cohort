@@ -7,11 +7,12 @@ import { usePlaylistStore } from '../store/usePlaylistStore'
 import Heatmap from '../components/Heatmap'
 import "../App.css"
 import DisplayPlaylistModal from '../components/modals/DisplayPlaylistModal'
+import EditPlaylistModal from '../components/modals/EditPlaylistModal'
 
 const Profile = () => {
     const { authUser } = useAuthStore()
     const { getAllSubmission, submissions } = useSubmissionStore()
-    const { playlists, fetchPlaylists, isFetchingPlaylists, deleteAPlaylist } = usePlaylistStore()
+    const { playlists, fetchPlaylists, isFetchingPlaylists, deleteAPlaylist, editAPlaylist } = usePlaylistStore()
     const { getSolvedProblemByUser, solvedProblems } = useProblemStore()
     const [wrongSubmissionCount, setWrongSubmissionCount] = useState(0)
     const [correctSubmissionCount, setCorrectSubmissionCount] = useState(0)
@@ -20,6 +21,9 @@ const Profile = () => {
     // For viewing playlist modal
     const [isDisplayPlaylistModalOpen, setIsDisplayPlaylistModalOpen] = useState(false)
     const [selectedPlaylistId, setSelectedPlaylistId] = useState(null)
+
+    const [isEditPlaylistModalOpen, setIsEditPlaylistModalOpen] = useState(false)
+    const [selectedPlaylistForEdit, setSelectedPlaylistForEdit] = useState({})
 
     useEffect(() => {
         if(authUser){
@@ -70,15 +74,16 @@ const Profile = () => {
         setSelectedPlaylistId(id)
         setIsDisplayPlaylistModalOpen(true)
     }
-    const handleEditPlaylist = (e, id) => {
-        console.log("Button Clicked: ", e.target, id);
+    const handleEditPlaylist = (e, id, name, description) => {
+        setSelectedPlaylistForEdit({id, name, description})
+        setIsEditPlaylistModalOpen(true)
     }
     const handleDeletePlaylist = async (e, id) => {
         const confirmation = window.confirm("Are you sure you want to delete this playlist?")
         if (confirmation) {
             setSelectedPlaylistId(id)
             await deleteAPlaylist(selectedPlaylistId)
-            console.log("Button Clicked: ", e.target, id);
+            await fetchPlaylists()
         }
     }
     return (
@@ -208,7 +213,7 @@ const Profile = () => {
                                         <td>{playlist.description.slice(0, 50) + "..."}</td>
                                         <td className='flex gap-2'>
                                             <button onClick={(e) => handleViewPlaylist(e, playlist.id)} className='btn btn-sm btn-outline'>View</button>
-                                            <button onClick={(e) => handleEditPlaylist(e, playlist.id)} className='btn btn-sm btn-outline'>Edit</button>
+                                            <button onClick={(e) => handleEditPlaylist(e, playlist.id, playlist.name, playlist.description)} className='btn btn-sm btn-outline'>Edit</button>
                                             <button onClick={(e) => handleDeletePlaylist(e, playlist.id)} className='btn btn-sm btn-outline btn-error'>Delete</button>
                                         </td>
                                     </tr>
@@ -218,6 +223,7 @@ const Profile = () => {
                 </div>
             </div>
             <DisplayPlaylistModal isOpen={isDisplayPlaylistModalOpen} onClose={()=>setIsDisplayPlaylistModalOpen(false)} playlistId={selectedPlaylistId} />
+            <EditPlaylistModal isOpen={isEditPlaylistModalOpen} onClose={()=>setIsEditPlaylistModalOpen(false)} playlist={selectedPlaylistForEdit} />
         </div>
     )
 }

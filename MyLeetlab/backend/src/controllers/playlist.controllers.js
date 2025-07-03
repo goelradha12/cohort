@@ -269,3 +269,47 @@ export const removeProblemFromPlaylist = asyncHandler(async function (req, res) 
         })
     }
 })
+
+export const editPlaylist = asyncHandler(async function (req, res) {
+    // goal: edit playlist details
+    try {
+        const { playlistId } = req.params;
+        const { name, description } = req.body;
+
+        const myPlaylist = await db.Playlist.findUnique({
+            where: {
+                id: playlistId
+            }
+        })
+        if (!myPlaylist)
+            throw new apiError(400, "Playlist doesn't Exists")
+
+        const playlist = await db.Playlist.update({
+            where: {
+                id: playlistId
+            },
+            data: {
+                name,
+                description
+            }
+        })
+        res.status(200).json(
+            new apiResponse(200, playlist, "Playlist edited successfully")
+        )
+    } catch (error) {
+        console.log(error);
+        if (error instanceof apiError) {
+            return res.status(error.statusCode).json({
+                statusCode: error.statusCode,
+                message: error.message,
+                success: false
+            })
+        }
+        return res.status(500).json({
+            statusCode: 500,
+            success: false,
+            message: "Editing playlist failed"
+        })
+    }
+    
+})
