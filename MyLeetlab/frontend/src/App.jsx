@@ -13,6 +13,7 @@ import ProblemPage from "./page/ProblemPage";
 import ThemeToggleButton from "./components/ThemeToggleButton";
 import PageNotFound from "./page/PageNotFound";
 import Profile from "./page/Profile";
+import ForgotPassword from "./page/ForgotPassword";
 function App() {
   // giving useful routes to the user as per the authentication
   const { authUser, checkAuth, isCheckingAuth } = useAuthStore();
@@ -58,6 +59,10 @@ function App() {
           element={authUser ? <Navigate to="/" /> : <SignUpPage />}
         />
 
+        <Route 
+          path="/forgot-password"
+          element={<ForgotPassword />}
+        />
         <Route path="/problem/:id"
           element={authUser ? <ProblemPage /> : <Navigate to="/login" />}
         />

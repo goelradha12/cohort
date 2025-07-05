@@ -101,6 +101,7 @@ const Profile = () => {
                                 <tr>
                                     <th>Name</th>
                                     <td>{authUser.name ? authUser.name : "NA"}</td>
+                                    <td><button className="btn btn-neutral">Edit</button></td>
                                 </tr>
                                 <tr>
                                     <th>Email</th>
