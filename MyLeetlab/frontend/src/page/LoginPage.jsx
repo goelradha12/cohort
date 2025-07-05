@@ -138,6 +138,9 @@ const SignUpPage = () => {
                 here
               </Link>
             </p>
+            <p className='text-base-content/60"'>
+              Forgot Password? <Link to="/forgot-password" className="link link-primary">Reset Password</Link>
+            </p>
           </div>
         </div>
       </div>
