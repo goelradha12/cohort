@@ -8,15 +8,21 @@ import Heatmap from '../components/Heatmap'
 import "../App.css"
 import DisplayPlaylistModal from '../components/modals/DisplayPlaylistModal'
 import EditPlaylistModal from '../components/modals/EditPlaylistModal'
+import { axiosInstance } from '../lib/axios'
+import toast from 'react-hot-toast'
 
 const Profile = () => {
-    const { authUser } = useAuthStore()
+    const { authUser, checkAuth, isCheckingAuth } = useAuthStore()
     const { getAllSubmission, submissions } = useSubmissionStore()
     const { playlists, fetchPlaylists, isFetchingPlaylists, deleteAPlaylist, editAPlaylist } = usePlaylistStore()
     const { getSolvedProblemByUser, solvedProblems } = useProblemStore()
     const [wrongSubmissionCount, setWrongSubmissionCount] = useState(0)
     const [correctSubmissionCount, setCorrectSubmissionCount] = useState(0)
     const [subimissionDates, setSubimissionDates] = useState([])
+
+    // profile edits
+    const [isEditingProfile, setIsEditingProfile] = useState(false);
+    const [newName, setNewName] = useState("");
 
     // For viewing playlist modal
     const [isDisplayPlaylistModalOpen, setIsDisplayPlaylistModalOpen] = useState(false)
@@ -86,6 +92,20 @@ const Profile = () => {
             await fetchPlaylists()
         }
     }
+
+    // editing user profile function
+    const handleEditUserName = async () => {
+        try {
+            const response = await axiosInstance.post("/auth/updateProfile", { newName })
+            toast.success(response.data?.message || "Profile updated successfully");
+        } catch (error) {
+            console.log(error)
+            toast.error(error.response?.data?.message || "Error updating profile")
+        } finally {
+            setIsEditingProfile(false);
+            await checkAuth();
+        }
+    }
     return (
         <div className=''>
             <div className="container mx-auto p-4 mb-10">
@@ -100,8 +120,34 @@ const Profile = () => {
 
                                 <tr>
                                     <th>Name</th>
-                                    <td>{authUser.name ? authUser.name : "NA"}</td>
-                                    <td><button className="btn btn-neutral">Edit</button></td>
+                                    <td>
+                                        {isEditingProfile ?
+                                            <>
+                                                <input
+                                                    type="text"
+                                                    className="input input-bordered input-sm max-w-1/2"
+                                                    defaultValue={authUser.name ? authUser.name : "NA"}
+                                                    onChange={(e) => setNewName(e.target.value)}
+                                                />
+
+                                                <button className="btn btn-success btn-sm ml-2" onClick={handleEditUserName}>Save</button>
+                                                <button className="btn btn-ghost btn-sm ml-2" onClick={() => setIsEditingProfile(false)}>Cancel</button>
+                                            </>
+                                            :
+                                            <div className='flex items-center justify-between'>
+                                                {isCheckingAuth ? <Loader className="w-4 h-4 animate-spin" /> : authUser.name ? authUser.name : "NA"}
+
+                                                <button
+                                                    className="btn btn-link btn-sm hover:border-success"
+                                                    onClick={() => setIsEditingProfile(true)}
+                                                    disabled={isEditingProfile}>
+                                                    Edit
+                                                </button>
+
+                                            </div>
+                                        }
+
+                                    </td>
                                 </tr>
                                 <tr>
                                     <th>Email</th>
@@ -164,7 +210,7 @@ const Profile = () => {
                         <span className='text-success text-md '>{"( " + new Date().getFullYear() + " )"}</span>
                     </h2>
 
-                    <div className="graph p-4 m-4 text-sm overflow-x-scroll">
+                    <div className="graph p-4 m-4 text-sm md:overflow-x-scroll">
                         <ul className="months">
                             <li>Jan</li>
                             <li>Feb</li>
