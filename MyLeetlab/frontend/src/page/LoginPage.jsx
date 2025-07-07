@@ -141,6 +141,9 @@ const SignUpPage = () => {
             <p className='text-base-content/60"'>
               Forgot Password? <Link to="/forgot-password" className="link link-primary">Reset Password</Link>
             </p>
+            <p className='text-base-content/60"'>
+              Missed Email Verfication? <Link to="/verify-email" className="link link-primary">Verify email</Link>
+            </p>
           </div>
         </div>
       </div>
