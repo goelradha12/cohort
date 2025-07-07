@@ -14,6 +14,7 @@ import ThemeToggleButton from "./components/ThemeToggleButton";
 import PageNotFound from "./page/PageNotFound";
 import Profile from "./page/Profile";
 import ForgotPassword from "./page/ForgotPassword";
+import VerifyEmail from "./page/VerifyEmail";
 function App() {
   // giving useful routes to the user as per the authentication
   const { authUser, checkAuth, isCheckingAuth } = useAuthStore();
@@ -63,6 +64,12 @@ function App() {
           path="/forgot-password"
           element={<ForgotPassword />}
         />
+
+        <Route 
+          path="/verify-email"
+          element={<VerifyEmail />}
+        />
+
         <Route path="/problem/:id"
           element={authUser ? <ProblemPage /> : <Navigate to="/login" />}
         />
