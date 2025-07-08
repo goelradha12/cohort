@@ -528,9 +528,11 @@ export const updateUserProfile = asyncHandler(async function (req, res) {
     // Make sure user is logged in(has access token) before giving the access
 
     // get newName, newAvatar
-    const { newName, newImage } = req.body;
+    const { newName } = req.body;
+    const newImage = req.file.fieldname;
 
     try {
+        // console.log(req.file)
         if (!(newName || req.file))
             throw new apiError(401, "No data recieved to update")
 
@@ -548,13 +550,14 @@ export const updateUserProfile = asyncHandler(async function (req, res) {
                     }
                 });
 
-            if (newImage)
+            if (newImage === "newImage")
+                // console.log(req.file.filename)
                 await db.User.update({
                     where: {
                         id: myUser.id
                     },
                     data: {
-                        image: newImage
+                        image: req.file.filename
                     }
                 });
             const updatedUser = await db.User.findUnique({ where:{id: myUser.id} })

@@ -10,6 +10,7 @@ import DisplayPlaylistModal from '../components/modals/DisplayPlaylistModal'
 import EditPlaylistModal from '../components/modals/EditPlaylistModal'
 import { axiosInstance } from '../lib/axios'
 import toast from 'react-hot-toast'
+import FormData, { } from "form-data"
 
 const Profile = () => {
     const { authUser, checkAuth, isCheckingAuth } = useAuthStore()
@@ -25,6 +26,7 @@ const Profile = () => {
     const [newName, setNewName] = useState("");
     const [isEditingProfileImage, setIsEditingProfileImage] = useState(false);
     const [newProfileImage, setNewProfileImage] = useState(null);
+    const [isProfileLoading, setIsProfileLoading] = useState(false);
     const [isEditingProfilePassword, setIsEditingProfilePassword] = useState(false);
     const [newPasswordData, setNewPasswordData] = useState({});
     const [showPassword, setShowPassword] = useState(false)
@@ -123,6 +125,23 @@ const Profile = () => {
             toast.error(error.response?.data?.message || "Error updating password")
         } finally {
             setIsEditingProfilePassword(false);
+        }
+
+    }
+
+    const handleEditUserProfile = async () => {
+        try {
+            setIsProfileLoading(true)
+            const formData = new FormData();
+            formData.append('newImage', newProfileImage);
+            const res = await axiosInstance.post("/auth/updateProfile", formData);
+            toast.success(res.data?.message || "Image updated successfully")
+        } catch (error) {
+            console.log("Error updating image: ", error)
+            toast.error(error.response?.data?.message || "Error updating image")
+        } finally {
+            await authUser();
+            setIsProfileLoading(false)
         }
 
     }
@@ -234,11 +253,37 @@ const Profile = () => {
                     <div className="card bg-base-100 shadow-xl p-4 border-success/20 border-1">
                         <div className='grid items-center justify-center'>
                             {authUser.avatar ?
-                                "Yes" : <img
+                                authUser.avatar : <img
                                     src={`https://avatar.iran.liara.run/public`}
                                     alt="User Avatar"
                                     className="object-cover border-2 border-success/50 h-30 rounded-full"
                                 />
+                            }
+                        </div>
+                        <div className='grid justify-end'>
+                            {isEditingProfileImage ?
+                                <div className='flex items-center pt-4'>
+                                    <input
+                                        type="file"
+                                        accept='image/*'
+                                        required
+                                        className="file-input-primary file-input"
+                                        onChange={(e) => setNewProfileImage(e.target.files[0])}
+                                    />
+
+                                    <button className="btn btn-success btn-sm ml-2" onClick={handleEditUserProfile}>Update</button>
+                                    <button className="btn btn-ghost btn-sm ml-2" onClick={() => setIsEditingProfileImage(false)}>Cancel</button>
+                                </div>
+                                :
+                                <div className='flex items-center justify-between'>
+                                    <button
+                                        className="btn btn-link btn-sm hover:border-success"
+                                        onClick={() => setIsEditingProfileImage(true)}
+                                        disabled={isEditingProfile}>
+                                        Edit Image
+                                    </button>
+
+                                </div>
                             }
                         </div>
                         <div className='mt-4'>
