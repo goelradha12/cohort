@@ -14,7 +14,7 @@ router.route("/register").post(
     registerUser);
 router.route("/verifyMail/:token").get(verifyMail);
 router.route("/login").post(userLoginValidator(),validate,loginUser);
-router.route("/changePassword").post(userChangePasswordValidator(),validate,changeCurrPassword);
+router.route("/changePassword").post((req,res,next)=>{console.log(req.data); next()},userChangePasswordValidator(),validate,changeCurrPassword);
 router.route("/resendVerificationEmail").post(resendVerificationEmailValidator(),validate,resendVerificationEmail);
 router.route("/forgotPassword").post(forgotPasswordRequestValidator(),validate,forgotPasswordRequest);
 router.route("/resetPassword/:token").post(resetPasswordValidator(),validate,resetPassword);

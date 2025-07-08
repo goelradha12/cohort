@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useAuthStore } from '../store/useAuthStore'
 import { useSubmissionStore } from '../store/useSubmissionStore'
 import { useProblemStore } from '../store/useProblemStore'
-import { Loader } from 'lucide-react'
+import { Eye, EyeOff, Loader } from 'lucide-react'
 import { usePlaylistStore } from '../store/usePlaylistStore'
 import Heatmap from '../components/Heatmap'
 import "../App.css"
@@ -23,6 +23,11 @@ const Profile = () => {
     // profile edits
     const [isEditingProfile, setIsEditingProfile] = useState(false);
     const [newName, setNewName] = useState("");
+    const [isEditingProfileImage, setIsEditingProfileImage] = useState(false);
+    const [newProfileImage, setNewProfileImage] = useState(null);
+    const [isEditingProfilePassword, setIsEditingProfilePassword] = useState(false);
+    const [newPasswordData, setNewPasswordData] = useState({});
+    const [showPassword, setShowPassword] = useState(false)
 
     // For viewing playlist modal
     const [isDisplayPlaylistModalOpen, setIsDisplayPlaylistModalOpen] = useState(false)
@@ -106,6 +111,22 @@ const Profile = () => {
             await checkAuth();
         }
     }
+
+    const handleEditPassword = async () => {
+        try {
+            const data = newPasswordData;
+            newPasswordData.email = authUser.email || "";
+            const res = await axiosInstance.post("/auth/changePassword", data);
+            toast.success(res.data?.message || "Password updated successfully");
+        } catch (error) {
+            console.log("Error updating password: ", error);
+            toast.error(error.response?.data?.message || "Error updating password")
+        } finally {
+            setIsEditingProfilePassword(false);
+        }
+
+    }
+
     return (
         <div className=''>
             <div className="container mx-auto p-4 mb-10">
@@ -167,6 +188,46 @@ const Profile = () => {
                                 </tr>
                             </tbody>
                         </table>
+                        <div className='text-sm flex items-center gap-1 mt-4'>
+                            {isEditingProfilePassword ?
+                                <div className='flex items-center gap-1'>
+                                    <input
+                                        type={showPassword ? "text" : "password"}
+                                        name='oldPassword'
+                                        className="input"
+                                        placeholder='Enter current password'
+                                        onChange={(e) => { setNewPasswordData((prev) => ({ ...prev, oldPassword: e.target.value })) }} />
+                                    <input
+                                        type={showPassword ? "text" : "password"}
+                                        name='newPassword'
+                                        className="input"
+                                        placeholder='Enter new password'
+                                        onChange={(e) => { setNewPasswordData((prev) => ({ ...prev, newPassword: e.target.value })) }} />
+                                    <button
+                                        type="button"
+                                        className="inset-y-0 right-0 px-3 cursor-pointer flex items-center"
+                                        onClick={() => setShowPassword(!showPassword)}
+                                    >
+                                        {showPassword ? (
+                                            <EyeOff className="h-5 w-5 text-base-content/40" />
+                                        ) : (
+                                            <Eye className="h-5 w-5 text-base-content/40" />
+                                        )}
+                                    </button>
+                                    <button className="btn btn-success" onClick={handleEditPassword}>Update</button>
+                                    <button className="btn btn-outline" onClick={() => setIsEditingProfilePassword(false)}>Cancel</button>
+                                </div>
+                                :
+                                <>
+                                    Change Password
+                                    <button
+                                        className="btn btn-link p-0 hover:dark:text-white hover:text-black"
+                                        onClick={() => setIsEditingProfilePassword(true)}>
+                                        Here
+                                    </button>
+                                </>
+                            }
+                        </div>
 
                     </div>
                     {/* COl 2 */}
