@@ -1,6 +1,7 @@
 import multer from "multer";
 
-const storage = multer.diskStorage({
+// memory storage to store in RAM temporarily
+const storage = multer.memoryStorage({
   destination: function (req, file, cb) {
     cb(null, './src/public/images')
   },
