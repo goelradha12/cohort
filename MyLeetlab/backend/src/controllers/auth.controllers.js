@@ -7,6 +7,7 @@ import { db } from "../libs/db.js";
 import { UserRole } from "../generated/prisma/index.js";
 import bcrypt from "bcryptjs";
 import { generateAccessToken, generateRefreshToken, generateTemporaryTokens } from "../utils/generateTokens.js";
+import { handleUpload } from "../middlewares/cloudinary.middleware.js";
 
 export const registerUser = asyncHandler(async function (req, res) {
     // recieve name, email and password
@@ -550,16 +551,20 @@ export const updateUserProfile = asyncHandler(async function (req, res) {
                     }
                 });
 
-            if (newImage === "newImage")
-                // console.log(req.file.filename)
+            if (newImage === "newImage") {
+                const cloudinaryResult = await handleUpload(req.file.buffer);
+
+                console.log(req.file)
+                console.log(cloudinaryResult)
                 await db.User.update({
                     where: {
                         id: myUser.id
                     },
                     data: {
-                        image: req.file.filename
+                        image:  cloudinaryResult.secure_url
                     }
                 });
+            }
             const updatedUser = await db.User.findUnique({ where:{id: myUser.id} })
             res.status(200).json(
                 new apiResponse(
