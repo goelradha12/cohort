@@ -5,6 +5,7 @@ import { Link } from "react-router";
 import CreatePlaylistModal from "./modals/CreatePlaylistModal";
 import { usePlaylistStore } from "../store/usePlaylistStore";
 import AddToPlaylistModal from "./modals/AddToPlaylistModal";
+import { useProblemStore } from "../store/useProblemStore";
 
 const ProblemTable = ({ problems, solvedProblems }) => {
     const { authUser } = useAuthStore();
@@ -17,7 +18,8 @@ const ProblemTable = ({ problems, solvedProblems }) => {
     const [isAddToPlaylistModalOpen, setIsAddToPlaylistModalOpen] = useState(false);
     const [selectedProblemId, setSelectedProblemId] = useState(null);
 
-    const {createNewPlaylist} = usePlaylistStore();
+    const { createNewPlaylist } = usePlaylistStore();
+    const { deleteAProblem, getAllProblem, isProblemsLoading } = useProblemStore();
     // getting list of tags and removing duplicates
     const allTags = useMemo(() => {
         if (!Array.isArray(problems)) return [];
@@ -54,8 +56,12 @@ const ProblemTable = ({ problems, solvedProblems }) => {
     }, [filteredProblems, currentPage]); // problems to display
 
     // handling admin action buttons
-    const handleDelete = (problemId) => {
-        console.log("Delete button", problemId);
+    const handleDelete = async (problemId) => {
+        // console.log("Delete button", problemId);
+        const confirmation = confirm("Are you sure you want to delete this problem?");
+        if (!confirmation) return;
+        await deleteAProblem(problemId);
+        await getAllProblem();
     }
     const handleAddToPlaylist = (problemId) => {
         setSelectedProblemId(problemId);

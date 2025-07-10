@@ -46,6 +46,15 @@ export const useProblemStore = create((set) => {
             } catch (error) {
                 console.log("Error getting the problem: ", error)
             }
+        },
+        deleteAProblem: async (id) => {
+            try {
+                const res = await axiosInstance.delete(`/problems/${id}`);
+                toast.success(res.data?.message || "Problem deleted successfully")
+            } catch (error) {
+                console.log("Error deleting problem: ", error);
+                toast.error(error.response?.data?.message || "Error deleting problem")
+            }
         }
     }
 
