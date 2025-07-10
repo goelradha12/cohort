@@ -90,7 +90,7 @@ const CreateProblemForm = () => {
 
         } catch (error) {
             console.log(error);
-            toast.error("Error creating problem")
+            toast.error(error.response?.data?.message ||"Error creating problem")
         }
         finally {
             setIsLoading(false);
@@ -578,6 +578,10 @@ const CreateProblemForm = () => {
                                         Create Problem
                                     </>
                                 )}
+                            </button>
+                            <button type="reset" className="btn btn-outline btn-lg gap-2 ml-2"
+                            onClick={() => reset()}>
+                                Reset
                             </button>
                         </div>
                     </form>
