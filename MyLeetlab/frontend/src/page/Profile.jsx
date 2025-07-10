@@ -124,6 +124,7 @@ const Profile = () => {
             console.log("Error updating password: ", error);
             toast.error(error.response?.data?.message || "Error updating password")
         } finally {
+            await checkAuth()
             setIsEditingProfilePassword(false);
         }
 
@@ -140,8 +141,9 @@ const Profile = () => {
             console.log("Error updating image: ", error)
             toast.error(error.response?.data?.message || "Error updating image")
         } finally {
-            await authUser();
+            await checkAuth();
             setIsProfileLoading(false)
+            setIsEditingProfileImage(false);
         }
 
     }
@@ -253,15 +255,25 @@ const Profile = () => {
                     <div className="card bg-base-100 shadow-xl p-4 border-success/20 border-1">
                         <div className='grid items-center justify-center'>
                             {authUser.avatar ?
-                                authUser.avatar : <img
+                                <img
+                                    src={authUser.avatar}
+                                    alt="User Avatar"
+                                    className="object-cover h-30 rounded-full"
+                                /> : <img
                                     src={`https://avatar.iran.liara.run/public`}
                                     alt="User Avatar"
-                                    className="object-cover border-2 border-success/50 h-30 rounded-full"
+                                    className="object-cover border-1 border-primary/50 h-30 rounded-full"
                                 />
                             }
                         </div>
                         <div className='grid justify-end'>
                             {isEditingProfileImage ?
+                            isProfileLoading?
+                            <div className='flex items-center gap-3'> 
+                                <Loader className='w-4 h-4 animate-spin' />
+                            <span>Loading...</span>
+                            </div>
+                            :
                                 <div className='flex items-center pt-4'>
                                     <input
                                         type="file"

@@ -7,7 +7,7 @@ import { db } from "../libs/db.js";
 import { UserRole } from "../generated/prisma/index.js";
 import bcrypt from "bcryptjs";
 import { generateAccessToken, generateRefreshToken, generateTemporaryTokens } from "../utils/generateTokens.js";
-import { handleUpload } from "../middlewares/cloudinary.middleware.js";
+import { handleDeleteMedia, handleUpload } from "../middlewares/cloudinary.middleware.js";
 
 export const registerUser = asyncHandler(async function (req, res) {
     // recieve name, email and password
@@ -33,7 +33,7 @@ export const registerUser = asyncHandler(async function (req, res) {
             role: UserRole.USER
         };
 
-        if(name)
+        if (name)
             newUserData.name = name;
         // generate hashed and unhashed tokens
         const { hashedToken, tokenExpiry } = generateTemporaryTokens();
@@ -157,15 +157,15 @@ export const loginUser = asyncHandler(async function (req, res) {
     try {
         // check if exists in db
         const user = await db.User.findUnique({ where: { email } })
-        
+
 
         if (!user) {
             throw new apiError(401, "Invalid Username Or Email")
         }
 
         // verify password
-        const isPassCorrect = await bcrypt.compare(password,user.password);
-        
+        const isPassCorrect = await bcrypt.compare(password, user.password);
+
         // console.log(isPassCorrect);
         if (isPassCorrect) {
 
@@ -231,14 +231,14 @@ export const changeCurrPassword = asyncHandler(async function (req, res) {
 
     try {
         // check if such email exists, 
-        const user = await db.User.findUnique({ where: {email} })
-    
+        const user = await db.User.findUnique({ where: { email } })
+
         if (!user) {
             throw new apiError(401, "Invalid Username Or Email")
         }
 
         // verify oldPassword
-        const isCorrect = await bcrypt.compare(oldPassword,user.password)
+        const isCorrect = await bcrypt.compare(oldPassword, user.password)
 
         if (!isCorrect) {
             throw new apiError(401, "Wrong password")
@@ -284,9 +284,9 @@ export const resendVerificationEmail = asyncHandler(async function (req, res) {
 
     try {
         // if such username or email exists, 
-        
+
         const user = await db.User.findUnique({ where: { email } })
-        
+
 
         if (!user) {
             throw new apiError(401, "Invalid Username Or Email")
@@ -316,7 +316,7 @@ export const resendVerificationEmail = asyncHandler(async function (req, res) {
                 emailVerificationExpiry: tokenExpiry
             }
         })
-        
+
         // send email for verification
         let verificationURL = process.env.BASE_URL + "/api/v1/auth/verifyMail/" + hashedToken;
         let expiryDateFormatted = new Date(tokenExpiry)
@@ -362,7 +362,7 @@ export const forgotPasswordRequest = asyncHandler(async function (req, res) {
     try {
         // if such username or email exists,
         const user = await db.User.findUnique({ where: { email } })
-        
+
         if (!user) {
             throw new apiError(401, "Invalid Email")
         }
@@ -396,7 +396,7 @@ export const forgotPasswordRequest = asyncHandler(async function (req, res) {
         return res.status(200).json(
             new apiResponse(
                 200,
-                { email: updatedUser.email, isVerified: updatedUser.isEmailVerified, role: updatedUser.role,name:updatedUser.username },
+                { email: updatedUser.email, isVerified: updatedUser.isEmailVerified, role: updatedUser.role, name: updatedUser.username },
                 "Mail sent to Reset Your Password")
         )
     } catch (error) {
@@ -425,9 +425,10 @@ export const resetPassword = asyncHandler(async function (req, res) {
     try {
 
         // get user with token
-        const user = await db.User.findFirst({ where: {
-            forgotPasswordToken: token
-        }
+        const user = await db.User.findFirst({
+            where: {
+                forgotPasswordToken: token
+            }
         })
         if (!user) {
             throw new apiError(401, "Invalid Token")
@@ -486,7 +487,7 @@ export const getUser = asyncHandler(async function (req, res) {
     try {
         if (req.user) {
 
-            const myUser = await db.User.findUnique({ where:{ id: req.user._id} })
+            const myUser = await db.User.findUnique({ where: { id: req.user._id } })
             if (!myUser)
                 throw new apiError(401, "No such User Exists")
 
@@ -538,7 +539,7 @@ export const updateUserProfile = asyncHandler(async function (req, res) {
             throw new apiError(401, "No data recieved to update")
 
         if (req.user) {
-            const myUser = await db.User.findUnique({ where:{id: req.user._id} });
+            const myUser = await db.User.findUnique({ where: { id: req.user._id } });
             if (!myUser) throw new apiError(401, "No such User Exists");
 
             if (newName)
@@ -554,18 +555,23 @@ export const updateUserProfile = asyncHandler(async function (req, res) {
             if (newImage === "newImage") {
                 const cloudinaryResult = await handleUpload(req.file.buffer);
 
-                console.log(req.file)
-                console.log(cloudinaryResult)
+                let imageId = myUser.image.split('/');
+                imageId = imageId[imageId.length - 1].split('.')[0];
+
+                const destroyResult = await handleDeleteMedia(imageId);
+
+                // console.log(req.file)
+                // console.log(cloudinaryResult, destroyResult)
                 await db.User.update({
                     where: {
                         id: myUser.id
                     },
                     data: {
-                        image:  cloudinaryResult.secure_url
+                        image: cloudinaryResult.secure_url
                     }
                 });
             }
-            const updatedUser = await db.User.findUnique({ where:{id: myUser.id} })
+            const updatedUser = await db.User.findUnique({ where: { id: myUser.id } })
             res.status(200).json(
                 new apiResponse(
                     200,
@@ -618,7 +624,7 @@ export const refreshAccessToken = asyncHandler(async function (req, res) {
                 user = userData;
             });
             // console.log(user)
-            const myUser = await db.User.findUnique({ where: {id: user._id} })
+            const myUser = await db.User.findUnique({ where: { id: user._id } })
             if (!myUser)
                 throw new apiError(401, "Invalid Token");
             const accessToken = generateAccessToken(myUser);
@@ -675,7 +681,7 @@ export const logOutUser = asyncHandler(async function (req, res) {
                 user = userData;
             });
             // console.log(user)
-            const myUser = await db.User.findUnique({ where:{ id: user._id} })
+            const myUser = await db.User.findUnique({ where: { id: user._id } })
             if (!myUser)
                 throw new apiError(401, "Invalid Token");
 
@@ -716,4 +722,3 @@ export const logOutUser = asyncHandler(async function (req, res) {
         })
     }
 })
-    

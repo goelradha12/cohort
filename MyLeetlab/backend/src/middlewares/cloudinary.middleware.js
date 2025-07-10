@@ -23,3 +23,8 @@ export async function handleUpload(fileBuffer) {
         streamifier.createReadStream(fileBuffer).pipe(uploadStream);
     });
 }
+
+export async function handleDeleteMedia(publicId) {
+    const result = await cloudinary.uploader.destroy(publicId, { resource_type: 'image', invalidate: true });
+    return result;
+}
