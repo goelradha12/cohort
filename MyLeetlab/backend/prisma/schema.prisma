@@ -57,7 +57,7 @@ model Problem {
   examples           Json
   constraints        String
   hints              String?
-  editor             String?
+  editorial          String?
   testcases          Json
   codeSnippets       Json
   referenceSolutions Json

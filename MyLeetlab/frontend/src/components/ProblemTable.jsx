@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from "react";
 import { useAuthStore } from "../store/useAuthStore";
 import { Bookmark, PencilIcon, Plus, TrashIcon } from "lucide-react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import CreatePlaylistModal from "./modals/CreatePlaylistModal";
 import { usePlaylistStore } from "../store/usePlaylistStore";
 import AddToPlaylistModal from "./modals/AddToPlaylistModal";
@@ -20,6 +20,8 @@ const ProblemTable = ({ problems, solvedProblems }) => {
 
     const { createNewPlaylist } = usePlaylistStore();
     const { deleteAProblem, getAllProblem, isProblemsLoading } = useProblemStore();
+
+    const navigate = useNavigate();
     // getting list of tags and removing duplicates
     const allTags = useMemo(() => {
         if (!Array.isArray(problems)) return [];
@@ -67,9 +69,7 @@ const ProblemTable = ({ problems, solvedProblems }) => {
         setSelectedProblemId(problemId);
         setIsAddToPlaylistModalOpen(true);
     }
-    const handleEdit = (problemId) => {
-        console.log("Edit button", problemId);
-    }
+
     return (
         <div className="w-full max-w-6xl mx-auto mt-10">
             <div className="flex justify-between items-center mb-6">
@@ -170,7 +170,7 @@ const ProblemTable = ({ problems, solvedProblems }) => {
                                                     >
                                                         <TrashIcon className="w-4 h-4 text-white" />
                                                     </button>
-                                                    <button onClick={() => handleEdit(problem.id)} className="btn btn-sm btn-warning">
+                                                    <button onClick={() => navigate(`/edit-problem/${problem.id}`)} className="btn btn-sm btn-warning">
                                                         <PencilIcon className="w-4 h-4 text-white" />
                                                     </button>
                                                 </div>
