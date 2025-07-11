@@ -13,8 +13,6 @@ export const CreateProblemSchema = z.object({
         .enum(["EASY", "MEDIUM", "HARD"], { errorMap: () => ({ message: "Difficulty must be one of EASY, MEDIUM, HARD" }) }),
     tags: z.array(z.string()).min(1, "At least one tag must be selected"),
     constraints: z.string().min(3, "Constraints must be at least 3 characters").min(1, "Constraints are required"),
-    hints: z.string().optional(),
-    editorial: z.string().optional(),
     testcases: z.array(
         z.object({
             input: z.string().min(1, "Input is required"),

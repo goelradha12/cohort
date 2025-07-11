@@ -7,7 +7,7 @@ import { asyncHandler } from "../utils/async-handler.js";
 export const createProblem = asyncHandler(async function (req, res) {
     try {
         // get data for req
-        const { title, description, difficulty, tags, examples, constraints, testcases, codeSnippets, referenceSolutions } = req.body
+        const { title, description, difficulty, tags, examples, constraints, testcases, codeSnippets, referenceSolutions, hints, editorial } = req.body
 
         // check access
         // check is user is admin and data is valid
@@ -70,6 +70,8 @@ export const createProblem = asyncHandler(async function (req, res) {
                 constraints,
                 testcases,
                 codeSnippets,
+                editorial,
+                hints,
                 referenceSolutions,
                 userId: myUser.id
             }
@@ -158,9 +160,12 @@ export const getProblemByID = asyncHandler(async function (req, res) {
 export const updateProblem = asyncHandler(async function (req, res) {
     try {
         // get all the data
-        const { title, description, difficulty, tags, examples, constraints, testcases, codeSnippets, referenceSolutions } = req.body
+        const { title, description, difficulty, tags, examples, constraints, testcases, codeSnippets, referenceSolutions, hints, editorial } = req.body
 
         // check if problem exists
+        if(!req.params.id)
+            throw new apiError(400, "Problem ID is required")
+
         const problem = await db.Problem.findUnique({
             where: {
                 id: req.params.id
@@ -237,6 +242,8 @@ export const updateProblem = asyncHandler(async function (req, res) {
                 testcases,
                 codeSnippets,
                 referenceSolutions,
+                hints,
+                editorial,
                 userId: myUser.id
             }
         })
