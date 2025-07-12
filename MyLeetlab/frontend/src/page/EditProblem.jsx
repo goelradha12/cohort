@@ -80,6 +80,8 @@ const EditProblem = () => {
                 PYTHON: "# Add your reference solution here",
                 JAVA: "// Add your reference solution here",
             },
+            hints: "",
+            editorial: ""
         },
     });
 
@@ -556,7 +558,7 @@ const EditProblem = () => {
                                     )}
                                 </div>
                                 <div className="form-control">
-                                    <label className="label">
+                                    <label className="label" for="hints">
                                         <span className="label-text font-medium">
                                             Hints (Optional)
                                         </span>
@@ -568,6 +570,7 @@ const EditProblem = () => {
                                         render={({ field }) => (
                                             <textarea
                                                 {...field}
+                                                defaultValue="NA"
                                                 placeholder="Enter hints for solving the problem"
                                                 className="textarea textarea-bordered min-h-24 w-full"
                                             />
@@ -575,7 +578,7 @@ const EditProblem = () => {
                                     />
                                 </div>
                                 <div className="form-control">
-                                    <label className="label">
+                                    <label className="label" for="editorial">
                                         <span className="label-text font-medium">
                                             Editorial (Optional)
                                         </span>
@@ -583,6 +586,7 @@ const EditProblem = () => {
                                     <textarea
                                         className="textarea textarea-bordered min-h-32 w-full p-3 resize-y"
                                         name="editorial"
+                                        defaultValue="NA"
                                         {...register("editorial")}
                                         placeholder="Enter problem editorial/solution explanation"
                                     />
