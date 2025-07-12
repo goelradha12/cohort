@@ -46,5 +46,7 @@ export const CreateProblemSchema = z.object({
         JAVASCRIPT: z.string().min(1, "JavaScript solution is required"),
         PYTHON: z.string().min(1, "Python solution is required"),        
         JAVA: z.string().min(1, "Java solution is required")
-    })
+    }),
+    hints: z.string(),
+    editorial: z.string(),
 })
