@@ -8,8 +8,11 @@ import { sampledpData, sampleStringProblem } from "../samples/sampleProblem.js";
 import { BookOpen, CheckCircle2, ChevronRight, Code2, Download, FileText, Home, Lightbulb, Plus, Trash2 } from "lucide-react";
 import toast from "react-hot-toast";
 import { axiosInstance } from "../lib/axios.js";
+import { EditorOptions } from "./EditorOptions.js";
 const CreateProblemForm = () => {
     const [sampleType, setSampleType] = useState("DP");
+    const [isInputByObject, setIsInputByObject] = useState(false);
+    const [inputByObject, setInputByObject] = useState("");
     const navigation = useNavigate();
 
     const {
@@ -55,6 +58,8 @@ const CreateProblemForm = () => {
                 PYTHON: "# Add your reference solution here",
                 JAVA: "// Add your reference solution here",
             },
+            hints: "NA",
+            editorial: "NA",
         },
     });
 
@@ -90,7 +95,7 @@ const CreateProblemForm = () => {
 
         } catch (error) {
             console.log(error);
-            toast.error(error.response?.data?.message ||"Error creating problem")
+            toast.error(error.response?.data?.message || "Error creating problem")
         }
         finally {
             setIsLoading(false);
@@ -98,32 +103,42 @@ const CreateProblemForm = () => {
     }
 
     const loadSampleData = () => {
-        const sampleData = sampleType === "DP" ? sampledpData : sampleStringProblem
+        let sampleData = {}
+        if (sampleType === "New") {
+            // console.log("Here");
+            setIsInputByObject(false)
+            sampleData = JSON.parse(inputByObject)
+        }
+        else {
+            sampleData = sampleType === "DP" ? sampledpData : sampleStringProblem
+        }
 
-        replaceTags(sampleData.tags.map((tag) => tag));
-        replacetestcases(sampleData.testcases.map((tc) => tc));
+        if (sampleData) {
+            replaceTags(sampleData.tags.map((tag) => tag));
+            replacetestcases(sampleData.testcases.map((tc) => tc));
 
-        // Reset the form with sample data
-        reset(sampleData);
+            // Reset the form with sample data
+            reset(sampleData);
+        }
     }
     return (
         <div className='container mx-auto py-8 px-4 max-w-7xl'>
             <div className="card mx-auto p-4">
                 <div className="flex items-center gap-1 pb-2">
-                                    <Home
-                                        onClick={() => navigation("/")}
-                                        className="cursor-pointer w-4 h-4"
-                                    />
-                                    <ChevronRight
-                                        onClick={() => navigation("/")}
-                                        className="cursor-pointer w-4 h-4"
-                                    />
-                                    <span
-                                        className="cursor-pointer font-normal"
-                                    >
-                                        Create Problem
-                                    </span>
-                                </div>
+                    <Home
+                        onClick={() => navigation("/")}
+                        className="cursor-pointer w-4 h-4"
+                    />
+                    <ChevronRight
+                        onClick={() => navigation("/")}
+                        className="cursor-pointer w-4 h-4"
+                    />
+                    <span
+                        className="cursor-pointer font-normal"
+                    >
+                        Create Problem
+                    </span>
+                </div>
             </div>
             <div className="card bg-base-100 shadow-xl">
                 <div className="card-body p-6 pt-10 md:p-8">
@@ -137,9 +152,17 @@ const CreateProblemForm = () => {
                             <div className="join">
                                 <button
                                     type="button"
+                                    className={`btn join-item ${sampleType === "New" ? "btn-active" : ""
+                                        }`}
+                                    onClick={() => { setSampleType("New"); setIsInputByObject(true) }}
+                                >
+                                    Add By JSON
+                                </button>
+                                <button
+                                    type="button"
                                     className={`btn join-item ${sampleType === "DP" ? "btn-active" : ""
                                         }`}
-                                    onClick={() => setSampleType("array")}
+                                    onClick={() => setSampleType("DP")}
                                 >
                                     DP Problem
                                 </button>
@@ -163,6 +186,20 @@ const CreateProblemForm = () => {
                         </div>
                     </div>
 
+                    {isInputByObject
+                        &&
+                        <>
+                        <label htmlFor="input-by-object" className="label">Enter Your JSON</label>
+                            <textarea 
+                                className="input w-full h-32 p-2"
+                                name="input-by-object"
+                                placeholder="Enter JSON within curly braces and click on 'load sample'"
+                                value={inputByObject}
+                                onChange={(e) => setInputByObject(e.target.value)}
+                            >
+                            </textarea>
+                        </>
+                    }
                     <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
                         {/* Basic Information */}
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -390,14 +427,7 @@ const CreateProblemForm = () => {
                                                                 theme="vs-dark"
                                                                 value={field.value}
                                                                 onChange={field.onChange}
-                                                                options={{
-                                                                    minimap: { enabled: false },
-                                                                    fontSize: 14,
-                                                                    lineNumbers: "on",
-                                                                    roundedSelection: false,
-                                                                    scrollBeyondLastLine: false,
-                                                                    automaticLayout: true,
-                                                                }}
+                                                                options={EditorOptions}
                                                             />
                                                         )}
                                                     />
@@ -430,14 +460,7 @@ const CreateProblemForm = () => {
                                                                 theme="vs-dark"
                                                                 value={field.value}
                                                                 onChange={field.onChange}
-                                                                options={{
-                                                                    minimap: { enabled: false },
-                                                                    fontSize: 14,
-                                                                    lineNumbers: "on",
-                                                                    roundedSelection: false,
-                                                                    scrollBeyondLastLine: false,
-                                                                    automaticLayout: true,
-                                                                }}
+                                                                options={EditorOptions}
                                                             />
                                                         )}
                                                     />
@@ -580,7 +603,7 @@ const CreateProblemForm = () => {
                                 )}
                             </button>
                             <button type="reset" className="btn btn-outline btn-lg gap-2 ml-2"
-                            onClick={() => reset()}>
+                                onClick={() => reset()}>
                                 Reset
                             </button>
                         </div>
