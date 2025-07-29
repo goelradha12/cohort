@@ -6,6 +6,7 @@ import {
   Code,
   Eye,
   EyeOff,
+  Link2,
   Loader2,
   Lock,
   Mail,
@@ -155,6 +156,12 @@ const SignUpPage = () => {
           "Sign in to access our platform and start using our services."
         }
       />
+      <div className='absolute right-2 bottom-2'>
+        <Link to="/developer-portfolio" className='flex gap-2 p-2 m-2 border-primary border-1 round'>
+         <Link2 />
+          My Portfolio
+        </Link>
+      </div>
     </div>
   )
 }

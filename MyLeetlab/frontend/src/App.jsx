@@ -16,6 +16,7 @@ import Profile from "./page/Profile";
 import ForgotPassword from "./page/ForgotPassword";
 import VerifyEmail from "./page/VerifyEmail";
 import EditProblem from "./page/EditProblem";
+import PortfolioPage from "./page/PortfolioPage";
 function App() {
   // giving useful routes to the user as per the authentication
   const { authUser, checkAuth, isCheckingAuth } = useAuthStore();
@@ -85,6 +86,11 @@ function App() {
             element={<EditProblem />}
           />
         </Route>
+
+        <Route
+          path="/developer-portfolio"
+          element={<PortfolioPage/>}
+        />
 
         <Route path="/404-page-not-found" element={<PageNotFound />} />
 

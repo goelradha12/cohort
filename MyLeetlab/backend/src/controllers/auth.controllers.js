@@ -65,11 +65,11 @@ export const registerUser = asyncHandler(async function (req, res) {
             new apiResponse(
                 200,
                 {
-                    name: myUser.name,
-                    avatar: myUser.image,
-                    email: myUser.email,
-                    isEmailVerified: myUser.isEmailVerified,
-                    role: myUser.role
+                    name: newUser.name,
+                    avatar: newUser.image,
+                    email: newUser.email,
+                    isEmailVerified: newUser.isEmailVerified,
+                    role: newUser.role
                     // emailVerificationToken: newUser.emailVerificationToken
                 },
                 "User Registered Successfully"
