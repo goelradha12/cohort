@@ -143,8 +143,9 @@ const ProblemPage = () => {
                                     ([lang, example], idx) => (
                                         <div
                                             key={lang}
-                                            className="bg-base-200 p-6 rounded-xl mb-6 font-mono"
+                                            className="bg-base-200 p-6 rounded-xl mb-6 font-mono relative"
                                         >
+                                            <span className="text-indigo-500 mb-2 absolute right-4 top-4">{lang}</span>
                                             <div className="mb-4">
                                                 <div className="text-indigo-500 mb-2 text-base font-semibold">
                                                     Input:
