@@ -4,6 +4,7 @@ import {
     ChevronRight,
     Code2,
     Database,
+    File,
     GitBranch,
     Github,
     Globe,
@@ -13,7 +14,7 @@ import {
     Mail,
 } from "lucide-react";
 import React from "react";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { useEffect } from "react";
 
 const PortfolioPage = () => {
@@ -119,22 +120,14 @@ const PortfolioPage = () => {
             duration: "1 month",
             company: "Umeed A Drop Of Hope - Foundation",
             title: "Winter Intern",
-            description: "",
-        },
-        {
-            dateRange: "May, 2022 — Nov, 2023",
-            duration: "",
-            company: "https://jagrukbanoindia.in/",
-            title: "Website Founder",
-            description:
-                "A WordPress-based platform to educate users about government schemes and initiatives.",
+            description: "Did 4 tasks during internship. Submitted ppt as final internship report.",
         },
         {
             dateRange: "May, 2023",
             duration: "2 months",
             company: "Hedgehomes - Real Estate",
             title: "WordPress Developer Intern",
-            description: "",
+            description: "A two month internship where I created landing pages for google ads for the company.",
         },
         {
             dateRange: "July, 2023 — Present",
@@ -146,8 +139,60 @@ const PortfolioPage = () => {
         },
     ];
 
+    const certificates = [
+        {
+            name: "Frontend Development with React",
+            issued: "June 2024",
+            skills: ["React", "JSX", "Hooks", "Tailwind"],
+            image: "https://via.placeholder.com/300x200.png",
+        },];
 
+    const projects = [
+        {
+            name: "Jagruk Bano India – Blog Website",
+            tech: ["WordPress"],
+            duration: "May 2022 – Nov 2023",
+            description:
+                "Managed and owned a WordPress platform focused on government schemes for 1.5 years, publishing over 20+ articles. Optimized SEO to increase visibility and successfully achieved Google Ads approval.",
+            link: [
+                {
+                    text: "Live",
+                    link: "https://jagrukbanoindia.in/",
+                },
+            ],
+        },
+        {
+            name: "SenseOverCents - Freelance",
+            tech: ["WordPress"],
+            duration: "Jan 2025 – March 2025",
+            description:
+                "Designed and developed the company website in WordPress, ensuring consistent branding, smooth user experience, and mobile responsiveness.",
+            link: [
+                {
+                    text: "Live",
+                    link: "https://senseovercents.com/",
+                },
+            ]
+        },
+        {
+            name: "CookTheCode – LeetCode Clone",
+            tech: ["ExpressJs", "PostgreSQL", "ReactJs"],
+            duration: "May 2025 – July 2025",
+            description:
+                "Built a full-stack problem-solving platform with secure authentication (login, signup, reset/forgot/update password, and email verification). \nImplemented role-based access for adding, editing, updating, or deleting problems. Users can create a profile, select problems, track submissions, and view detailed editorial solutions.",
+            link: [
+                {
+                    text: "GitHub",
+                    link: "https://github.com/goelradha12/cohort/tree/main/MyLeetlab",
+                },
+                {
+                    text: "Live Link",
+                    link: "https://cookthecode.in",
+                }
+            ]
 
+        },
+    ];
 
     useEffect(() => {
         document.title = "Developer's Portfolio";
@@ -158,16 +203,16 @@ const PortfolioPage = () => {
             {/* Breadcrumb */}
             <div className="card mx-auto p-4 max-w-7xl">
                 <div className="flex items-center gap-1 text-sm text-gray-600">
-                    <Home onClick={() => navigate("/")} className="cursor-pointer w-14 h-4" />
+                    <Home onClick={() => navigate("/")} className="cursor-pointer w-4 h-4 text-primary" />
                     <ChevronRight className="w-4 h-4" />
                     <span>Portfolio</span>
                 </div>
             </div>
 
             {/* Hero Section */}
-            <section className="hero-content flex-col lg:flex-row-reverse text-center lg:text-left mx-auto pt-20 pb-10">
-                <div className="absolute inset-0 -z-10">
-                    <div className="w-[600px] h-[600px] bg-gradient-to-r from-purple-500 via-blue-500 to-pink-500 opacity-10 blur-3xl rounded-full absolute top-1/2 left-1/2" />
+            <section className="hero-content flex-col lg:flex-row-reverse text-center lg:text-left mx-auto pt-20 pb-10 relative">
+                <div className="absolute inset-0 -z-20 pointer-events-none">
+                    <div className="w-[600px] h-[600px] -z-20 bg-gradient-to-r from-purple-500 via-blue-500 to-pink-500 opacity-10 blur-3xl rounded-full absolute top-1/2 left-1/2" />
                 </div>
                 <div className="grid justify-items-center text-center mx-auto gap-5">
                     <img
@@ -180,6 +225,13 @@ const PortfolioPage = () => {
                         <p className="mt-4 text-base md:text-lg text-base-content">
                             An MCA student with a passion for coding and a love for solving complex problems through logic and design.
                         </p>
+                        <a
+                            href="https://drive.google.com/file/d/1zwcf3h_zh-eYfsQCFqYNhuw7WDAW2Uf5/view?usp=sharing"
+                            target="_blank"
+                            className="btn btn-outline gap-2 mt-4  border-2 border-primary hover:bg-primary hover:text-white"
+                        >
+                            <File className="w-5 h-5" /> Resume
+                        </a>
                     </div>
                 </div>
             </section>
@@ -211,6 +263,7 @@ const PortfolioPage = () => {
                     >
                         <Mail className="w-5 h-5" /> Email
                     </a>
+
                 </div>
             </section>
 
@@ -255,43 +308,52 @@ const PortfolioPage = () => {
             {/* Projects */}
             <section className="border-t border-base-300 py-20 container mx-auto px-4">
                 <h2 className="text-3xl font-bold text-center mb-12">Projects</h2>
-                <div className="flex justify-between align-middle gap-4">
-
-                    <div className="container text-center p-6 border border-base-200 rounded-lg shadow-lg bg-base-600">
-                        <h3 className="text-xl font-semibold mb-4">WordPress Projects</h3>
-                    </div>
-                    <div className="container text-center p-6 border border-base-200 rounded-lg shadow-lg bg-base-600">
-                        <h3 className="text-xl font-semibold mb-4">React Projects</h3>
-                    </div>
-                    <div className="container text-center p-6 border border-base-200 rounded-lg shadow-lg bg-base-600">
-                        <h3 className="text-xl font-semibold mb-4">Fullstack Projects</h3>
-                    </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {projects.map((project, idx) => (
+                        <div
+                            key={idx}
+                            className="card bg-base-100 shadow-lg hover:shadow-xl transition-shadow duration-300"
+                        >
+                            <div className="card-body">
+                                <h3 className="card-title text-lg">{project.name}</h3>
+                                <p className="text-sm text-gray-400">{project.description}</p>
+                                <div className="mt-3 flex flex-wrap gap-2">
+                                    {project.tech.map((t, i) => (
+                                        <span
+                                            key={i}
+                                            className="badge badge-outline badge-primary"
+                                        >
+                                            {t}
+                                        </span>
+                                    ))}
+                                </div>
+                                <div className="card-actions justify-end mt-4">
+                                    {project.link.map((data, i) => (
+                                        <a
+                                            key={i}
+                                            href={data.link}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="btn btn-outline btn-primary gap-2"
+                                        >
+                                            {data.text}
+                                        </a>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    ))}
                 </div>
-            </section>
-
-            {/* Important Links */}
-            <section className="border-t border-base-300 py-20 container mx-auto px-4">
-                <h2 className="text-3xl font-bold text-center mb-12">Important Links</h2>
-            </section>
-
-            {/* Important Links */}
-            <section className="border-t border-base-300 py-20 container mx-auto px-4">
-                <h2 className="text-3xl font-bold text-center mb-12">Certificates</h2>
-            </section>
-
-            {/* Important Links */}
-            <section className="border-t border-base-300 py-20 container mx-auto px-4">
-                <h2 className="text-3xl font-bold text-center mb-12">Interests</h2>
             </section>
 
             {/* Experience */}
             <section className="border-t border-base-300 py-20 container mx-auto px-4 ">
                 <h2 className="text-3xl font-bold text-center mb-12">Experience</h2>
-                <div className="grid grid-cols-[auto_1px_1fr] gap-4">
+                <div className="grid grid-cols-[1fr_1px_2fr] gap-4">
                     {experienceData.map((exp, idx) => (
                         <div key={idx} className="contents">
                             {/* Left Column - Date + Duration */}
-                            <div className="text-right pr-4 text-sm text-gray-600 whitespace-nowrap">
+                            <div className="text-right pr-4 text-sm text-gray-400 whitespace-nowrap">
                                 <p>{exp.dateRange}</p>
                                 {exp.duration && <p>{exp.duration}</p>}
                             </div>
