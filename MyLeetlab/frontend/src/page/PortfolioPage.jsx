@@ -66,7 +66,7 @@ const PortfolioPage = () => {
     const recommendations = [
         {
             name: "Jeeva (V Naveen Reddy)",
-            designation: "Builder @ Sense Over Cents",
+            designation: "Founder @ SenseOverCents",
             intro: "Radha’s client – Dec 29, 2024",
             feedback: `She has helped us build our company website recently on WordPress, throughout the process she has been very understanding in nature, and built us a good website. Finding people with talent and skills is hard, you know what’s much harder? To find the ones with character and humility, she has them both.`,
             profile: "https://www.linkedin.com/in/jeeva-v-naveen-reddy-333924188",
@@ -90,7 +90,7 @@ const PortfolioPage = () => {
         },
         {
             name: "Alok Mishra",
-            designation: "Social Media Manager | Storywriter | Copywriter",
+            designation: "Social Media Manager | Copywriter",
             intro: "Radha’s client – Apr 14, 2023",
             feedback: `I needed help with my portfolio site — she took it on immediately. She gave life to my content, making it client-ready. If you're looking for a website creator, she’s top-notch.`,
             profile: "https://www.linkedin.com/in/alok-mishra-11ba84212",
@@ -192,6 +192,23 @@ const PortfolioPage = () => {
             ]
 
         },
+        {
+            name: "Kanban Board",
+            tech: ["JavaScript"],
+            duration: "Dec 2024",
+            description:
+                "Built a Kanban board using React and Tailwind CSS. It allows users to create, update, and delete tasks, and also allows users to drag and drop tasks between columns.",
+            link: [
+                {
+                    text: "GitHub",
+                    link: "https://github.com/goelradha12/cohort/blob/main/kanban%20dashboard/kanban.md",
+                },
+                {
+                    text: "Live Link",
+                    link: "https://kanbans.netlify.app/",
+                }
+            ]
+        }
     ];
 
     useEffect(() => {
@@ -202,7 +219,7 @@ const PortfolioPage = () => {
         <div className="mb-20">
             {/* Breadcrumb */}
             <div className="card mx-auto p-4 max-w-7xl">
-                <div className="flex items-center gap-1 text-sm text-gray-600">
+                <div className="flex items-center gap-1 text-base text-gray-400">
                     <Home onClick={() => navigate("/")} className="cursor-pointer w-4 h-4 text-primary" />
                     <ChevronRight className="w-4 h-4" />
                     <span>Portfolio</span>
@@ -239,7 +256,7 @@ const PortfolioPage = () => {
             {/* Social Links */}
             <section className="bg-base-100 pb-20 text-center">
                 <hr className="border-t border-gray-600 w-1/6 mx-auto" />
-                <h2 className="text-2xl font-semibold pt-10 text-gray-700 mb-6">Connect with Me</h2>
+                <h2 className="text-2xl font-semibold pt-10 text-gray-500 mb-6">Connect with Me</h2>
                 <div className="flex justify-center gap-4 flex-wrap">
                     <a
                         href="https://github.com/goelradha12"
@@ -293,52 +310,11 @@ const PortfolioPage = () => {
                             {/* Info Box */}
                             <div className="min-w-[220px] max-w-sm text-left md:text-center">
                                 <h3 className="text-xl font-bold text-primary mb-1">{item.degree}</h3>
-                                <p className="text-sm text-gray-400 italic mb-2">{item.institute}</p>
-                                <div className="text-sm text-gray-400">
+                                <p className="text-base text-gray-400 italic mb-2">{item.institute}</p>
+                                <div className="text-base text-gray-400">
                                     <span className="font-semibold">{item.year}</span>
                                     <span className="hidden md:inline mx-1">•</span>
                                     <span className="font-medium">{item.detail}</span>
-                                </div>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            </section>
-
-            {/* Projects */}
-            <section className="border-t border-base-300 py-20 container mx-auto px-4">
-                <h2 className="text-3xl font-bold text-center mb-12">Projects</h2>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {projects.map((project, idx) => (
-                        <div
-                            key={idx}
-                            className="card bg-base-100 shadow-lg hover:shadow-xl transition-shadow duration-300"
-                        >
-                            <div className="card-body">
-                                <h3 className="card-title text-lg">{project.name}</h3>
-                                <p className="text-sm text-gray-400">{project.description}</p>
-                                <div className="mt-3 flex flex-wrap gap-2">
-                                    {project.tech.map((t, i) => (
-                                        <span
-                                            key={i}
-                                            className="badge badge-outline badge-primary"
-                                        >
-                                            {t}
-                                        </span>
-                                    ))}
-                                </div>
-                                <div className="card-actions justify-end mt-4">
-                                    {project.link.map((data, i) => (
-                                        <a
-                                            key={i}
-                                            href={data.link}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="btn btn-outline btn-primary gap-2"
-                                        >
-                                            {data.text}
-                                        </a>
-                                    ))}
                                 </div>
                             </div>
                         </div>
@@ -353,7 +329,7 @@ const PortfolioPage = () => {
                     {experienceData.map((exp, idx) => (
                         <div key={idx} className="contents">
                             {/* Left Column - Date + Duration */}
-                            <div className="text-right pr-4 text-sm text-gray-400 whitespace-nowrap">
+                            <div className="text-right pr-4 text-base text-gray-400 whitespace-nowrap">
                                 <p>{exp.dateRange}</p>
                                 {exp.duration && <p>{exp.duration}</p>}
                             </div>
@@ -363,10 +339,10 @@ const PortfolioPage = () => {
 
                             {/* Right Column - Experience Details */}
                             <div className="pl-4 pb-8">
-                                <p className="text-sm font-medium text-gray-500">{exp.company}</p>
+                                <p className="text-base font-medium text-gray-400">{exp.company}</p>
                                 <h3 className="text-lg font-semibold uppercase">{exp.title}</h3>
                                 {exp.description && (
-                                    <p className="text-sm mt-1 text-gray-400">{exp.description}</p>
+                                    <p className="text-base mt-1 text-gray-400">{exp.description}</p>
                                 )}
                             </div>
                         </div>
@@ -396,11 +372,154 @@ const PortfolioPage = () => {
                 </div>
             </section>
 
+            {/* Projects */}
+            <section className="border-t border-base-300 py-20 container mx-auto px-4">
+                <h2 className="text-3xl font-bold text-center mb-12">Projects</h2>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {projects.map((project, idx) => (
+                        <div
+                            key={idx}
+                            className="card bg-base-100 shadow-lg hover:shadow-xl transition-shadow duration-300"
+                        >
+                            <div className="card-body">
+                                <h3 className="card-title text-lg">{project.name}</h3>
+                                <p className="text-base text-gray-400">{project.description}</p>
+                                <div className="mt-3 flex flex-wrap gap-2">
+                                    {project.tech.map((t, i) => (
+                                        <span
+                                            key={i}
+                                            className="badge badge-outline badge-primary"
+                                        >
+                                            {t}
+                                        </span>
+                                    ))}
+                                </div>
+                                <div className="card-actions justify-end mt-4">
+                                    {project.link.map((data, i) => (
+                                        <a
+                                            key={i}
+                                            href={data.link}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="btn btn-outline btn-primary gap-2"
+                                        >
+                                            {data.text}
+                                        </a>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </section>
+
+            <section className="border-t border-base-300 py-20 container mx-auto px-4">
+                <h2 className="text-3xl font-bold text-center mb-12">My Practice Platforms / Links</h2>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+
+                    {/* Frontend */}
+                    <div className="card bg-base-100 shadow-lg hover:shadow-xl transition-shadow duration-300 p-4">
+                        <h3 className="font-semibold text-lg mb-2">HTML & CSS</h3>
+                        <ul className="space-y-2 text-sm">
+                            <li>
+                                <span className="font-medium">CodePen.io</span> –
+                                <a href="https://codepen.io/goelradha12" target="_blank" rel="noopener noreferrer" className="text-primary underline ml-1">Visit</a>
+                            </li>
+                            <li>
+                                <span className="font-medium">Space Travel Website (Tutorial)</span><br />
+                                <a href="https://travel-in-a-website.netlify.app/" target="_blank" rel="noopener noreferrer" className="text-primary underline">Live</a> |
+                                <a href="https://github.com/goelradha12/Space-Website" target="_blank" rel="noopener noreferrer" className="text-primary underline ml-1">Repo</a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    {/* React Project */}
+                    <div className="card bg-base-100 shadow-lg hover:shadow-xl transition-shadow duration-300 p-4">
+                        <h3 className="font-semibold text-lg mb-2">React</h3>
+                        <ul className="space-y-2 text-sm">
+                            <li>
+                                <span className="font-medium">E-commerce Product Page - </span>
+                                <a href="https://single-product-page-for-e-commerce.netlify.app/" target="_blank" rel="noopener noreferrer" className="text-primary underline">Live</a> |
+                                <a href="https://github.com/goelradha12/e-commerce-page" target="_blank" rel="noopener noreferrer" className="text-primary underline ml-1">Repo</a>
+                            </li>
+                            <li>
+                                <span className="font-medium">Tenzies Game - </span>
+                                <a href="https://64c654c961f7c9788630c9fa--incandescent-flan-f2db95.netlify.app/" target="_blank" rel="noopener noreferrer" className="text-primary underline">Live</a> |
+                                <a href="https://github.com/goelradha12/tenzies-game" target="_blank" rel="noopener noreferrer" className="text-primary underline ml-1">Repo</a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    {/* JS Projects */}
+                    <div className="card bg-base-100 shadow-lg hover:shadow-xl transition-shadow duration-300 p-4">
+                        <h3 className="font-semibold text-lg mb-2">JavaScript</h3>
+                        <ul className="space-y-2 text-sm">
+                            <li>
+                                <span className="font-medium">30 Days of Code </span> –
+                                <a href="https://github.com/goelradha12/js-intermediate" target="_blank" rel="noopener noreferrer" className="text-primary underline ml-1">Repo</a>
+                            </li>
+                            <li>
+                                <span className="font-medium">Currency Converter </span>
+                                <a href="https://coruscating-stroopwafel-d8f303.netlify.app/" target="_blank" rel="noopener noreferrer" className="text-primary underline">Live</a> |
+                                <a href="https://github.com/goelradha12/currency-convertor" target="_blank" rel="noopener noreferrer" className="text-primary underline ml-1">Repo</a>
+                            </li>
+                            <li>
+                                <span className="font-medium">Tic-Tac-Toe </span>
+                                <a href="https://radha-tic-tac-toe.netlify.app/" target="_blank" rel="noopener noreferrer" className="text-primary underline">Live</a> |
+                                <a href="https://github.com/goelradha12/tic-tac-toe" target="_blank" rel="noopener noreferrer" className="text-primary underline ml-1">Repo</a>
+                            </li>
+                            <li>
+                                <span className="font-medium">Simon Game </span>
+                                <a href="https://simonegames.netlify.app/" target="_blank" rel="noopener noreferrer" className="text-primary underline">Live</a> |
+                                <a href="https://github.com/goelradha12/simonGame" target="_blank" rel="noopener noreferrer" className="text-primary underline ml-1">Repo</a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    {/* GitHub Java */}
+                    <div className="card bg-base-100 shadow-lg hover:shadow-xl transition-shadow duration-300 p-4">
+                        <h3 className="font-semibold text-lg mb-2">Java (ongoing)</h3>
+                        <ul className="space-y-2 text-sm">
+                            <li>
+                                <span className="font-medium">GitHub Repo</span> –
+                                <a href="https://github.com/goelradha12/Java" target="_blank" rel="noopener noreferrer" className="text-primary underline ml-1">Visit</a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    {/* CPP */}
+                    <div className="card bg-base-100 shadow-lg hover:shadow-xl transition-shadow duration-300 p-4">
+                        <h3 className="font-semibold text-lg mb-2">C++</h3>
+                        <ul className="space-y-2 text-sm">
+                            <li>
+                                <span className="font-medium">Competitive Programming</span> –
+                                <a href="https://www.codechef.com/users/radhagoel123" target="_blank" rel="noopener noreferrer" className="text-primary underline ml-1">CodeChef</a>
+                            </li>
+                            <li>
+                                <span className="font-medium">DSA with C++</span> –
+                                <a href="https://auth.geeksforgeeks.org/user/goelradha12" target="_blank" rel="noopener noreferrer" className="text-primary underline ml-1">GeeksForGeeks</a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    {/* HackerRank */}
+                    <div className="card bg-base-100 shadow-lg hover:shadow-xl transition-shadow duration-300 p-4">
+                        <h3 className="font-semibold text-lg mb-2">30 Days of Code (C)</h3>
+                        <ul className="space-y-2 text-sm">
+                            <li>
+                                <span className="font-medium">HackerRank</span> –
+                                <a href="https://www.hackerrank.com/goyalradha2001?hr_r=1" target="_blank" rel="noopener noreferrer" className="text-primary underline ml-1">Profile</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
             {/* recommendation and feedback */}
             <section className="border-t border-base-300 py-20 container mx-auto px-4">
                 <div className="text-center mb-12">
                     <h2 className="text-3xl font-bold text-center mb-2">Recommendations</h2>
-                    <p className="text-sm opacity-70">Words shared by people I've worked with</p>
+                    <p className="text-base opacity-70">Words shared by people I've worked with</p>
                 </div>
 
                 <div className="flex gap-6 overflow-x-auto pb-4 px-4">
@@ -408,11 +527,6 @@ const PortfolioPage = () => {
                         <div
                             key={idx}
                             className="min-w-[300px] max-w-sm p-6 rounded-2xl shadow-md bg-base-200 flex-shrink-0 hover:shadow-xl transition-shadow"
-                            style={{
-                                borderImage: "linear-gradient(135deg, #7F00FF, #E100FF) 1",
-                                borderWidth: "2px",
-                                borderStyle: "solid",
-                            }}
                         >
                             <div className="flex flex-col gap-4">
                                 <div>
@@ -424,13 +538,13 @@ const PortfolioPage = () => {
                                     >
                                         {ref.name}
                                     </a>
-                                    <p className="text-sm text-gray-500 pl-2">{ref.designation}</p>
+                                    <p className="text-base text-gray-400 pl-2">{ref.designation}</p>
                                     <p className="mt-2 italic text-md text-base-content">{ref.summary}</p>
                                 </div>
                                 <blockquote className="text-base text-gray-400 leading-relaxed">
                                     “{ref.feedback}”
                                 </blockquote>
-                                <p className="text-xs mt-1 text-gray-400 text-right">~{ref.intro}</p>
+                                <p className="text-sm mt-1 text-gray-400 text-right">~{ref.intro}</p>
                             </div>
                         </div>
                     ))}
