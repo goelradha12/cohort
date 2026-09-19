@@ -43,9 +43,12 @@ export const createProblem = asyncHandler(async function (req, res) {
             const results = await pollBatchResults(tokens)
 
             // validate if all testcases are passed
-            console.log("\n-------results-------\n", results)
+            console.info("Reference solution execution completed", {
+                language,
+                testcaseCount: results.length,
+                failedCount: results.filter((result) => result.status?.id !== 3).length,
+            })
             for (let i = 0; i < results.length; i++) {
-                // console.log("-------result-------", results[i])
                 const result = results[i];
 
                 if (result.status.id !== 3) {
@@ -82,7 +85,13 @@ export const createProblem = asyncHandler(async function (req, res) {
         )
 
     } catch (error) {
-        console.log(error)
+        console.error("Problem creation failed", {
+            name: error.name,
+            message: error.message,
+            code: error.code,
+            statusCode: error.statusCode,
+            stack: error.stack,
+        })
         if (error instanceof apiError) {
             return res.status(error.statusCode).json({
                 statusCode: error.statusCode,
@@ -108,7 +117,13 @@ export const getAllProblems = asyncHandler(async function (req, res) {
             new apiResponse(200, problems, "All Problems Fetched Successfully")
         )
     } catch (error) {
-        console.log(error)
+        console.error("Problem list fetch failed", {
+            name: error.name,
+            message: error.message,
+            code: error.code,
+            statusCode: error.statusCode,
+            stack: error.stack,
+        })
         if (error instanceof apiError) {
             return res.status(error.statusCode).json({
                 statusCode: error.statusCode,
@@ -141,7 +156,14 @@ export const getProblemByID = asyncHandler(async function (req, res) {
             new apiResponse(200, problem, "Problem Fetched Successfully")
         )
     } catch (error) {
-        console.log(error)
+        console.error("Problem fetch failed", {
+            problemId: req.params.id,
+            name: error.name,
+            message: error.message,
+            code: error.code,
+            statusCode: error.statusCode,
+            stack: error.stack,
+        })
         if (error instanceof apiError) {
             return res.status(error.statusCode).json({
                 statusCode: error.statusCode,
@@ -212,7 +234,6 @@ export const updateProblem = asyncHandler(async function (req, res) {
                 // validate if all testcases are passed
 
                 for (let i = 0; i < results.length; i++) {
-                    console.log("-------result-------", results[i])
                     const result = results[i];
 
                     if (result.status.id !== 3) {
@@ -251,7 +272,14 @@ export const updateProblem = asyncHandler(async function (req, res) {
         return res.status(200).json(
             new apiResponse(200, updatedProblem, "Problem Updated Successfully"))
     } catch (error) {
-        console.log(error)
+        console.error("Problem update failed", {
+            problemId: req.params.id,
+            name: error.name,
+            message: error.message,
+            code: error.code,
+            statusCode: error.statusCode,
+            stack: error.stack,
+        })
         if (error instanceof apiError) {
             return res.status(error.statusCode).json({
                 statusCode: error.statusCode,
@@ -289,7 +317,14 @@ export const deleteProblem = asyncHandler(async function (req, res) {
             new apiResponse(200, {}, "Problem Deleted Successfully")
         )
     } catch (error) {
-        console.log(error)
+        console.error("Problem deletion failed", {
+            problemId: req.params.id,
+            name: error.name,
+            message: error.message,
+            code: error.code,
+            statusCode: error.statusCode,
+            stack: error.stack,
+        })
         if (error instanceof apiError) {
             return res.status(error.statusCode).json({
                 statusCode: error.statusCode,
@@ -321,7 +356,13 @@ export const getAllProblemsSolvedByUser = asyncHandler(async function (req, res)
             new apiResponse(200, mySolvedProblems, "All Problems Fetched Successfully")
         )
     } catch (error) {
-        console.log(erorrs)
+        console.error("Solved-problem lookup failed", {
+            name: erorrs.name,
+            message: erorrs.message,
+            code: erorrs.code,
+            statusCode: erorrs.statusCode,
+            stack: erorrs.stack,
+        })
         if (error instanceof apiError) {
             return res.status(error.statusCode).json({
                 statusCode: error.statusCode,

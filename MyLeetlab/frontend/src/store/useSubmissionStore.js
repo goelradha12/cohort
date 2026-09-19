@@ -31,7 +31,7 @@ export const useSubmissionStore = create((set)=> {
                 set({submissions: response.data.data});
             } catch (error) {
                 console.log("Error fetching submissions: ",error);
-                toast.error(error.response.data.message || "Error fetching submissions");
+                toast.error(error?.response?.data?.message || "Error fetching submissions");
             } finally {
                 set({gettingSubmissions: false});
             }
@@ -44,7 +44,7 @@ export const useSubmissionStore = create((set)=> {
                 set({submissionsByProblemID: response.data.data});
             } catch (error) {
                 console.log("Error fetching submissions: ",error);
-                toast.error(error.response.data.message || "Error fetching submissions");
+                toast.error(error?.response?.data?.message || "Error fetching submissions");
             } finally {
                 set({gettingSubmissionByProblemID: false});
             }

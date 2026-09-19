@@ -33,7 +33,7 @@ export const useProblemStore = create((set) => {
                 console.log("Error getting the problem: ", error)
                 set({ problem: null })
                 // displaying error msgs from backend
-                toast.error(error.response.data.message || "Error fetching Problem")
+                toast.error(error?.response?.data?.message || "Error fetching Problem")
             } finally {
                 set({ isProblemLoading: false })
             }

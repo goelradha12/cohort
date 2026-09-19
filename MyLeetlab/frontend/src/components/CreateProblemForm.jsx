@@ -103,22 +103,45 @@ const CreateProblemForm = () => {
     }
 
     const loadSampleData = () => {
-        let sampleData = {}
-        if (sampleType === "New") {
-            // console.log("Here");
-            setIsInputByObject(false)
-            sampleData = JSON.parse(inputByObject)
-        }
-        else {
-            sampleData = sampleType === "DP" ? sampledpData : sampleStringProblem
-        }
+        try {
+            const sampleData = sampleType === "New"
+                ? JSON.parse(inputByObject)
+                : sampleType === "DP" ? sampledpData : sampleStringProblem;
 
-        if (sampleData) {
-            replaceTags(sampleData.tags.map((tag) => tag));
-            replacetestcases(sampleData.testcases.map((tc) => tc));
+            if (!sampleData || typeof sampleData !== "object" || Array.isArray(sampleData)) {
+                throw new Error("JSON must contain one problem object");
+            }
 
-            // Reset the form with sample data
-            reset(sampleData);
+            if (!Array.isArray(sampleData.tags) || !Array.isArray(sampleData.testcases)) {
+                throw new Error("JSON must include tags and testcases arrays");
+            }
+
+            const normalizedData = {
+                ...sampleData,
+                tags: sampleData.tags.map(String),
+                testcases: sampleData.testcases.map((testcase) => ({
+                    ...testcase,
+                    input: String(testcase.input ?? ""),
+                    output: String(testcase.output ?? ""),
+                })),
+                examples: Object.fromEntries(
+                    Object.entries(sampleData.examples ?? {}).map(([language, example]) => [language, {
+                        ...example,
+                        input: String(example.input ?? ""),
+                        output: String(example.output ?? ""),
+                        explanation: String(example.explanation ?? ""),
+                    }])
+                ),
+            };
+
+            reset(normalizedData);
+            replaceTags(normalizedData.tags);
+            replacetestcases(normalizedData.testcases);
+            setIsInputByObject(false);
+            toast.success("JSON loaded into the form");
+        } catch (error) {
+            console.error("Could not load problem JSON:", error);
+            toast.error(error.message || "Invalid problem JSON");
         }
     }
     return (

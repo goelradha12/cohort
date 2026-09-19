@@ -17,7 +17,7 @@ export const useExecuteCodeStore = create((set) => ({
         } catch (error) {
             console.log("Error executing code: ", error);
             set({executionResult: null});
-            toast.error(error.response.data?.message || "Error executing code");
+            toast.error(error?.response?.data?.message || "Error executing code");
         } finally {
             set({isExecutingCode: false,});
         }
@@ -32,7 +32,7 @@ export const useExecuteCodeStore = create((set) => ({
         } catch (error) {
             console.log("Error executing code: ", error);
             set({executionResult: null});
-            toast.error(error.response.data.message || "Error Running code");
+            toast.error(error?.response?.data?.message || "Error Running code");
         } finally {
             set({isRunningCode: false});
         }

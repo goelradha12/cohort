@@ -17,6 +17,7 @@ import ForgotPassword from "./page/ForgotPassword";
 import VerifyEmail from "./page/VerifyEmail";
 import EditProblem from "./page/EditProblem";
 import PortfolioPage from "./page/PortfolioPage";
+import Leaderboard from "./page/Leaderboard";
 function App() {
   // giving useful routes to the user as per the authentication
   const { authUser, checkAuth, isCheckingAuth } = useAuthStore();
@@ -50,6 +51,10 @@ function App() {
           <Route 
           path="/profile"
           element={authUser ? <Profile /> : <Navigate to="/login" />} />
+
+          <Route
+          path="/leaderboard"
+          element={authUser ? <Leaderboard /> : <Navigate to="/login" />} />
         </Route>
 
         <Route

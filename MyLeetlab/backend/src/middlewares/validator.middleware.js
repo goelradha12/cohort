@@ -11,7 +11,10 @@ export const validate = (req,res,next) => {
         const extractedError = errors.array().map((err) => {
             return {[err.path]:[err.msg]}
         })
-        console.log(extractedError)
+        console.warn("Request validation failed", {
+            fields: errors.array().map((error) => error.path),
+            count: errors.array().length,
+        })
         throw new apiError(422,"Recieved data is not valid",extractedError);
     }
 }

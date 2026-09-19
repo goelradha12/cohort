@@ -16,7 +16,7 @@ export const getAllSubmission = asyncHandler(async (req, res) => {
             new apiResponse(200, mySubmission, "All Submissions Fetched Successfully")
         )
     } catch (error) {
-        console.log(error);
+        console.error("Submission list fetch failed", { userId: req.user?._id, name: error.name, message: error.message, code: error.code, statusCode: error.statusCode, stack: error.stack });
         if (error instanceof apiError) {
             return res.status(error.statusCode).json({
                 statusCode: error.statusCode,
@@ -47,7 +47,7 @@ export const getSubmissionCount = asyncHandler(async (req, res) => {
             new apiResponse(200, submissionCount, "Submission Count Fetched Successfully")
         )
     } catch (error) {
-        console.log(error);
+        console.error("Submission count fetch failed", { problemId: req.params.problemId, name: error.name, message: error.message, code: error.code, statusCode: error.statusCode, stack: error.stack });
         if (error instanceof apiError) {
             return res.status(error.statusCode).json({
                 statusCode: error.statusCode,
@@ -74,12 +74,11 @@ export const getSuccessfulSubmissionCount = asyncHandler(async (req, res) => {
                 status: "ACCEPTED"
             }
         })
-        // console.log(submissionCount)
         res.status(200).json(
             new apiResponse(200, submissionCount, "Submission Count Fetched Successfully")
         )
     } catch (error) {
-        console.log(error);
+        console.error("Successful submission count fetch failed", { problemId: req.params.problemId, name: error.name, message: error.message, code: error.code, statusCode: error.statusCode, stack: error.stack });
         if (error instanceof apiError) {
             return res.status(error.statusCode).json({
                 statusCode: error.statusCode,
@@ -115,7 +114,7 @@ export const getSubmissionForProblem = asyncHandler(async (req, res) => {
             new apiResponse(200, mySubmission, "Submission Fetched Successfully")
         )
     } catch (error) {
-        console.log(error);
+        console.error("Problem submission fetch failed", { userId: req.user?._id, problemId: req.params.problemId, name: error.name, message: error.message, code: error.code, statusCode: error.statusCode, stack: error.stack });
         if (error instanceof apiError) {
             return res.status(error.statusCode).json({
                 statusCode: error.statusCode,

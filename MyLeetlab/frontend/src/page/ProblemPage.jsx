@@ -27,6 +27,8 @@ import { getJudge0LanguageID } from "../lib/utilFunctions.js";
 import SubmissionResult from "../components/SubmissionResult.jsx";
 import SubmissionList from "../components/SubmissionList.jsx";
 import { useSubmissionStore } from "../store/useSubmissionStore.js";
+import toast from "react-hot-toast";
+import AddToPlaylistModal from "../components/modals/AddToPlaylistModal.jsx";
 
 const ProblemPage = () => {
     const navigate = useNavigate();
@@ -44,6 +46,7 @@ const ProblemPage = () => {
     const [code, setCode] = useState("");
     const [activeTab, setActiveTab] = useState("description");
     const [testcases, setTestcases] = useState([]);
+    const [isAddToPlaylistModalOpen, setIsAddToPlaylistModalOpen] = useState(false);
     const { isExecutingCode, executionResult, executeCode, setExecutionResultNull, isRunningCode, runCode } = useExecuteCodeStore();
     const { submissionsByProblemID, getSubmissionByProblemID, gettingSubmissionByProblemID } = useSubmissionStore(); // submissions
     const {
@@ -114,6 +117,30 @@ const ProblemPage = () => {
             console.log(executionResult)
         } catch (error) {
             console.log("Error Running code", error);
+        }
+    }
+
+    // Copy the current problem page URL to the clipboard.
+    const handleShare = async () => {
+        const shareUrl = window.location.href;
+        try {
+            if (navigator.clipboard?.writeText) {
+                await navigator.clipboard.writeText(shareUrl);
+            } else {
+                // Fallback for insecure contexts / older browsers.
+                const textarea = document.createElement("textarea");
+                textarea.value = shareUrl;
+                textarea.style.position = "fixed";
+                textarea.style.opacity = "0";
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand("copy");
+                document.body.removeChild(textarea);
+            }
+            toast.success("Problem link copied");
+        } catch (error) {
+            console.log("Error copying problem link", error);
+            toast.error("Couldn't copy link");
         }
     }
 
@@ -324,8 +351,34 @@ const ProblemPage = () => {
                         </div>
                     </div>
                     <div className="flex items-center gap-4">
-                        <Bookmark className="w-[50px] h-[50px]" />
-                        <Share2 className="w-[50px] h-[50px]" />
+                        <Bookmark
+                            role="button"
+                            tabIndex={0}
+                            aria-label="Save problem to playlist"
+                            title="Save to playlist"
+                            onClick={() => setIsAddToPlaylistModalOpen(true)}
+                            onKeyDown={(e) => {
+                                if (e.key === "Enter" || e.key === " ") {
+                                    e.preventDefault();
+                                    setIsAddToPlaylistModalOpen(true);
+                                }
+                            }}
+                            className="w-[50px] h-[50px] cursor-pointer"
+                        />
+                        <Share2
+                            role="button"
+                            tabIndex={0}
+                            aria-label="Copy problem link"
+                            title="Copy problem link"
+                            onClick={handleShare}
+                            onKeyDown={(e) => {
+                                if (e.key === "Enter" || e.key === " ") {
+                                    e.preventDefault();
+                                    handleShare();
+                                }
+                            }}
+                            className="w-[50px] h-[50px] cursor-pointer"
+                        />
                         {/* Options to select language of editor */}
                         <select
                             className="select select-primary"
@@ -498,6 +551,12 @@ const ProblemPage = () => {
                         )}
                 </div>
             </div>
+
+            <AddToPlaylistModal
+                isOpen={isAddToPlaylistModalOpen}
+                onClose={() => setIsAddToPlaylistModalOpen(false)}
+                problemId={problem.id}
+            />
         </div >
     );
 };

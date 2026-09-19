@@ -1,0 +1,23 @@
+# Known Issues and Limitations
+
+These are observations from the current repository, not resolved defects.
+
+- No automated tests, backend lint script, CI, Docker, or deployment configuration is present.
+- `createAdmin.js` contains a hard-coded admin email/password and immediately creates a user when executed (auto-running IIFE); it is not wired as an npm script. The password is bcrypt-hashed on write by the `hashPassword` Prisma middleware, so this is a credential-hygiene issue, not a login bug.
+- Password hashing is centralized in the `hashPassword` Prisma middleware registered in `backend/src/libs/db.js` (`db.$use`), which hashes `data.password` on every `User` create/update. Controllers must not hash passwords again or they will double-hash and break login.
+- Judge0 polling loops forever if the external service never completes and has no timeout/backoff policy.
+- ~~Submission creation and testcase-result creation are separate operations; a failure between them can leave partial data.~~ **Resolved (item 3)**: `executeCode` now wraps `Submission.create` + `ProblemSolved.upsert` + `TestCaseResult.createMany` in `db.$transaction`.
+- ~~Trimmed stdout comparison is a forward-looking risk for multi-line/float/`\r\n` output.~~ **Resolved (item 5)**: comparison now uses `outputsMatch`/`normalizeOutput` in `backend/src/libs/judgeUtils.js` (CRLF normalize, per-line trailing-whitespace strip, trailing-blank-line drop, single-token numeric tolerance). Shared by `executeCode` and `runCode`.
+- Submission `status` values are centralized as `SUBMISSION_STATUS` constants in `judgeUtils.js` (`"ACCEPTED"` / `"WRONG ANSWER"`). These exact strings are load-bearing: the frontend compares `=== "ACCEPTED"` and renders the raw value in `SubmissionResult.jsx`, `SubmissionList.jsx`, and `Profile.jsx`. Do not change the values without updating those consumers.
+- ~~Error access in some frontend stores assumes `error.response` exists.~~ **Resolved (item 7)**: `useExecuteCodeStore`, `useSubmissionStore`, and `useProblemStore` now use `error?.response?.data?.message` with fallbacks (playlist/auth stores were already safe).
+- A global Express error handler now exists at `backend/src/middlewares/error.middleware.js`, registered last in `index.js`. It renders `apiError` (and unknown errors) as JSON so errors forwarded via `asyncHandler`'s `next(err)` no longer hit Express's default HTML handler.
+- `App.jsx` logs `authUser`; several controllers/stores also log runtime data. Review production logging for sensitive values.
+- `changePassword` route lacks `isLoggedIn` and identifies the account from a body `email`, but it is **not exploitable**: it requires the correct `oldPassword` (verified via `bcrypt.compare`), which an attacker could already use to log in. Treated as low-priority hardening, not a vulnerability. Password storage is fine via the hashing middleware. See remediation item 2.
+- Backend CORS allows `BASE_URL` plus localhost only; production origin behavior depends on the local environment value.
+- ~~The frontend production Axios path `/api/v1` assumes same-origin routing.~~ **Partially resolved (item 8)**: `axios.js` now resolves `VITE_API_URL` first (explicit prod/staging base URL), then dev localhost, then the `/api/v1` same-origin fallback. `frontend/.env.example` documents the variable. A reverse-proxy/hosting setup is still needed only if you rely on the same-origin fallback rather than `VITE_API_URL`.
+- Judge0 polling still loops without a timeout/backoff (item 6, pending).
+- ~~No rate limiting.~~ **Resolved (item 10)**: `express-rate-limit` in `backend/src/middlewares/rateLimit.middleware.js` — execution 3/min per user (keyed on user id), auth-sensitive 10 per 15 min per IP. Behind a reverse proxy, set `app.set('trust proxy', 1)` so the auth limiter sees the real client IP. Secure cookie/CORS policy is still outstanding.
+- `Profile.jsx` calls `playlist.description.slice(...)` while the Prisma field is nullable; empty descriptions may need defensive rendering (remediation, still open).
+- ~~Avatar upload was broken.~~ **Resolved**: `updateUserProfile` no longer reads `req.file.fieldname` before the guard (name-only updates worked around it crashing), no longer splits a null `myUser.image` on first upload, and uses folder-aware `getCloudinaryPublicId`. The frontend `Profile.jsx` now uses the browser-native `FormData` (the Node `form-data` package was imported by mistake, producing a body Axios couldn't serialize) plus an empty-file guard.
+- README future-work notes are not a reliable status source; reconcile them with code when planning changes.
+- External portfolio content contains personal links and hard-coded remote assets; treat it as static content rather than core platform data.

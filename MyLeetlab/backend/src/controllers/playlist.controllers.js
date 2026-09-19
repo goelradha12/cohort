@@ -25,7 +25,7 @@ export const getAllListDetails = asyncHandler(async function (req, res) {
             new apiResponse(200, myPlaylists, "Playlist Fetched Successfully")
         )
     } catch (error) {
-        console.log(error);
+        console.error("Playlist list fetch failed", { userId: req.user?._id, name: error.name, message: error.message, code: error.code, statusCode: error.statusCode, stack: error.stack });
         if (error instanceof apiError) {
             return res.status(error.statusCode).json({
                 statusCode: error.statusCode,
@@ -67,7 +67,7 @@ export const createPlaylist = asyncHandler(async function (req, res) {
             new apiResponse(200, myPlaylist, "Playlist Created Successfully")
         )
     } catch (error) {
-        console.log(error);
+        console.error("Playlist creation failed", { userId: req.user?._id, name: error.name, message: error.message, code: error.code, statusCode: error.statusCode, stack: error.stack });
         if (error instanceof apiError) {
             return res.status(error.statusCode).json({
                 statusCode: error.statusCode,
@@ -102,7 +102,7 @@ export const deletePlaylist = asyncHandler(async function (req, res) {
             new apiResponse(200, myPlaylist, "Playlist Deleted Successfully")
         )
     } catch (error) {
-        console.log(error);
+        console.error("Playlist deletion failed", { playlistId: req.params.playlistId, userId: req.user?._id, name: error.name, message: error.message, code: error.code, statusCode: error.statusCode, stack: error.stack });
         if (error instanceof apiError) {
             return res.status(error.statusCode).json({
                 statusCode: error.statusCode,
@@ -144,7 +144,7 @@ export const getPlaylistDetails = asyncHandler(async function (req, res) {
             new apiResponse(200, myPlaylist, "Playlist Fetched Successfully")
         )
     } catch (error) {
-        console.log(error);
+        console.error("Playlist fetch failed", { playlistId: req.params.playlistId, userId: req.user?._id, name: error.name, message: error.message, code: error.code, statusCode: error.statusCode, stack: error.stack });
         if (error instanceof apiError) {
             return res.status(error.statusCode).json({
                 statusCode: error.statusCode,
@@ -210,7 +210,7 @@ export const addProblemToPlaylist = asyncHandler(async function (req, res) {
             new apiResponse(200, data, "Problem added to playlist successfully")
         )
     } catch (error) {
-        console.log(error);
+        console.error("Problem add-to-playlist failed", { playlistId: req.params.playlistId, userId: req.user?._id, problemCount: Array.isArray(req.body?.problemIds) ? req.body.problemIds.length : 0, name: error.name, message: error.message, code: error.code, statusCode: error.statusCode, stack: error.stack });
         if (error instanceof apiError) {
             return res.status(error.statusCode).json({
                 statusCode: error.statusCode,
@@ -254,7 +254,7 @@ export const removeProblemFromPlaylist = asyncHandler(async function (req, res) 
             new apiResponse(200, problemplaylist, "Problem removed from playlist successfully")
         )
     } catch (error) {
-        console.log(error);
+        console.error("Problem remove-from-playlist failed", { playlistId: req.params.playlistId, userId: req.user?._id, problemId: req.body?.problemId, name: error.name, message: error.message, code: error.code, statusCode: error.statusCode, stack: error.stack });
         if (error instanceof apiError) {
             return res.status(error.statusCode).json({
                 statusCode: error.statusCode,
@@ -297,7 +297,7 @@ export const editPlaylist = asyncHandler(async function (req, res) {
             new apiResponse(200, playlist, "Playlist edited successfully")
         )
     } catch (error) {
-        console.log(error);
+        console.error("Playlist update failed", { playlistId: req.params.playlistId, userId: req.user?._id, name: error.name, message: error.message, code: error.code, statusCode: error.statusCode, stack: error.stack });
         if (error instanceof apiError) {
             return res.status(error.statusCode).json({
                 statusCode: error.statusCode,

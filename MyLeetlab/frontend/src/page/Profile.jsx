@@ -10,7 +10,6 @@ import DisplayPlaylistModal from '../components/modals/DisplayPlaylistModal'
 import EditPlaylistModal from '../components/modals/EditPlaylistModal'
 import { axiosInstance } from '../lib/axios'
 import toast from 'react-hot-toast'
-import FormData, { } from "form-data"
 
 const Profile = () => {
     const { authUser, checkAuth, isCheckingAuth } = useAuthStore()
@@ -131,6 +130,10 @@ const Profile = () => {
     }
 
     const handleEditUserProfile = async () => {
+        if (!newProfileImage) {
+            toast.error("Please choose an image first")
+            return
+        }
         try {
             setIsProfileLoading(true)
             const formData = new FormData();

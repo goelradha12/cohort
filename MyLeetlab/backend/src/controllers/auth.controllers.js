@@ -7,11 +7,10 @@ import { db } from "../libs/db.js";
 import { UserRole } from "../generated/prisma/index.js";
 import bcrypt from "bcryptjs";
 import { generateAccessToken, generateRefreshToken, generateTemporaryTokens } from "../utils/generateTokens.js";
-import { handleDeleteMedia, handleUpload } from "../middlewares/cloudinary.middleware.js";
+import { handleDeleteMedia, handleUpload, getCloudinaryPublicId } from "../middlewares/cloudinary.middleware.js";
 
 export const registerUser = asyncHandler(async function (req, res) {
     // recieve name, email and password
-    // console.log(req.body);
     const { name, email, password } = req.body;
 
     try {
@@ -26,7 +25,6 @@ export const registerUser = asyncHandler(async function (req, res) {
             throw new apiError(401, "Email already exists");
         }
 
-        // console.log("here")
         const newUserData = {
             email: email.toLowerCase(),
             password: password,
@@ -48,7 +46,6 @@ export const registerUser = asyncHandler(async function (req, res) {
         newUserData.emailVerificationToken = hashedToken;
         newUserData.emailVerificationExpiry = tokenExpiry;
 
-        // console.log("----",newUser,"----");
         const newUser = await db.User.create({ data: newUserData })
 
         if (!newUser) {
@@ -75,7 +72,7 @@ export const registerUser = asyncHandler(async function (req, res) {
                 "User Registered Successfully"
             ))
     } catch (error) {
-        console.log(error)
+        console.error("User registration failed", { name: error.name, message: error.message, code: error.code, statusCode: error.statusCode, stack: error.stack })
         if (error instanceof apiError) {
             return res.status(error.statusCode).json({
                 statusCode: error.statusCode,
@@ -131,7 +128,7 @@ export const verifyMail = asyncHandler(async function (req, res) {
         );
 
     } catch (error) {
-        console.log(error);
+        console.error("Email verification failed", { name: error.name, message: error.message, code: error.code, statusCode: error.statusCode, stack: error.stack });
         if (error instanceof apiError) {
             return res.status(error.statusCode).json({
                 statusCode: error.statusCode,
@@ -166,7 +163,6 @@ export const loginUser = asyncHandler(async function (req, res) {
         // verify password
         const isPassCorrect = await bcrypt.compare(password, user.password);
 
-        // console.log(isPassCorrect);
         if (isPassCorrect) {
 
             // login only if verified
@@ -207,7 +203,7 @@ export const loginUser = asyncHandler(async function (req, res) {
 
     }
     catch (error) {
-        console.log(error)
+        console.error("User login failed", { name: error.name, message: error.message, code: error.code, statusCode: error.statusCode, stack: error.stack })
         if (error instanceof apiError) {
             return res.status(error.statusCode).json({
                 statusCode: error.statusCode,
@@ -260,7 +256,7 @@ export const changeCurrPassword = asyncHandler(async function (req, res) {
                 "Password changed Successfully")
         )
     } catch (error) {
-        console.log(error)
+        console.error("Password change failed", { name: error.name, message: error.message, code: error.code, statusCode: error.statusCode, stack: error.stack })
         if (error instanceof apiError) {
             return res.status(error.statusCode).json({
                 statusCode: error.statusCode,
@@ -339,7 +335,7 @@ export const resendVerificationEmail = asyncHandler(async function (req, res) {
                 "Mail Sent Successfully"
             ))
     } catch (error) {
-        console.log(error)
+        console.error("Verification email resend failed", { name: error.name, message: error.message, code: error.code, statusCode: error.statusCode, stack: error.stack })
         if (error instanceof apiError) {
             return res.status(error.statusCode).json({
                 statusCode: error.statusCode,
@@ -400,7 +396,7 @@ export const forgotPasswordRequest = asyncHandler(async function (req, res) {
                 "Mail sent to Reset Your Password")
         )
     } catch (error) {
-        console.log(error)
+        console.error("Forgot-password request failed", { name: error.name, message: error.message, code: error.code, statusCode: error.statusCode, stack: error.stack })
         if (error instanceof apiError) {
             return res.status(error.statusCode).json({
                 statusCode: error.statusCode,
@@ -464,7 +460,7 @@ export const resetPassword = asyncHandler(async function (req, res) {
             )
         )
     } catch (error) {
-        console.log(error)
+        console.error("Password reset failed", { name: error.name, message: error.message, code: error.code, statusCode: error.statusCode, stack: error.stack })
         if (error instanceof apiError) {
             return res.status(error.statusCode).json({
                 statusCode: error.statusCode,
@@ -508,7 +504,7 @@ export const getUser = asyncHandler(async function (req, res) {
         }
     }
     catch (error) {
-        console.log(error)
+        console.error("User profile fetch failed", { userId: req.user?._id, name: error.name, message: error.message, code: error.code, statusCode: error.statusCode, stack: error.stack })
         if (error instanceof apiError) {
             return res.status(error.statusCode).json({
                 statusCode: error.statusCode,
@@ -531,10 +527,10 @@ export const updateUserProfile = asyncHandler(async function (req, res) {
 
     // get newName, newAvatar
     const { newName } = req.body;
-    const newImage = req.file.fieldname;
+    // req.file is only present on a multipart request with an uploaded image.
+    const hasNewImage = req.file?.fieldname === "newImage";
 
     try {
-        // console.log(req.file)
         if (!(newName || req.file))
             throw new apiError(401, "No data recieved to update")
 
@@ -552,16 +548,18 @@ export const updateUserProfile = asyncHandler(async function (req, res) {
                     }
                 });
 
-            if (newImage === "newImage") {
+            if (hasNewImage) {
                 const cloudinaryResult = await handleUpload(req.file.buffer);
 
-                let imageId = myUser.image.split('/');
-                imageId = imageId[imageId.length - 1].split('.')[0];
+                // Delete the previous Cloudinary image if one exists. New users have
+                // image === null, so guard against splitting a null value.
+                if (myUser.image) {
+                    const publicId = getCloudinaryPublicId(myUser.image);
+                    if (publicId) {
+                        await handleDeleteMedia(publicId);
+                    }
+                }
 
-                const destroyResult = await handleDeleteMedia(imageId);
-
-                // console.log(req.file)
-                // console.log(cloudinaryResult, destroyResult)
                 await db.User.update({
                     where: {
                         id: myUser.id
@@ -589,7 +587,7 @@ export const updateUserProfile = asyncHandler(async function (req, res) {
             throw new apiError(401, "Invalid Token");
         }
     } catch (error) {
-        console.log(error);
+        console.error("User profile update failed", { userId: req.user?._id, name: error.name, message: error.message, code: error.code, statusCode: error.statusCode, stack: error.stack });
         if (error instanceof apiError) {
             return res.status(error.statusCode).json({
                 statusCode: error.statusCode,
@@ -610,7 +608,6 @@ export const updateUserProfile = asyncHandler(async function (req, res) {
 export const refreshAccessToken = asyncHandler(async function (req, res) {
     // goal: when user gets on this URL, give him new access token if valid
     const { refreshToken } = req.cookies;
-    // console.log(refreshToken)
     try {
         let user;
         if (refreshToken) {
@@ -623,7 +620,6 @@ export const refreshAccessToken = asyncHandler(async function (req, res) {
                 }
                 user = userData;
             });
-            // console.log(user)
             const myUser = await db.User.findUnique({ where: { id: user._id } })
             if (!myUser)
                 throw new apiError(401, "Invalid Token");
@@ -645,7 +641,7 @@ export const refreshAccessToken = asyncHandler(async function (req, res) {
         }
     }
     catch (error) {
-        console.log(error)
+        console.error("Access-token refresh failed", { name: error.name, message: error.message, code: error.code, statusCode: error.statusCode, stack: error.stack })
         if (error instanceof apiError) {
             return res.status(error.statusCode).json({
                 statusCode: error.statusCode,
@@ -667,7 +663,6 @@ export const logOutUser = asyncHandler(async function (req, res) {
     // if user is logged in (check for refresh token), 
     // remove jwt tokens (refresh token) from db and cookies
     const { refreshToken } = req.cookies;
-    // console.log(refreshToken)
     try {
         let user;
         if (refreshToken) {
@@ -680,7 +675,6 @@ export const logOutUser = asyncHandler(async function (req, res) {
                 }
                 user = userData;
             });
-            // console.log(user)
             const myUser = await db.User.findUnique({ where: { id: user._id } })
             if (!myUser)
                 throw new apiError(401, "Invalid Token");
@@ -706,7 +700,7 @@ export const logOutUser = asyncHandler(async function (req, res) {
             throw new apiError(401, "Already Logged Out")
         }
     } catch (error) {
-        console.log(error)
+        console.error("User logout failed", { name: error.name, message: error.message, code: error.code, statusCode: error.statusCode, stack: error.stack })
         if (error instanceof apiError) {
             return res.status(error.statusCode).json({
                 statusCode: error.statusCode,
