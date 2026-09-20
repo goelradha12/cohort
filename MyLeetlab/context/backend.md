@@ -1,7 +1,7 @@
 # Backend
 
 ## Bootstrap
-`backend/src/index.js` loads environment values, configures CORS for `BASE_URL` and `http://localhost:5173`, parses cookies/urlencoded/JSON bodies, mounts `/api/v1/auth`, `/problems`, `/execute-code`, `/submission`, `/playlist`, and `/leaderboard` routers, and registers the global `errorHandler` last.
+`backend/src/index.js` loads environment values, configures CORS for `BASE_URL` and `http://localhost:5173`, parses cookies/urlencoded/JSON bodies, mounts `/api/v1/auth`, `/problems`, `/execute-code`, `/submission`, `/playlist`, `/leaderboard`, and `/companies` routers, and registers the global `errorHandler` last.
 
 ## Controller modules
 - `auth.controllers.js`: registration, login, profile, logout, token refresh, verification, password recovery/change, profile update.

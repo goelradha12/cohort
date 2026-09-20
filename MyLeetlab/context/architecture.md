@@ -6,7 +6,7 @@ React/Vite browser
   -> Axios with credentials -> Express API (/api/v1)
   -> PostgreSQL through Prisma
   -> Judge0-compatible HTTP API for code execution
-  -> Mailtrap SMTP for verification/password mail
+  -> Resend for verification/password mail
   -> Cloudinary for profile images
 ```
 

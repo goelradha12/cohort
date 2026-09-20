@@ -19,7 +19,7 @@
 - `cookie-parser`, `cors`, `dotenv`, and `express-validator`.
 - `express-rate-limit` for in-memory rate limiting on auth and execution routes.
 - Judge0-compatible API through Axios.
-- Nodemailer/Mailgen for email.
+- Resend (email delivery) with Mailgen for HTML generation.
 - Cloudinary, Multer, and Streamifier for image upload.
 - Nodemon for the development server.
 

@@ -10,6 +10,8 @@ Prisma schema: `backend/prisma/schema.prisma`. Provider: PostgreSQL. URLs are `D
 - `ProblemSolved`: unique `(userId, problemId)` solved marker.
 - `Playlist`: user-owned named collection; unique `(userId, name)`.
 - `ProblemPlaylist`: join table; unique `(playlistId, problemId)`.
+- `Company`: canonical company identity — `id` (cuid), `name`, `normalizedName` (`@unique`), `createdAt`. Intentionally has **no Prisma relation** to `Problem`.
+- `Problem.companies`: optional `Json?` array of `{ companyId, year, context }`. Stores `companyId` explicitly (no DB FK); controllers validate ids against `Company`. `null` = never set.
 
 All main foreign keys use cascade delete. `TestCaseResult.submissionId` is indexed. `Difficulty` is `EASY | MEDIUM | HARD`; `UserRole` is `ADMIN | USER`.
 

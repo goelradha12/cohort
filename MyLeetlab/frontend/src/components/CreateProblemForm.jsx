@@ -1,14 +1,92 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { CreateProblemSchema } from "../validators/problemForm.validators.js";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 import Editor from "@monaco-editor/react";
 import { sampledpData, sampleStringProblem } from "../samples/sampleProblem.js";
-import { BookOpen, CheckCircle2, ChevronRight, Code2, Download, FileText, Home, Lightbulb, Plus, Trash2 } from "lucide-react";
+import { BookOpen, Building2, CheckCircle2, ChevronRight, Code2, Download, FileText, Home, Lightbulb, Plus, Trash2 } from "lucide-react";
 import toast from "react-hot-toast";
 import { axiosInstance } from "../lib/axios.js";
 import { EditorOptions } from "./EditorOptions.js";
+import { useCompanyStore } from "../store/useCompanyStore.js";
+import { INTERVIEW_CONTEXTS } from "../lib/interviewContexts.js";
+import { useLanguageStore } from "../store/useLanguageStore.js";
+import { getMonacoLanguage } from "../lib/utilFunctions.js";
+
+// Searchable company combobox. Shows existing companies matching the typed query
+// and offers "Add \"<query>\" as new company" which creates it (admin-only) and
+// selects the returned id. `value` is the selected companyId; `onChange(id)`.
+// Exported so EditProblem can reuse it.
+export const CompanyCombobox = ({ value, onChange, options, onCreate, isCreating }) => {
+    const [query, setQuery] = useState("");
+    const [open, setOpen] = useState(false);
+
+    const selected = options.find((c) => c.id === value);
+    const q = query.trim().toLowerCase();
+    const matches = q
+        ? options.filter((c) => c.name.toLowerCase().includes(q))
+        : options;
+    const exactExists = options.some((c) => c.name.trim().toLowerCase() === q);
+
+    const handleCreate = async () => {
+        const name = query.trim();
+        if (!name) return;
+        const company = await onCreate(name);
+        if (company?.id) {
+            onChange(company.id);
+            setQuery("");
+            setOpen(false);
+        }
+    };
+
+    return (
+        <div className="relative">
+            <input
+                type="text"
+                className="input input-bordered w-full"
+                placeholder="Search or add a company"
+                aria-label="Company"
+                value={open ? query : selected?.name ?? query}
+                onFocus={() => { setOpen(true); setQuery(selected?.name ?? ""); }}
+                onChange={(e) => { setQuery(e.target.value); setOpen(true); }}
+                onBlur={() => setTimeout(() => setOpen(false), 150)}
+            />
+            {open && (
+                <ul className="menu menu-sm absolute z-20 mt-1 w-full max-h-56 overflow-y-auto bg-base-100 rounded-box shadow border border-base-300 flex-nowrap">
+                    {matches.map((c) => (
+                        <li key={c.id}>
+                            <button
+                                type="button"
+                                onMouseDown={(e) => e.preventDefault()}
+                                onClick={() => { onChange(c.id); setQuery(""); setOpen(false); }}
+                            >
+                                {c.name}
+                            </button>
+                        </li>
+                    ))}
+                    {q && !exactExists && (
+                        <li>
+                            <button
+                                type="button"
+                                className="text-primary"
+                                onMouseDown={(e) => e.preventDefault()}
+                                onClick={handleCreate}
+                                disabled={isCreating}
+                            >
+                                {isCreating ? "Adding..." : `Add "${query.trim()}" as new company`}
+                            </button>
+                        </li>
+                    )}
+                    {matches.length === 0 && !q && (
+                        <li className="disabled"><span>No companies yet — type to add one</span></li>
+                    )}
+                </ul>
+            )}
+        </div>
+    );
+};
+
 const CreateProblemForm = () => {
     const [sampleType, setSampleType] = useState("DP");
     const [isInputByObject, setIsInputByObject] = useState(false);
@@ -20,6 +98,8 @@ const CreateProblemForm = () => {
         control,
         handleSubmit,
         reset,
+        setValue,
+        unregister,
         formState: { errors },
     } = useForm({
         resolver: zodResolver(CreateProblemSchema),
@@ -31,18 +111,10 @@ const CreateProblemForm = () => {
                 },
             ],
             tags: [""],
+            // Defaults cover only the initially-selected language (JavaScript).
+            // Adding a language seeds its own fields via addLanguage().
             examples: {
                 JAVASCRIPT: {
-                    input: "",
-                    output: "",
-                    explanation: "",
-                },
-                PYTHON: {
-                    input: "",
-                    output: "",
-                    explanation: "",
-                },
-                JAVA: {
                     input: "",
                     output: "",
                     explanation: "",
@@ -50,16 +122,13 @@ const CreateProblemForm = () => {
             },
             codeSnippets: {
                 JAVASCRIPT: "function solution() {\n  // Write your code here\n}",
-                PYTHON: "def solution():\n    # Write your code here\n    pass",
-                JAVA: "public class Solution {\n    public static void main(String[] args) {\n        // Write your code here\n    }\n}",
             },
             referenceSolutions: {
                 JAVASCRIPT: "// Add your reference solution here",
-                PYTHON: "# Add your reference solution here",
-                JAVA: "// Add your reference solution here",
             },
             hints: "NA",
             editorial: "NA",
+            companies: [],
         },
     });
 
@@ -82,6 +151,51 @@ const CreateProblemForm = () => {
         control,
         name: "tags",
     });
+
+    const {
+        fields: companyFields,
+        append: appendCompany,
+        remove: removeCompany,
+    } = useFieldArray({
+        control,
+        name: "companies",
+    });
+
+    // Canonical company list for the comboboxes (shared store).
+    const { companies: companyOptions, fetchCompanies, createCompany, isCreatingCompany } = useCompanyStore();
+    // Supported languages from the backend (single source of truth via /languages).
+    const { languages: supportedLanguages, fetchLanguages } = useLanguageStore();
+    useEffect(() => {
+        fetchCompanies();
+        fetchLanguages();
+    }, []);
+
+    // Which languages this problem supports. Starts with JavaScript; admin can
+    // add/remove any supported language. Each language keeps its own code data.
+    const [selectedLanguages, setSelectedLanguages] = useState(["JAVASCRIPT"]);
+    const [languageToAdd, setLanguageToAdd] = useState("");
+
+    // Languages not yet added (for the "Add language" selector).
+    const availableToAdd = supportedLanguages.filter((l) => !selectedLanguages.includes(l.key));
+    const labelFor = (key) => supportedLanguages.find((l) => l.key === key)?.label || key;
+
+    const addLanguage = () => {
+        if (!languageToAdd || selectedLanguages.includes(languageToAdd)) return;
+        setSelectedLanguages((prev) => [...prev, languageToAdd]);
+        // Seed empty fields for the new language so RHF registers them.
+        setValue(`codeSnippets.${languageToAdd}`, "");
+        setValue(`referenceSolutions.${languageToAdd}`, "");
+        setValue(`examples.${languageToAdd}`, { input: "", output: "", explanation: "" });
+        setLanguageToAdd("");
+    };
+
+    const removeLanguage = (key) => {
+        setSelectedLanguages((prev) => prev.filter((l) => l !== key));
+        // Drop that language's data so it isn't submitted.
+        unregister(`codeSnippets.${key}`);
+        unregister(`referenceSolutions.${key}`);
+        unregister(`examples.${key}`);
+    };
 
     const [isLoading, setIsLoading] = useState(false);
 
@@ -137,6 +251,9 @@ const CreateProblemForm = () => {
             reset(normalizedData);
             replaceTags(normalizedData.tags);
             replacetestcases(normalizedData.testcases);
+            // Sync selected languages from the loaded code snippets' keys.
+            const loadedLangs = Object.keys(normalizedData.codeSnippets || {});
+            if (loadedLangs.length > 0) setSelectedLanguages(loadedLangs);
             setIsInputByObject(false);
             toast.success("JSON loaded into the form");
         } catch (error) {
@@ -420,17 +537,176 @@ const CreateProblemForm = () => {
                             )}
                         </div>
 
-                        {/* Code Editor Sections */}
+                        {/* Companies (optional) — where this problem was seen */}
+                        <div className="card bg-base-200 p-4 md:p-6 shadow-md">
+                            <div className="flex items-center justify-between mb-6">
+                                <h3 className="text-lg md:text-xl font-semibold flex items-center gap-2">
+                                    <Building2 className="w-5 h-5" />
+                                    Companies <span className="text-sm font-normal opacity-60">(optional)</span>
+                                </h3>
+                                <button
+                                    type="button"
+                                    className="btn btn-primary btn-sm"
+                                    onClick={() => appendCompany({ companyId: "", year: "", context: "" })}
+                                >
+                                    <Plus className="w-4 h-4 mr-1" /> Add Company
+                                </button>
+                            </div>
+                            {/* Suggestions for the free-text context field (reference only). */}
+                            <datalist id="interview-contexts">
+                                {INTERVIEW_CONTEXTS.map((ctx) => (
+                                    <option key={ctx} value={ctx} />
+                                ))}
+                            </datalist>
+                            <div className="space-y-6">
+                                {companyFields.map((field, index) => (
+                                    <div key={field.id} className="card bg-base-100 shadow-md">
+                                        <div className="card-body p-4 md:p-6">
+                                            <div className="flex justify-between items-center mb-4">
+                                                <h4 className="text-base md:text-lg font-semibold">
+                                                    Company #{index + 1}
+                                                </h4>
+                                                <button
+                                                    type="button"
+                                                    className="btn btn-ghost btn-sm text-error"
+                                                    onClick={() => removeCompany(index)}
+                                                >
+                                                    <Trash2 className="w-4 h-4 mr-1" /> Remove
+                                                </button>
+                                            </div>
+                                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                                <div className="form-control">
+                                                    <label className="label">
+                                                        <span className="label-text font-medium">Company</span>
+                                                    </label>
+                                                    <Controller
+                                                        control={control}
+                                                        name={`companies.${index}.companyId`}
+                                                        render={({ field: { value, onChange } }) => (
+                                                            <CompanyCombobox
+                                                                value={value}
+                                                                onChange={onChange}
+                                                                options={companyOptions}
+                                                                onCreate={createCompany}
+                                                                isCreating={isCreatingCompany}
+                                                            />
+                                                        )}
+                                                    />
+                                                    {errors.companies?.[index]?.companyId && (
+                                                        <label className="label">
+                                                            <span className="label-text-alt text-error">
+                                                                {errors.companies[index].companyId.message}
+                                                            </span>
+                                                        </label>
+                                                    )}
+                                                </div>
+                                                <div className="form-control">
+                                                    <label className="label">
+                                                        <span className="label-text font-medium">Year</span>
+                                                    </label>
+                                                    <input
+                                                        type="number"
+                                                        className="input input-bordered w-full"
+                                                        {...register(`companies.${index}.year`)}
+                                                        placeholder="e.g. 2023"
+                                                    />
+                                                    {errors.companies?.[index]?.year && (
+                                                        <label className="label">
+                                                            <span className="label-text-alt text-error">
+                                                                {errors.companies[index].year.message}
+                                                            </span>
+                                                        </label>
+                                                    )}
+                                                </div>
+                                                <div className="form-control">
+                                                    <label className="label">
+                                                        <span className="label-text font-medium">Context</span>
+                                                    </label>
+                                                    <input
+                                                        type="text"
+                                                        list="interview-contexts"
+                                                        className="input input-bordered w-full"
+                                                        {...register(`companies.${index}.context`)}
+                                                        placeholder="e.g. Technical round 1"
+                                                    />
+                                                    {errors.companies?.[index]?.context && (
+                                                        <label className="label">
+                                                            <span className="label-text-alt text-error">
+                                                                {errors.companies[index].context.message}
+                                                            </span>
+                                                        </label>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                                {companyFields.length === 0 && (
+                                    <p className="text-sm opacity-60">
+                                        No companies added. This is optional.
+                                    </p>
+                                )}
+                            </div>
+                        </div>
+
+                        {/* Language selection */}
+                        <div className="card bg-base-200 p-4 md:p-6 shadow-md">
+                            <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
+                                <h3 className="text-lg md:text-xl font-semibold flex items-center gap-2">
+                                    <Code2 className="w-5 h-5" />
+                                    Languages <span className="text-sm font-normal opacity-60">({selectedLanguages.length} selected)</span>
+                                </h3>
+                                <div className="flex items-center gap-2">
+                                    <select
+                                        className="select select-bordered select-sm"
+                                        value={languageToAdd}
+                                        onChange={(e) => setLanguageToAdd(e.target.value)}
+                                        disabled={availableToAdd.length === 0}
+                                    >
+                                        <option value="">
+                                            {availableToAdd.length === 0 ? "All languages added" : "Select a language"}
+                                        </option>
+                                        {availableToAdd.map((l) => (
+                                            <option key={l.key} value={l.key}>{l.label}</option>
+                                        ))}
+                                    </select>
+                                    <button
+                                        type="button"
+                                        className="btn btn-primary btn-sm"
+                                        onClick={addLanguage}
+                                        disabled={!languageToAdd}
+                                    >
+                                        <Plus className="w-4 h-4 mr-1" /> Add Language
+                                    </button>
+                                </div>
+                            </div>
+                            {selectedLanguages.length === 0 && (
+                                <p className="text-error text-sm mt-2">At least one language is required.</p>
+                            )}
+                        </div>
+
+                        {/* Code Editor Sections (one per selected language) */}
                         <div className="space-y-8">
-                            {["JAVASCRIPT", "PYTHON", "JAVA"].map((language) => (
+                            {selectedLanguages.map((language) => (
                                 <div
                                     key={language}
                                     className="card bg-base-200 p-4 md:p-6 shadow-md"
                                 >
-                                    <h3 className="text-lg md:text-xl font-semibold mb-6 flex items-center gap-2">
-                                        <Code2 className="w-5 h-5" />
-                                        {language}
-                                    </h3>
+                                    <div className="flex items-center justify-between mb-6">
+                                        <h3 className="text-lg md:text-xl font-semibold flex items-center gap-2">
+                                            <Code2 className="w-5 h-5" />
+                                            {labelFor(language)}
+                                        </h3>
+                                        <button
+                                            type="button"
+                                            className="btn btn-ghost btn-sm text-error"
+                                            onClick={() => removeLanguage(language)}
+                                            disabled={selectedLanguages.length === 1}
+                                            title={selectedLanguages.length === 1 ? "At least one language is required" : "Remove language"}
+                                        >
+                                            <Trash2 className="w-4 h-4 mr-1" /> Remove
+                                        </button>
+                                    </div>
 
                                     <div className="space-y-6">
                                         {/* Starter Code */}
@@ -446,7 +722,7 @@ const CreateProblemForm = () => {
                                                         render={({ field }) => (
                                                             <Editor
                                                                 height="300px"
-                                                                language={language.toLowerCase()}
+                                                                language={getMonacoLanguage(language)}
                                                                 theme="vs-dark"
                                                                 value={field.value}
                                                                 onChange={field.onChange}
@@ -479,7 +755,7 @@ const CreateProblemForm = () => {
                                                         render={({ field }) => (
                                                             <Editor
                                                                 height="300px"
-                                                                language={language.toLowerCase()}
+                                                                language={getMonacoLanguage(language)}
                                                                 theme="vs-dark"
                                                                 value={field.value}
                                                                 onChange={field.onChange}

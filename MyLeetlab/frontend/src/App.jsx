@@ -26,8 +26,7 @@ function App() {
   // it will also update checkAuth on first render
   useEffect(() => {
     checkAuth()
-    console.log(authUser)
-  }, [])
+  }, [authUser, checkAuth])
 
   // if something is loading, show loader only in page
   if (isCheckingAuth && !authUser)
@@ -38,7 +37,6 @@ function App() {
     )
   return (
     <>
-      {/* {console.log(authUser)} */}
       <Toaster />
       <ThemeToggleButton />
       <Routes>

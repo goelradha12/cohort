@@ -1,12 +1,10 @@
 import { useEffect } from 'react'
-import { useAuthStore } from '../store/useAuthStore.js';
 import { useProblemStore } from '../store/useProblemStore.js';
 import { Loader } from 'lucide-react';
 import ProblemTable from '../components/ProblemTable';
 
 
 const HomePage = () => {
-  const { authUser } = useAuthStore();
   const { problems, getAllProblem, isProblemsLoading, solvedProblems, getSolvedProblemByUser } = useProblemStore();
 
   useEffect(

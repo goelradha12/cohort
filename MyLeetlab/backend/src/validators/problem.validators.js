@@ -42,6 +42,39 @@ export const createProblemValidator = () => {
         .withMessage("CodeSnippets is Required"),
         body("referenceSolutions")
         .notEmpty()
-        .withMessage("referenceSolutions is Required")
+        .withMessage("referenceSolutions is Required"),
+        // companies is optional; if present it must be an array.
+        body("companies")
+        .optional()
+        .isArray()
+        .withMessage("Companies must be an array"),
+        // When companies exists, every entry must have all three fields.
+        body("companies.*.companyId")
+        .exists({ checkNull: true })
+        .withMessage("companyId is required for each company entry")
+        .bail()
+        .isString()
+        .withMessage("companyId must be a string")
+        .bail()
+        .trim()
+        .notEmpty()
+        .withMessage("companyId cannot be empty"),
+        body("companies.*.year")
+        .exists({ checkNull: true })
+        .withMessage("year is required for each company entry")
+        .bail()
+        .isInt({ min: 1970, max: new Date().getFullYear() + 1 })
+        .withMessage(`year must be an integer between 1970 and ${new Date().getFullYear() + 1}`)
+        .toInt(),
+        body("companies.*.context")
+        .exists({ checkNull: true })
+        .withMessage("context is required for each company entry")
+        .bail()
+        .isString()
+        .withMessage("context must be a string")
+        .bail()
+        .trim()
+        .notEmpty()
+        .withMessage("context cannot be empty"),
     ]
 }

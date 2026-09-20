@@ -13,7 +13,8 @@
 | `REFRESH_TOKEN_SECRET`, `REFRESH_TOKEN_EXPIRY` | Refresh JWT signing and lifetime |
 | `JUDGE0_URL` | Judge0-compatible service base URL |
 | `SULU_API_TOKEN` | Judge0-compatible service auth token |
-| `MAILTRAP_HOST`, `MAILTRAP_PORT`, `MAILTRAP_USERNAME`, `MAILTRAP_PASSWORD`, `MAILTRAP_MAIL` | SMTP email delivery |
+| `RESEND_API_KEY` | Resend API key for email delivery |
+| `MAIL_FROM` | Sender identity for outgoing mail, e.g. `LeetLab <noreply@radhagoyal.in>` |
 | `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET`, `CLOUDINARY_URL` | Image upload configuration; code directly uses the first three |
 
 Frontend configuration is not loaded from a committed `.env` file. `axios.js` uses Vite's `import.meta.env.MODE`: development targets localhost backend, other modes use `/api/v1`.

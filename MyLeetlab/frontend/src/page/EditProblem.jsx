@@ -4,6 +4,7 @@ import { useProblemStore } from "../store/useProblemStore";
 import {
     BookOpen,
     BrushCleaning,
+    Building2,
     CheckCircle2,
     ChevronRight,
     Code2,
@@ -21,6 +22,11 @@ import { CreateProblemSchema } from "../validators/problemForm.validators";
 import { Editor } from "@monaco-editor/react";
 import toast from "react-hot-toast";
 import { axiosInstance } from "../lib/axios";
+import { useCompanyStore } from "../store/useCompanyStore";
+import { CompanyCombobox } from "../components/CreateProblemForm.jsx";
+import { INTERVIEW_CONTEXTS } from "../lib/interviewContexts.js";
+import { useLanguageStore } from "../store/useLanguageStore";
+import { getMonacoLanguage } from "../lib/utilFunctions";
 
 const EditProblem = () => {
     const navigation = useNavigate();
@@ -42,6 +48,8 @@ const EditProblem = () => {
         control,
         handleSubmit,
         reset,
+        setValue,
+        unregister,
         formState: { errors },
     } = useForm({
         resolver: zodResolver(CreateProblemSchema),
@@ -81,7 +89,8 @@ const EditProblem = () => {
                 JAVA: "// Add your reference solution here",
             },
             hints: "",
-            editorial: ""
+            editorial: "",
+            companies: []
         },
     });
 
@@ -105,16 +114,55 @@ const EditProblem = () => {
         name: "tags",
     });
 
+    const {
+        fields: companyFields,
+        append: appendCompany,
+        remove: removeCompany,
+        replace: replaceCompanies,
+    } = useFieldArray({
+        control,
+        name: "companies",
+    });
+
+    const { companies: companyOptions, fetchCompanies, createCompany, isCreatingCompany } = useCompanyStore();
+    const { languages: supportedLanguages, fetchLanguages } = useLanguageStore();
+    useEffect(() => {
+        fetchCompanies();
+        fetchLanguages();
+    }, []);
+
+    // Languages this problem supports — initialized from the problem's JSON keys
+    // in handleReset(), then editable via add/remove.
+    const [selectedLanguages, setSelectedLanguages] = useState([]);
+    const [languageToAdd, setLanguageToAdd] = useState("");
+
+    const availableToAdd = supportedLanguages.filter((l) => !selectedLanguages.includes(l.key));
+    const labelFor = (key) => supportedLanguages.find((l) => l.key === key)?.label || key;
+
+    const addLanguage = () => {
+        if (!languageToAdd || selectedLanguages.includes(languageToAdd)) return;
+        setSelectedLanguages((prev) => [...prev, languageToAdd]);
+        setValue(`codeSnippets.${languageToAdd}`, "");
+        setValue(`referenceSolutions.${languageToAdd}`, "");
+        setValue(`examples.${languageToAdd}`, { input: "", output: "", explanation: "" });
+        setLanguageToAdd("");
+    };
+
+    const removeLanguage = (key) => {
+        setSelectedLanguages((prev) => prev.filter((l) => l !== key));
+        unregister(`codeSnippets.${key}`);
+        unregister(`referenceSolutions.${key}`);
+        unregister(`examples.${key}`);
+    };
+
     const [isLoading, setIsLoading] = useState(false);
 
     async function onSubmit(data) {
-        console.log("clicked", data);
         try {
             setIsLoading(true);
             const response = await axiosInstance.put(`/problems/${id}`, data);
             toast.success(response?.data?.message || "Problem edited successfully");
         } catch (error) {
-            console.log(error);
             toast.error(error.response?.data?.message || "Error editing problem");
         } finally {
             setIsLoading(false);
@@ -122,14 +170,26 @@ const EditProblem = () => {
         }
     }
 
-    function onError(error) {
-        console.log("Validation Errors:", errors);
+    function onError() {
         toast.error("Please fix form errors before submitting.");
     }
     function handleReset() {
-        reset(problem);
+        // Normalize a null companies column to [] so the field array works and
+        // year values render in the number inputs.
+        const normalizedCompanies = Array.isArray(problem.companies)
+            ? problem.companies.map((c) => ({
+                companyId: c.companyId ?? "",
+                year: c.year ?? "",
+                context: c.context ?? "",
+            }))
+            : [];
+        reset({ ...problem, companies: normalizedCompanies });
         replacetestcases(problem.testcases);
         replaceTags(problem.tags);
+        replaceCompanies(normalizedCompanies);
+        // Initialize selected languages from the problem's actual code snippet keys.
+        const langs = Object.keys(problem.codeSnippets || {});
+        setSelectedLanguages(langs);
     }
     if (isProblemLoading) {
         return (
@@ -376,17 +436,176 @@ const EditProblem = () => {
                             )}
                         </div>
 
-                        {/* Code Editor Sections */}
+                        {/* Companies (optional) — where this problem was seen */}
+                        <div className="card bg-base-200 p-4 md:p-6 shadow-md">
+                            <div className="flex items-center justify-between mb-6">
+                                <h3 className="text-lg md:text-xl font-semibold flex items-center gap-2">
+                                    <Building2 className="w-5 h-5" />
+                                    Companies <span className="text-sm font-normal opacity-60">(optional)</span>
+                                </h3>
+                                <button
+                                    type="button"
+                                    className="btn btn-primary btn-sm"
+                                    onClick={() => appendCompany({ companyId: "", year: "", context: "" })}
+                                >
+                                    <Plus className="w-4 h-4 mr-1" /> Add Company
+                                </button>
+                            </div>
+                            {/* Suggestions for the free-text context field (reference only). */}
+                            <datalist id="interview-contexts">
+                                {INTERVIEW_CONTEXTS.map((ctx) => (
+                                    <option key={ctx} value={ctx} />
+                                ))}
+                            </datalist>
+                            <div className="space-y-6">
+                                {companyFields.map((field, index) => (
+                                    <div key={field.id} className="card bg-base-100 shadow-md">
+                                        <div className="card-body p-4 md:p-6">
+                                            <div className="flex justify-between items-center mb-4">
+                                                <h4 className="text-base md:text-lg font-semibold">
+                                                    Company #{index + 1}
+                                                </h4>
+                                                <button
+                                                    type="button"
+                                                    className="btn btn-ghost btn-sm text-error"
+                                                    onClick={() => removeCompany(index)}
+                                                >
+                                                    <Trash2 className="w-4 h-4 mr-1" /> Remove
+                                                </button>
+                                            </div>
+                                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                                <div className="form-control">
+                                                    <label className="label">
+                                                        <span className="label-text font-medium">Company</span>
+                                                    </label>
+                                                    <Controller
+                                                        control={control}
+                                                        name={`companies.${index}.companyId`}
+                                                        render={({ field: { value, onChange } }) => (
+                                                            <CompanyCombobox
+                                                                value={value}
+                                                                onChange={onChange}
+                                                                options={companyOptions}
+                                                                onCreate={createCompany}
+                                                                isCreating={isCreatingCompany}
+                                                            />
+                                                        )}
+                                                    />
+                                                    {errors.companies?.[index]?.companyId && (
+                                                        <label className="label">
+                                                            <span className="label-text-alt text-error">
+                                                                {errors.companies[index].companyId.message}
+                                                            </span>
+                                                        </label>
+                                                    )}
+                                                </div>
+                                                <div className="form-control">
+                                                    <label className="label">
+                                                        <span className="label-text font-medium">Year</span>
+                                                    </label>
+                                                    <input
+                                                        type="number"
+                                                        className="input input-bordered w-full"
+                                                        {...register(`companies.${index}.year`)}
+                                                        placeholder="e.g. 2023"
+                                                    />
+                                                    {errors.companies?.[index]?.year && (
+                                                        <label className="label">
+                                                            <span className="label-text-alt text-error">
+                                                                {errors.companies[index].year.message}
+                                                            </span>
+                                                        </label>
+                                                    )}
+                                                </div>
+                                                <div className="form-control">
+                                                    <label className="label">
+                                                        <span className="label-text font-medium">Context</span>
+                                                    </label>
+                                                    <input
+                                                        type="text"
+                                                        list="interview-contexts"
+                                                        className="input input-bordered w-full"
+                                                        {...register(`companies.${index}.context`)}
+                                                        placeholder="e.g. Technical round 1"
+                                                    />
+                                                    {errors.companies?.[index]?.context && (
+                                                        <label className="label">
+                                                            <span className="label-text-alt text-error">
+                                                                {errors.companies[index].context.message}
+                                                            </span>
+                                                        </label>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                                {companyFields.length === 0 && (
+                                    <p className="text-sm opacity-60">
+                                        No companies added. This is optional.
+                                    </p>
+                                )}
+                            </div>
+                        </div>
+
+                        {/* Language selection */}
+                        <div className="card bg-base-200 p-4 md:p-6 shadow-md">
+                            <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
+                                <h3 className="text-lg md:text-xl font-semibold flex items-center gap-2">
+                                    <Code2 className="w-5 h-5" />
+                                    Languages <span className="text-sm font-normal opacity-60">({selectedLanguages.length} selected)</span>
+                                </h3>
+                                <div className="flex items-center gap-2">
+                                    <select
+                                        className="select select-bordered select-sm"
+                                        value={languageToAdd}
+                                        onChange={(e) => setLanguageToAdd(e.target.value)}
+                                        disabled={availableToAdd.length === 0}
+                                    >
+                                        <option value="">
+                                            {availableToAdd.length === 0 ? "All languages added" : "Select a language"}
+                                        </option>
+                                        {availableToAdd.map((l) => (
+                                            <option key={l.key} value={l.key}>{l.label}</option>
+                                        ))}
+                                    </select>
+                                    <button
+                                        type="button"
+                                        className="btn btn-primary btn-sm"
+                                        onClick={addLanguage}
+                                        disabled={!languageToAdd}
+                                    >
+                                        <Plus className="w-4 h-4 mr-1" /> Add Language
+                                    </button>
+                                </div>
+                            </div>
+                            {selectedLanguages.length === 0 && (
+                                <p className="text-error text-sm mt-2">At least one language is required.</p>
+                            )}
+                        </div>
+
+                        {/* Code Editor Sections (one per selected language) */}
                         <div className="space-y-8">
-                            {["JAVASCRIPT", "PYTHON", "JAVA"].map((language) => (
+                            {selectedLanguages.map((language) => (
                                 <div
                                     key={language}
                                     className="card bg-base-200 p-4 md:p-6 shadow-md"
                                 >
-                                    <h3 className="text-lg md:text-xl font-semibold mb-6 flex items-center gap-2">
-                                        <Code2 className="w-5 h-5" />
-                                        {language}
-                                    </h3>
+                                    <div className="flex items-center justify-between mb-6">
+                                        <h3 className="text-lg md:text-xl font-semibold flex items-center gap-2">
+                                            <Code2 className="w-5 h-5" />
+                                            {labelFor(language)}
+                                        </h3>
+                                        <button
+                                            type="button"
+                                            className="btn btn-ghost btn-sm text-error"
+                                            onClick={() => removeLanguage(language)}
+                                            disabled={selectedLanguages.length === 1}
+                                            title={selectedLanguages.length === 1 ? "At least one language is required" : "Remove language"}
+                                        >
+                                            <Trash2 className="w-4 h-4 mr-1" /> Remove
+                                        </button>
+                                    </div>
 
                                     <div className="space-y-6">
                                         {/* Starter Code */}
@@ -402,7 +621,7 @@ const EditProblem = () => {
                                                         render={({ field }) => (
                                                             <Editor
                                                                 height="300px"
-                                                                language={language.toLowerCase()}
+                                                                language={getMonacoLanguage(language)}
                                                                 theme="vs-dark"
                                                                 value={field.value}
                                                                 onChange={field.onChange}
@@ -442,7 +661,7 @@ const EditProblem = () => {
                                                         render={({ field }) => (
                                                             <Editor
                                                                 height="300px"
-                                                                language={language.toLowerCase()}
+                                                                language={getMonacoLanguage(language)}
                                                                 theme="vs-dark"
                                                                 value={field.value}
                                                                 onChange={field.onChange}

@@ -139,14 +139,6 @@ const PortfolioPage = () => {
         },
     ];
 
-    const certificates = [
-        {
-            name: "Frontend Development with React",
-            issued: "June 2024",
-            skills: ["React", "JSX", "Hooks", "Tailwind"],
-            image: "https://via.placeholder.com/300x200.png",
-        },];
-
     const projects = [
         {
             name: "Jagruk Bano India – Blog Website",

@@ -4,7 +4,7 @@
 `backend/src/libs/judge0lib.js` maps C/CPP/Python/Java/JavaScript names to language IDs, posts a batch to `${JUDGE0_URL}/submissions/batch`, then polls the same endpoint until status IDs are not queued/running. `SULU_API_TOKEN` is sent as `X-Auth-Token`. The implementation uses exact trimmed stdout comparison against expected output.
 
 ## Email
-`backend/src/utils/mail.js` uses Nodemailer with Mailtrap settings and Mailgen templates for email verification and forgot-password messages. Required variable names are listed in [configuration-and-environment.md](configuration-and-environment.md).
+`backend/src/utils/mail.js` uses the Resend SDK to send email verification and forgot-password messages; Mailgen still generates the HTML body. Resend is initialized from `RESEND_API_KEY` and sends from `MAIL_FROM`. A failed send throws `apiError(502)`, handled by the calling controllers. Required variable names are listed in [configuration-and-environment.md](configuration-and-environment.md).
 
 ## Cloudinary
 `cloudinary.middleware.js` configures Cloudinary from environment values. `updateProfile` receives an image through Multer memory storage and uploads/deletes media through Cloudinary helpers.

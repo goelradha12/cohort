@@ -18,7 +18,7 @@ Legend: FE = frontend, `⟶` = full request path. All API paths are prefixed wit
 | Reset password | `page/ForgotPassword.jsx` | — | `POST /auth/resetPassword/:token` | `auth.routes.js` → `resetPassword` |
 | Change password | (account UI) | — | `POST /auth/changePassword` | `auth.routes.js` → `changeCurrPassword` — **route has no `isLoggedIn` guard** |
 | Update profile name/image | `page/Profile.jsx` (`handleEditUserName`, `handleEditUserProfile`) | — | `POST /auth/updateProfile` | `auth.routes.js` (`isLoggedIn`, `upload.single('newImage')`) → `updateUserProfile` |
-| Refresh access token | Axios flow | — | `GET /auth/refreshAccessToken` | `auth.routes.js` → `refreshAccessToken` |
+| Refresh access token | `lib/axios.js` response interceptor (auto, on 401) | — | `GET /auth/refreshAccessToken` | `auth.routes.js` → `refreshAccessToken` |
 
 Guards live in `middlewares/auth.middlewares.js` (`isLoggedIn`, `isVerified`, `checkAdmin`). Tokens/cookies in `utils/generateTokens.js`. Email in `utils/mail.js`. Image upload in `middlewares/multer.middlewares.js` + `middlewares/cloudinary.middleware.js`. Rate limiting on login/register/forgot/reset/resend via `authRateLimiter` (`middlewares/rateLimit.middleware.js`, 10 per 15 min per IP).
 
@@ -30,6 +30,9 @@ Guards live in `middlewares/auth.middlewares.js` (`isLoggedIn`, `isVerified`, `c
 | Problem detail | `page/ProblemPage.jsx` | `useProblemStore.getProblemById` | `GET /problems/:id` | `problem.routes.js` (verified) → `getProblemByID` |
 | Solved-problem lookup | `HomePage.jsx` / `Profile.jsx` | `useProblemStore.getSolvedProblemByUser` | `GET /problems/get-solved-problems` | `problem.routes.js` (verified) → `getAllProblemsSolvedByUser` |
 | Create problem (admin) | `page/AddProblem.jsx`, `components/CreateProblemForm.jsx` | — | `POST /problems/create-problem` | `problem.routes.js` (`checkAdmin`) → `createProblem` |
+| Companies on problems (admin add/edit) | `CreateProblemForm.jsx` / `EditProblem.jsx` company `useFieldArray` + `CompanyCombobox` (exported from CreateProblemForm), `store/useCompanyStore.js` | `GET /companies`, `POST /companies` (admin) → `company.controllers.js`; companies persisted via create/update problem | Combobox offers "Add X as new company"; problem.companies JSON validated against Company table. |
+| Filter/practice by company & year | `components/ProblemTable.jsx` (URL query params via `useSearchParams`), `store/useCompanyStore.js` | client-side filter on `problem.companies`; company options from `/companies` (only used ones, A-Z), years desc | company+year match the SAME JSON entry; `?company=<id>&year=` shareable. |
+| "Asked at" on problem detail | `page/ProblemPage.jsx` (companyId→name via `/companies` map) | — | resolves `problem.companies`, skips unknown ids. |
 | Edit problem (admin) | `page/EditProblem.jsx`, `CreateProblemForm.jsx` | — | `PUT /problems/:id` | `problem.routes.js` (`checkAdmin`) → `updateProblem` |
 | Delete problem (admin) | `ProblemTable.jsx` | `useProblemStore.deleteAProblem` | `DELETE /problems/:id` | `problem.routes.js` (`checkAdmin`) → `deleteProblem` |
 
@@ -84,9 +87,11 @@ Playlist validators: `validators/playlist.validators.js`. All playlist routes ar
 
 ## Cross-cutting entry points
 - FE route table + auth redirects: `frontend/src/App.jsx`.
+- Axios response interceptor (`frontend/src/lib/axios.js`): on **401** does a one-time silent refresh via `GET /auth/refreshAccessToken` (shared across concurrent requests, skips the refresh call and the initial `/auth/getProfile` probe) then replays the request; clears `authUser` if refresh fails. On **429** shows a rate-limit toast. Never retries a request more than once.
 - Axios instance (base URL + `withCredentials`): `frontend/src/lib/axios.js`.
 - Language/util helpers: `frontend/src/lib/utilFunctions.js`.
 - Express bootstrap + API prefixes + CORS: `backend/src/index.js`.
+- Supported languages (single source of truth): `backend/src/libs/judge0lib.js` (`LANGUAGES`, `getJudge0LanguageID`, `getLanguageName`, `isSupportedLanguage`), exposed via `GET /languages` (`language.controllers.js`); frontend consumes it through `store/useLanguageStore.js` and maps Monaco ids via `lib/utilFunctions.js` `getMonacoLanguage`.
 - Prisma client: `backend/src/libs/db.js`; schema: `backend/prisma/schema.prisma`.
 - Response/error wrappers: `backend/src/utils/api.response.js`, `api.error.js`, `async-handler.js`; global error handler `backend/src/middlewares/error.middleware.js` (registered last in `index.js`).
 

@@ -19,27 +19,24 @@ import {
     ThumbsUp,
     Users,
 } from "lucide-react";
-import { useAuthStore } from "../store/useAuthStore.js";
 import Editor from '@monaco-editor/react';
 import { EditorOptions } from "../components/EditorOptions.js";
 import { useExecuteCodeStore } from "../store/useExecuteCodeStore.js";
-import { getJudge0LanguageID } from "../lib/utilFunctions.js";
+import { getJudge0LanguageID, getMonacoLanguage } from "../lib/utilFunctions.js";
 import SubmissionResult from "../components/SubmissionResult.jsx";
 import SubmissionList from "../components/SubmissionList.jsx";
 import { useSubmissionStore } from "../store/useSubmissionStore.js";
 import toast from "react-hot-toast";
 import AddToPlaylistModal from "../components/modals/AddToPlaylistModal.jsx";
+import { useCompanyStore } from "../store/useCompanyStore.js";
 
 const ProblemPage = () => {
     const navigate = useNavigate();
     const { id } = useParams();
     const { isProblemLoading, problem, getProblemById } = useProblemStore();
-    const { authUser } = useAuthStore();
-
     useEffect(() => {
         getProblemById(id);
-        // console.log(`AuthUser: ${JSON.stringify(authUser)}, Problem: ${problem}`)
-    }, []);
+    }, [getProblemById, id]);
 
     const [selectedLanguage, setSelectedLanguage] = useState("");
     const [editorTheme, setEditorTheme] = useState("vs-dark");
@@ -59,9 +56,30 @@ const ProblemPage = () => {
 
     const { solvedProblems, getSolvedProblemByUser } = useProblemStore();
 
+    // Companies for resolving companyId -> name in the "Asked at" section.
+    const { companies: companyOptions, fetchCompanies } = useCompanyStore();
+    useEffect(() => {
+        fetchCompanies();
+    }, []);
+    const companyMap = useMemo(
+        () => new Map(companyOptions.map((company) => [company.id, company.name])),
+        [companyOptions]
+    );
+    // Resolve problem.companies -> display rows, skipping entries whose companyId
+    // is not present in the /companies response (per spec, don't crash on unknowns).
+    const askedAtCompanies = useMemo(() => {
+        if (!problem || !Array.isArray(problem.companies)) return [];
+        return problem.companies
+            .filter((entry) => companyMap.has(entry.companyId))
+            .map((entry) => ({
+                name: companyMap.get(entry.companyId),
+                year: entry.year,
+                context: entry.context,
+            }));
+    }, [problem, companyMap]);
+
 
     useEffect(() => {
-        // console.log(problem);
         if (problem) {
             setSelectedLanguage(Object.keys(problem.codeSnippets)[0])
             setCode(Object.values(problem.codeSnippets)[0]);
@@ -82,13 +100,11 @@ const ProblemPage = () => {
 
     const isProblemSolved = useMemo(() => {
         if (!problem || solvedProblems.length === 0) return false;
-        // console.log(solvedProblems.map((p) => p.problem.id).includes(problem.id))
         return solvedProblems.map((p) => p.problem.id).includes(problem.id)
 
     }, [solvedProblems, problem])
 
     const successRateOfProblem = useMemo(() => {
-        // console.log(problemSubmissionCountByAllUser, successProbSubCountByAll)
         if (!problem || !problemSubmissionCountByAllUser || !successProbSubCountByAll) return 0;
         return (successProbSubCountByAll/problemSubmissionCountByAllUser * 100).toFixed(2);
     },[problemSubmissionCountByAllUser, problem])
@@ -98,11 +114,9 @@ const ProblemPage = () => {
             const language_id = getJudge0LanguageID(selectedLanguage);
             const stdin = problem.testcases.map((tc) => tc.input);
             const expected_outputs = problem.testcases.map((tc) => tc.output);
-            // console.log("data sent: ", { code, language_id, stdin, expected_outputs, id, selectedLanguage });
-            executeCode(code, language_id, stdin, expected_outputs, id);
-            console.log(executionResult)
-        } catch (error) {
-            console.log("Error executing code", error);
+                executeCode(code, language_id, stdin, expected_outputs, id);
+        } catch {
+            toast.error("Error executing code");
         }
     }
     const handleRunCode = (e) => {
@@ -112,11 +126,9 @@ const ProblemPage = () => {
             const language_id = getJudge0LanguageID(selectedLanguage);
             const stdin = problem.testcases.map((tc) => tc.input);
             const expected_outputs = problem.testcases.map((tc) => tc.output);
-            // console.log("data sent: ", { code, language_id, stdin, expected_outputs, id, selectedLanguage });
-            runCode(code, language_id, stdin, expected_outputs, id);
-            console.log(executionResult)
-        } catch (error) {
-            console.log("Error Running code", error);
+                runCode(code, language_id, stdin, expected_outputs, id);
+        } catch {
+            toast.error("Error running code");
         }
     }
 
@@ -138,8 +150,7 @@ const ProblemPage = () => {
                 document.body.removeChild(textarea);
             }
             toast.success("Problem link copied");
-        } catch (error) {
-            console.log("Error copying problem link", error);
+        } catch {
             toast.error("Couldn't copy link");
         }
     }
@@ -167,7 +178,7 @@ const ProblemPage = () => {
                             <>
                                 <h3 className="text-lg font-semibold mb-4">Examples:</h3>
                                 {Object.entries(problem.examples).map(
-                                    ([lang, example], idx) => (
+                                    ([lang, example]) => (
                                         <div
                                             key={lang}
                                             className="bg-base-200 p-6 rounded-xl mb-6 font-mono relative"
@@ -215,11 +226,25 @@ const ProblemPage = () => {
                                 </div>
                             </>
                         )}
+
+                        {askedAtCompanies.length > 0 && (
+                            <>
+                                <h3 className="text-lg font-semibold mb-4">Asked at:</h3>
+                                <div className="bg-base-200 p-6 rounded-xl mb-6 space-y-2">
+                                    {askedAtCompanies.map((company, idx) => (
+                                        <div key={idx} className="flex flex-wrap items-center gap-2">
+                                            <span className="badge badge-primary">{company.name}</span>
+                                            <span className="badge badge-outline">{company.year}</span>
+                                            <span className="text-base-content/70">{company.context}</span>
+                                        </div>
+                                    ))}
+                                </div>
+                            </>
+                        )}
                     </div>
                 )
             case "submissions":
 
-                // console.log("All submissions to this problem: ", submissionsByProblemID)
                 return (gettingSubmissionByProblemID ?
                     <div className="grid content-center justify-center justify-items-center gap-3 h-screen">
                         <Loader className="size-10 animate-spin" />
@@ -242,7 +267,6 @@ const ProblemPage = () => {
                 )
 
             case "solution":
-                console.log(solvedProblems)
                 return (
                     <div className="p-2">
                         <p className="pb-4 opacity-60">{isProblemSolved ? "" : "Submit your code before accessing solutions"}</p>
@@ -250,7 +274,7 @@ const ProblemPage = () => {
                         <span>{problem.referenceSolutions && Object.keys(problem.referenceSolutions).length !== 0 ?
                             <>
                                 {Object.keys(problem.referenceSolutions).map(
-                                    (lang, idx) => (
+                                    (lang) => (
                                         <div
                                             key={lang}
                                             className=" cursor-pointer hover:bg-base-300 bg-base-200 p-6 rounded-xl mb-6 font-mono shadow-lg"
@@ -460,7 +484,7 @@ const ProblemPage = () => {
                                     height="100%"
                                     value={code}
                                     theme={editorTheme}
-                                    language={selectedLanguage.toLowerCase()}
+                                    language={getMonacoLanguage(selectedLanguage)}
                                     options={EditorOptions}
                                     onChange={(value) => setCode(value || "")}
                                     automaticLayout={true}

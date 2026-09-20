@@ -14,7 +14,7 @@ import toast from 'react-hot-toast'
 const Profile = () => {
     const { authUser, checkAuth, isCheckingAuth } = useAuthStore()
     const { getAllSubmission, submissions } = useSubmissionStore()
-    const { playlists, fetchPlaylists, isFetchingPlaylists, deleteAPlaylist, editAPlaylist } = usePlaylistStore()
+    const { playlists, fetchPlaylists, isFetchingPlaylists, deleteAPlaylist } = usePlaylistStore()
     const { getSolvedProblemByUser, solvedProblems } = useProblemStore()
     const [wrongSubmissionCount, setWrongSubmissionCount] = useState(0)
     const [correctSubmissionCount, setCorrectSubmissionCount] = useState(0)
@@ -105,7 +105,6 @@ const Profile = () => {
             const response = await axiosInstance.post("/auth/updateProfile", { newName })
             toast.success(response.data?.message || "Profile updated successfully");
         } catch (error) {
-            console.log(error)
             toast.error(error.response?.data?.message || "Error updating profile")
         } finally {
             setIsEditingProfile(false);
@@ -120,7 +119,6 @@ const Profile = () => {
             const res = await axiosInstance.post("/auth/changePassword", data);
             toast.success(res.data?.message || "Password updated successfully");
         } catch (error) {
-            console.log("Error updating password: ", error);
             toast.error(error.response?.data?.message || "Error updating password")
         } finally {
             await checkAuth()
@@ -141,7 +139,6 @@ const Profile = () => {
             const res = await axiosInstance.post("/auth/updateProfile", formData);
             toast.success(res.data?.message || "Image updated successfully")
         } catch (error) {
-            console.log("Error updating image: ", error)
             toast.error(error.response?.data?.message || "Error updating image")
         } finally {
             await checkAuth();
@@ -378,7 +375,7 @@ const Profile = () => {
                                     <tr key={playlist.id}>
                                         <td>{playlist.name}</td>
                                         <td>{playlist.problem.length}</td>
-                                        <td>{playlist.description.slice(0, 50) + "..."}</td>
+                                        <td>{playlist.description ? `${playlist.description.slice(0, 50)}...` : "No description"}</td>
                                         <td className='flex gap-2'>
                                             <button onClick={(e) => handleViewPlaylist(e, playlist.id)} className='btn btn-sm btn-outline'>View</button>
                                             <button onClick={(e) => handleEditPlaylist(e, playlist.id, playlist.name, playlist.description)} className='btn btn-sm btn-outline'>Edit</button>

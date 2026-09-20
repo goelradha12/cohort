@@ -13,8 +13,7 @@ export const useAuthStore = create((set) => ({
         try {
             const response = await axiosInstance.get("/auth/getProfile");
             set({ authUser: response.data.data, isCheckingAuth: false });
-        } catch (error) {
-            console.log(error);
+        } catch {
             set({ authUser: null, isCheckingAuth: false });
         } finally {
             set({ isCheckingAuth: false });
@@ -24,7 +23,7 @@ export const useAuthStore = create((set) => ({
     signup: async (data) => {
         set({ isSigningUp: true });
         try {
-            const res = await axiosInstance.post("/auth/register", data);
+            await axiosInstance.post("/auth/register", data);
             toast.success("Verification link sent on Email"); // reflecting a pop-up message
         } catch (error) {
             // console.log("Error signing up: ", error);
@@ -41,7 +40,6 @@ export const useAuthStore = create((set) => ({
             set({ authUser: res.data.data });
             toast.success(res.data.message || "User logged in successfully");
         } catch (error) {
-            console.log("Error logging in: ", error)
             toast.error( error.response?.data?.message || "Error Logging")
         } finally {
             set({ isLoggingIn: false })
@@ -51,14 +49,17 @@ export const useAuthStore = create((set) => ({
     logout: async () => {
         set({ isLoggingOut: true });
         try {
-            const res = await axiosInstance.get("/auth/logout");
-            set({ authUser: null });
-            toast.success(res.data?.message || "User logged out");
+            await axiosInstance.get("/auth/logout");
         } catch (error) {
-            console.log("Error logging out: ", error);
-            toast.error(error.response?.data?.message || "Error logging out");
+            // Even if the server call fails (e.g. already logged out), we still
+            // clear client auth below — logging out should always succeed locally.
+            console.log("Logout request error: ", error);
         } finally {
-            set({ isLoggingOut: false });
+            // Always end up logged out on the client.
+            set({ authUser: null, isLoggingOut: false });
+            // Fixed toast id so react-hot-toast replaces rather than stacks
+            // duplicates if logout is triggered more than once.
+            toast.success("Logged out", { id: "logout" });
         }
     }
 }));

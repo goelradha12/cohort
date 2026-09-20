@@ -278,7 +278,8 @@ export const editPlaylist = asyncHandler(async function (req, res) {
 
         const myPlaylist = await db.Playlist.findUnique({
             where: {
-                id: playlistId
+                id: playlistId,
+                userId: req.user._id
             }
         })
         if (!myPlaylist)

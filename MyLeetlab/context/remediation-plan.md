@@ -10,7 +10,7 @@ Severity scale: **P1** correctness or security gap, **P2** robustness/operationa
 
 ## P2 — Robustness and operations
 
-### Judge0 polling has no timeout or backoff
+### Judge0 polling has no timeout or backoff — ✅ DONE (backoff 0.5s→3s, ~60s cap, 504/502 apiError)
 - **Files**: `backend/src/libs/judge0lib.js` (`pollBatchResults`).
 - **Root cause**: `while (true)` with a fixed 1s sleep loops forever if Judge0 never finishes, tying up the request.
 - **Fix**: Add a max-attempts / max-elapsed-time cap, throw an `apiError` (e.g. 504) on timeout, and use incremental backoff instead of a flat 1s. Guard the network calls so a Judge0 error surfaces as a clean API error.
@@ -32,21 +32,20 @@ Severity scale: **P1** correctness or security gap, **P2** robustness/operationa
 
 ## P3 — Hygiene and project setup
 
-### No automated tests, backend lint script, or CI
-- **Files**: new `backend` test setup and `package.json` scripts; optional CI workflow.
-- **Fix**: Add a test runner (e.g. Vitest/Jest) covering auth guards, validators, Judge0 language mapping, `outputsMatch`, and playlist ownership. Add a backend lint script. Add CI to run lint + tests. Containerization only if deployment needs it.
-- **Verify**: `npm test` and lint run green locally and in CI.
+### No automated tests or CI
+- **Files**: new `backend` test setup and optional CI workflow.
+- **Status**: Backend linting and Docker packaging are now present.
+- **Fix**: Add a test runner (e.g. Vitest/Jest) covering auth guards, validators, Judge0 language mapping, `outputsMatch`, and playlist ownership. Add CI to run frontend/backend lint, build, Prisma validation, and tests.
+- **Verify**: checks run green locally and in CI.
 
 ### Sensitive/debug logging in runtime code
-- **Files**: `frontend/src/App.jsx` (`console.log(authUser)`) and various controllers/stores.
-- **Fix**: Remove or gate debug logs behind an environment flag; ensure no tokens/passwords/PII are logged.
-- **Verify**: confirm production build emits no sensitive console output.
+- **Status**: Frontend debug logs were removed and Judge0/server startup messages are development-gated.
+- **Files**: backend controllers and middleware still contain diagnostic error logs.
+- **Fix**: Centralize server logging before production and ensure no tokens/passwords/PII are logged.
+- **Verify**: confirm production logs contain only approved operational fields.
 
-### Hard-coded, auto-running admin seed (`createAdmin.js`)
-- **Files**: `backend/src/utils/createAdmin.js`.
-- **Root cause**: Seeds a hard-coded email/password and runs immediately on import via an IIFE. The password *is* hashed by the Prisma middleware, so this is credential hygiene, not a login bug.
-- **Fix**: Read admin email/password from env vars (`ADMIN_EMAIL`/`ADMIN_PASSWORD`, already stubbed in `backend/.env.example`); make the script idempotent and run it explicitly rather than on import. Do not add manual hashing.
-- **Verify**: run the seed with env vars set; confirm admin logs in and re-running is safe.
+### Hard-coded, auto-running admin seed (`createAdmin.js`) — ✅ DONE (file removed)
+- The hard-coded seed script was deleted (it was never imported). To create an admin, set `User.role = ADMIN` directly, or add an env-driven, idempotent seed script later if desired (`ADMIN_EMAIL`/`ADMIN_PASSWORD` are stubbed in `backend/.env.example`).
 
 ### `changeCurrPassword` hardening (low priority, not exploitable)
 - **Files**: `backend/src/controllers/auth.controllers.js`, `backend/src/routes/auth.routes.js`.
@@ -54,7 +53,7 @@ Severity scale: **P1** correctness or security gap, **P2** robustness/operationa
 - **Fix**: Add `isLoggedIn` to the route and derive the account from `req.user`, ignoring any body `email`. Keep writing plaintext `newPassword` (the middleware hashes it). Optionally rotate the refresh token.
 - **Verify**: change password while logged in; confirm the new password works, the old fails, and a logged-out request is rejected.
 
-### Review access control for reference solutions and ownership queries
+### Review access control for reference solutions and ownership queries — ✅ reference solutions DONE (gated to admin/solver; list strips them). Playlist/profile ownership audit still open.
 - **Files**: `backend/src/controllers/problem.controllers.js` (`getProblemByID`), playlist and profile controllers.
 - **Root cause**: `Problem.referenceSolutions` may be returned to non-admin users; playlist/profile queries should confirm they scope to the requesting user.
 - **Fix**: Strip `referenceSolutions` (and other admin-only fields) from non-admin problem responses; audit each playlist/submission query to ensure it filters by `req.user` ownership.
@@ -71,7 +70,7 @@ Severity scale: **P1** correctness or security gap, **P2** robustness/operationa
 1. Judge0 polling timeout/backoff (P2 resilience — the main gap left in the execution path).
 2. Nullable playlist description guard (quick P2 frontend safety fix).
 3. Secure cookie/CORS policy + `trust proxy`, alongside the deployment-topology decision.
-4. P3 cleanup: tests/lint/CI, debug logging, admin seed, `changeCurrPassword` hardening, access-control audit.
+4. P3 cleanup: tests/CI, centralized backend logging, admin seed, `changeCurrPassword` hardening, access-control audit.
 
 ---
 

@@ -1,5 +1,23 @@
 import Mailgen from "mailgen";
-import nodemailer from "nodemailer";
+import { Resend } from "resend";
+import { apiError } from "./api.error.js";
+
+// Resend client is created lazily (on first send) rather than at import time.
+// This avoids two problems:
+//  1. The Resend constructor throws if the API key is missing; constructing it at
+//     import time would crash the whole app on startup even for non-email routes.
+//  2. dotenv.config() runs after ES module imports are evaluated, so reading the
+//     key at import time would see it as undefined even when .env has it.
+let resendClient = null;
+const getResendClient = () => {
+  if (!process.env.RESEND_API_KEY) {
+    throw new apiError(500, "Email is not configured (RESEND_API_KEY missing)");
+  }
+  if (!resendClient) {
+    resendClient = new Resend(process.env.RESEND_API_KEY);
+  }
+  return resendClient;
+};
 
 export const sendMail = async (options) => {
   const mailGenerator = new Mailgen({
@@ -9,29 +27,29 @@ export const sendMail = async (options) => {
       link: "testlink",
     },
   });
-  // Generate an HTML email with the provided contents
+  // Mailgen still generates the email HTML from the provided content.
   var emailBody = mailGenerator.generate(options.mailGenContent);
 
-  // Generate the plaintext version of the e-mail (for clients that do not support HTML)
-  var emailText = mailGenerator.generatePlaintext(options.mailGenContent);
-
-  var transport = nodemailer.createTransport({
-    host: process.env.MAILTRAP_HOST,
-    port: process.env.MAILTRAP_PORT,
-    secure: false,
-    auth: {
-        user: process.env.MAILTRAP_USERNAME,
-        pass: process.env.MAILTRAP_PASSWORD
-    }
-  });
-
-  await transport.sendMail({
-    from: process.env.MAILTRAP_MAIL, // sender address
-    to: options.email, // list of receivers
-    subject: options.subject, // Subject line
+  // Resend sends the Mailgen-generated HTML.
+  const resend = getResendClient();
+  const { data, error } = await resend.emails.send({
+    from: process.env.MAIL_FROM,
+    to: [options.email],
+    subject: options.subject,
     html: emailBody,
-    text: emailText,
   });
+
+  if (error) {
+    console.error("Email send failed", {
+      to: options.email,
+      subject: options.subject,
+      name: error?.name,
+      message: error?.message,
+    });
+    throw new apiError(502, "Failed to send email");
+  }
+
+  return data;
 };
 
 // a factory function that will return a body object

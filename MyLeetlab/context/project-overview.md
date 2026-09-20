@@ -15,7 +15,9 @@ MyLeetlab is a LeetCode-style coding practice application with an administrator-
 - Judge0 batch execution and per-testcase result storage.
 - Submission history, problem submission counts, success counts, and profile summary/heatmap.
 - Playlist creation, editing, deletion, detail lookup, and problem membership changes.
+- Company tagging and filtering for problems, with supported-language management for problem authoring.
+- Docker Compose deployment packaging for the frontend and backend.
 - Developer portfolio and not-found routes.
 
 ## Repository status
-The code is an active application rather than a packaged deployment. There are no visible automated tests, CI workflows, Docker files, or deployment manifests. Some README entries describe future work; see [roadmap-and-todos.md](roadmap-and-todos.md).
+The code is an active application with Docker packaging, but it still has no automated tests, CI workflow, or cloud hosting manifest. Some README entries describe future work; see [roadmap-and-todos.md](roadmap-and-todos.md).

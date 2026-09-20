@@ -53,5 +53,16 @@ Base URL: `/api/v1`. All protected endpoints authenticate with the `accessToken`
 ## Leaderboard
 - `GET /leaderboard`: logged in + verified. Public solved-count ranking of all users. Returns an array of `{ userId, name, image, solvedCount, rank }` sorted by `solvedCount` desc; equal counts share a rank. No email/PII. Solved count is aggregated on demand from `ProblemSolved` (fine at ~100-150 users).
 
+## Languages
+- `GET /languages`: logged in. Returns the backend-supported languages `{ key, id, label, monaco }[]` derived from `judge0lib.js` (the single source of truth): C (50), CPP (54), PYTHON (71), JAVA (62), JAVASCRIPT (63). The admin problem form's language selector consumes this; the frontend must not maintain a separate list.
+
+Problem language fields: `codeSnippets`, `referenceSolutions`, and `examples` are JSON objects keyed by these language keys. A problem supports any non-empty subset (one or more). `createProblem`/`updateProblem` require ≥1 language, reject unsupported keys with 400, require each `codeSnippets` language to have a matching `referenceSolution`, and execute every reference solution through Judge0 before saving.
+
+## Companies
+- `GET /companies`: logged in + verified. Returns the canonical company list `{ id, name }` sorted by name. Used to build the companyId→name map for display and filter options.
+- `POST /companies`: logged in + admin + validation. Body `{ name }`. Normalizes the name (trim, lowercase, collapse whitespace) and find-or-creates by `normalizedName`, so "Google"/"google"/" GOOGLE " resolve to one company. Returns the existing record (200) or the newly created one (201). No delete endpoint.
+
+Problem `companies` field: `Problem.companies` is an optional JSON array of `{ companyId, year, context }` (all three required per entry; the array itself is optional — null/absent means none). There is no DB foreign key; `createProblem`/`updateProblem` verify every `companyId` exists in the `Company` table and return 400 if any is unknown. On update, `companies` is written only when the field is present in the body (`undefined` leaves the existing value untouched; `[]` explicitly clears it).
+
 ## Response caveat
 Exact controller messages and nested payload shapes should be read from the controller before building a new consumer. The standard wrapper is `apiResponse`; execution returns `data.submission` and `data.TestCaseResult`.

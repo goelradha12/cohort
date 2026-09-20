@@ -1,7 +1,7 @@
 # Testing
 
 ## Present infrastructure
-No test files, test runner configuration, coverage configuration, or package test scripts were found in the repository. The available executable checks are frontend ESLint (`npm run lint`) and Vite build (`npm run build`). The current frontend build passes. ESLint currently exits with 10 unused-variable errors and 12 React hook dependency warnings in existing application files; this documentation task did not change those files. Backend runtime behavior must currently be checked through local integration/manual requests.
+No test files, test runner configuration, or coverage configuration were found in the repository. Frontend ESLint (`npm run lint`) and Vite build (`npm run build`) are available. Backend ESLint is available through `npm run lint` from `backend/`; backend runtime behavior must currently be checked through local integration/manual requests.
 
 ## Recommended coverage gaps
 - Auth cookie issuance, expiry, verification, password reset, and role guards.

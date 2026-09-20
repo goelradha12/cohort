@@ -6,7 +6,7 @@ import jwt from "jsonwebtoken";
 import { db } from "../libs/db.js";
 import { UserRole } from "../generated/prisma/index.js";
 import bcrypt from "bcryptjs";
-import { generateAccessToken, generateRefreshToken, generateTemporaryTokens } from "../utils/generateTokens.js";
+import { generateAccessToken, generateRefreshToken, generateTemporaryTokens, getCookieOptions } from "../utils/generateTokens.js";
 import { handleDeleteMedia, handleUpload, getCloudinaryPublicId } from "../middlewares/cloudinary.middleware.js";
 
 export const registerUser = asyncHandler(async function (req, res) {
@@ -173,12 +173,7 @@ export const loginUser = asyncHandler(async function (req, res) {
             // add access token in cookies
             const accessToken = generateAccessToken(user);
             const refreshToken = generateRefreshToken(user);
-            const cookieOptions = {
-                httpOnly: true,
-                sameSite: "strict",
-                secure: true,
-                maxAge: 24 * 60 * 60 * 1000,
-            }
+            const cookieOptions = getCookieOptions()
             res.cookie("accessToken", accessToken, cookieOptions)
             res.cookie("refreshToken", refreshToken, cookieOptions)
             // add refresh token in database
@@ -624,11 +619,7 @@ export const refreshAccessToken = asyncHandler(async function (req, res) {
             if (!myUser)
                 throw new apiError(401, "Invalid Token");
             const accessToken = generateAccessToken(myUser);
-            const cookieOptions = {
-                httpOnly: true,
-                secure: true,
-                maxAge: 24 * 60 * 60 * 1000,
-            }
+            const cookieOptions = getCookieOptions()
             res.cookie("accessToken", accessToken, cookieOptions)
 
             res.status(200).json(
@@ -679,9 +670,12 @@ export const logOutUser = asyncHandler(async function (req, res) {
             if (!myUser)
                 throw new apiError(401, "Invalid Token");
 
-            // user exists, removing tokens
-            res.clearCookie('refreshToken')
-            res.clearCookie('accessToken')
+            // user exists, removing tokens. Clear with matching sameSite/secure
+            // so the browser reliably removes cross-site cookies.
+            const clearOptions = getCookieOptions()
+            delete clearOptions.maxAge
+            res.clearCookie('refreshToken', clearOptions)
+            res.clearCookie('accessToken', clearOptions)
 
             // removing refresh token from db
             await db.User.update({

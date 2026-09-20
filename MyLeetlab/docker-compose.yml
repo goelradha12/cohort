@@ -1,0 +1,33 @@
+# Runs the MyLeetlab backend (Express/Prisma) and frontend (Vite build served by
+# nginx). The database is external (managed PostgreSQL / Neon), so no db service.
+#
+# Usage:
+#   1. Ensure backend/.env exists (copy from backend/.env.example and fill in).
+#   2. Set VITE_API_URL for the frontend build (below) to your backend's public URL.
+#   3. docker compose up --build
+
+services:
+  backend:
+    build:
+      context: ./backend
+    # Backend configuration (DATABASE_URL, JWT secrets, Judge0, mail, Cloudinary,
+    # PORT, BASE_URL, etc.) comes from backend/.env — see backend/.env.example.
+    env_file:
+      - ./backend/.env
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        # Build-time API base URL baked into the bundle. Production default points
+        # at the backend subdomain. Override for local builds, e.g.
+        #   VITE_API_URL=http://localhost:3000/api/v1 docker compose up --build
+        VITE_API_URL: ${VITE_API_URL:-https://api.leetcode.radhagoyal.in/api/v1}
+    ports:
+      - "5173:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
