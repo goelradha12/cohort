@@ -104,7 +104,7 @@ export const pollBatchResults = async (tokens) => {
           },
         }
       ));
-    } catch (err) {
+    } catch (_err) {
       // Network/HTTP error talking to Judge0 — surface as a clean gateway error.
       throw new apiError(502, "Code execution service is unavailable");
     }

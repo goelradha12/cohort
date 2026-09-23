@@ -163,7 +163,7 @@ export const getAllProblems = asyncHandler(async function (req, res) {
 
         // The list view never needs reference solutions; strip them so they are
         // not exposed to clients.
-        const sanitized = problems.map(({ referenceSolutions, ...rest }) => rest)
+        const sanitized = problems.map(({ referenceSolutions: _referenceSolutions, ...rest }) => rest)
 
         return res.status(200).json(
             new apiResponse(200, sanitized, "All Problems Fetched Successfully")
@@ -446,11 +446,11 @@ export const getAllProblemsSolvedByUser = asyncHandler(async function (req, res)
         )
     } catch (error) {
         console.error("Solved-problem lookup failed", {
-            name: erorrs.name,
-            message: erorrs.message,
-            code: erorrs.code,
-            statusCode: erorrs.statusCode,
-            stack: erorrs.stack,
+            name: error.name,
+            message: error.message,
+            code: error.code,
+            statusCode: error.statusCode,
+            stack: error.stack,
         })
         if (error instanceof apiError) {
             return res.status(error.statusCode).json({

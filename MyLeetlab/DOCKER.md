@@ -1,6 +1,6 @@
 # Running MyLeetlab with Docker
 
-The app is containerized as two services with **no application or architecture
+The app can be containerized as two images with **no application or architecture
 changes**:
 
 - **backend** — Express + Prisma, run with `node src/index.js` (same entry point
@@ -12,33 +12,24 @@ changes**:
 The database is **external** (managed PostgreSQL / Neon), so there is no database
 container — the backend connects using `DATABASE_URL` / `DIRECT_URL` from its env.
 
+> **Deployment note:** the backend is deployed to **Azure App Service** via GitHub
+> Actions (`.github/workflows/deploy-myleetlab-backend.yml`), not Docker Compose.
+> The Dockerfiles below remain for local container runs and container-based hosts.
+
 ## Prerequisites
-- Docker + Docker Compose.
+- Docker.
 - `backend/.env` filled in (copy from `backend/.env.example`). Required names:
   `PORT`, `BASE_URL`, `NODE_ENV`, `DATABASE_URL`, `DIRECT_URL`,
   `ACCESS_TOKEN_SECRET`, `ACCESS_TOKEN_EXPIRY`, `REFRESH_TOKEN_SECRET`,
   `REFRESH_TOKEN_EXPIRY`, `JUDGE0_URL`, `SULU_API_TOKEN`, `RESEND_API_KEY`,
   `MAIL_FROM`, `CLOUDINARY_*`.
 
-## Quick start
-```bash
-# from the repo root
-docker compose up --build
-```
-- Frontend: http://localhost:5173
-- Backend:  http://localhost:3000
-
-The frontend is published on port 5173, which the backend's CORS config already
-allows (`http://localhost:5173`), so no CORS changes are needed for local use.
-
 ## Configuring the frontend API URL
 `VITE_API_URL` is baked into the frontend bundle at **build time** (Vite inlines
-`import.meta.env.*`). The compose default is the production backend
-`https://api.leetcode.radhagoyal.in/api/v1`. For a **local** build, override it:
-```bash
-VITE_API_URL=http://localhost:3000/api/v1 docker compose up --build
-```
-Changing it requires a rebuild of the frontend image (`--build`).
+`import.meta.env.*`). Point it at your backend, e.g. the production backend
+`https://api.leetcode.radhagoyal.in/api/v1`, or for a **local** build
+`http://localhost:3000/api/v1`. It is passed as a `--build-arg` at image build
+time (see "Running the images individually"); changing it requires a rebuild.
 
 ## Split-domain production deployment
 Frontend `https://leetcode.radhagoyal.in`, backend `https://api.leetcode.radhagoyal.in`
@@ -71,7 +62,7 @@ docker run -p 5173:80 myleetlab-frontend
 
 ## Notes
 - Secrets stay out of images: `.env` is excluded via `.dockerignore`; provide it
-  at runtime with `env_file` (compose) or `--env-file` (docker run).
+  at runtime with `--env-file` (docker run) or as App Service application settings.
 - The generated Prisma client (`backend/src/generated`) is rebuilt inside the
   image, not copied from the host.
 - For a production deployment behind a single origin/reverse proxy, set

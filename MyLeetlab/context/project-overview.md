@@ -16,7 +16,7 @@ MyLeetlab is a LeetCode-style coding practice application with an administrator-
 - Submission history, problem submission counts, success counts, and profile summary/heatmap.
 - Playlist creation, editing, deletion, detail lookup, and problem membership changes.
 - Company tagging and filtering for problems, with supported-language management for problem authoring.
-- Docker Compose deployment packaging for the frontend and backend.
+- Azure App Service deployment for the backend via GitHub Actions; Docker images available for local container runs.
 - Developer portfolio and not-found routes.
 
 ## Repository status
