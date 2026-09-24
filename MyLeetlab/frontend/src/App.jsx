@@ -22,11 +22,12 @@ function App() {
   // giving useful routes to the user as per the authentication
   const { authUser, checkAuth, isCheckingAuth } = useAuthStore();
 
-  // as soon as checkauth changes, use checkAuth function
-  // it will also update checkAuth on first render
+  // Verify the session once on mount. checkAuth() updates authUser, so depending
+  // on authUser here would re-run checkAuth on every auth change and loop forever.
   useEffect(() => {
     checkAuth()
-  }, [authUser, checkAuth])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   // if something is loading, show loader only in page
   if (isCheckingAuth && !authUser)

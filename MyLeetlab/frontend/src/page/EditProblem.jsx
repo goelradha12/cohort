@@ -32,16 +32,19 @@ const EditProblem = () => {
     const navigation = useNavigate();
     const id = useParams().id;
     const { isProblemLoading, problem, getProblemById } = useProblemStore();
+    // Fetch when the problem id changes (keyed on id, not just mount).
     useEffect(() => {
         getProblemById(id);
-    }, []);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [id]);
 
+    // Seed the form once the fetched problem matches this page's id.
     useEffect(() => {
-        if (problem) {
+        if (problem && problem.id === id) {
             handleReset();
-            console.log(problem)
         }
-    }, [problem]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [problem, id]);
 
     const {
         register,
@@ -777,7 +780,7 @@ const EditProblem = () => {
                                     )}
                                 </div>
                                 <div className="form-control">
-                                    <label className="label" for="hints">
+                                    <label className="label" htmlFor="hints">
                                         <span className="label-text font-medium">
                                             Hints (Optional)
                                         </span>
@@ -789,7 +792,7 @@ const EditProblem = () => {
                                         render={({ field }) => (
                                             <textarea
                                                 {...field}
-                                                defaultValue="NA"
+                                                id="hints"
                                                 placeholder="Enter hints for solving the problem"
                                                 className="textarea textarea-bordered min-h-24 w-full"
                                             />
@@ -797,15 +800,14 @@ const EditProblem = () => {
                                     />
                                 </div>
                                 <div className="form-control">
-                                    <label className="label" for="editorial">
+                                    <label className="label" htmlFor="editorial">
                                         <span className="label-text font-medium">
                                             Editorial (Optional)
                                         </span>
                                     </label>
                                     <textarea
+                                        id="editorial"
                                         className="textarea textarea-bordered min-h-32 w-full p-3 resize-y"
-                                        name="editorial"
-                                        defaultValue="NA"
                                         {...register("editorial")}
                                         placeholder="Enter problem editorial/solution explanation"
                                     />
