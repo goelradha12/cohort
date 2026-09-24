@@ -26,14 +26,18 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: npm
+          cache-dependency-path: MyLeetlab/backend/package-lock.json
 
       - name: Install dependencies
+        working-directory: MyLeetlab/backend
         run: npm ci
 
       - name: Generate Prisma Client
+        working-directory: MyLeetlab/backend
         run: npx prisma generate
 
       - name: Build
+        working-directory: MyLeetlab/backend
         run: npm run build
 
       - name: Login to Azure
@@ -47,3 +51,4 @@ jobs:
         uses: azure/webapps-deploy@v3
         with:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
+          package: MyLeetlab/backend
