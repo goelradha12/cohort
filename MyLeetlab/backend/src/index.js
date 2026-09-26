@@ -25,7 +25,7 @@ if (process.env.NODE_ENV === "production") {
 // Allowed browser origins. BASE_URL is the production frontend
 // (e.g. https://leetcode.radhagoyal.in); localhost stays for dev. Falsy values
 // are filtered so an unset BASE_URL doesn't break CORS.
-const allowedOrigins = [process.env.BASE_URL, "http://localhost:5173"].filter(Boolean);
+const allowedOrigins = ["https://leetcode.radhagoyal.in", "http://localhost:5173"].filter(Boolean);
 app.use(cors({
     origin: allowedOrigins,
     credentials: true
