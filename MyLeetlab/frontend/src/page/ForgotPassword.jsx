@@ -15,13 +15,11 @@ const ForgotPassword = () => {
     } = useForm();
     const [dispayInfo, setDisplayInfo] = useState(false);
     const handleFormSubmit = async (data) => {
-        console.log(data);
         try {
             const response = await axiosInstance.post("/auth/forgotPassword", data);
             toast.success(response.data?.message || "Mail sent for Reset Password");
             setDisplayInfo(true);
         } catch (error) {
-            console.log(error);
             toast.error(error.response?.data?.message || "Reset Password Failed");
         } finally {
             reset();

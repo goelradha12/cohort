@@ -18,6 +18,7 @@ import { useAuthStore } from '../store/useAuthStore.js';
 const SignUpPage = () => {
 
   const [showPassword , setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   
   // taking my custom state data from store
   const { signup, isSigningUp } = useAuthStore();
@@ -32,8 +33,9 @@ const SignUpPage = () => {
 
   const onSubmit = async (data)=>{
    try {
-    console.log("signup data" , data)
-    await signup(data)
+    // confirmPassword is only for client-side validation; don't send it to the API
+    const { confirmPassword: _, ...signupData } = data;
+    await signup(signupData)
    } catch (error) {
      console.error("SignUp failed:", error);
    }
@@ -50,8 +52,8 @@ const SignUpPage = () => {
               <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
                 <Code className="w-6 h-6 text-primary" />
               </div>
-              <h1 className="text-2xl font-bold mt-2">Welcome</h1>
-              <p className="text-base-content/60">Sign Up to your account</p>
+              <h1 className="text-2xl font-bold mt-2">Create your account</h1>
+              <p className="text-base-content/60">Sign up to start solving problems</p>
             </div>
           </div>
 
@@ -77,7 +79,7 @@ const SignUpPage = () => {
                 />
               </div>
               {errors.name && (
-                <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>
+                <p className="text-error text-sm mt-1">{errors.name.message}</p>
               )}              
             </div>
 
@@ -100,7 +102,7 @@ const SignUpPage = () => {
                 />
               </div>
               {errors.email && (
-                <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
+                <p className="text-error text-sm mt-1">{errors.email.message}</p>
               )}
             </div>
 
@@ -135,7 +137,42 @@ const SignUpPage = () => {
                 </button>
               </div>
               {errors.password && (
-                <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>
+                <p className="text-error text-sm mt-1">{errors.password.message}</p>
+              )}
+            </div>
+
+            {/* Confirm Password */}
+            <div className="form-control">
+              <label className="label">
+                <span className="label-text font-medium">Confirm Password</span>
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <Lock className="h-5 w-5 text-base-content/40" />
+                </div>
+                <input
+                  type={showConfirmPassword ? "text" : "password"}
+                  {...register("confirmPassword")}
+                  className={`input input-bordered w-full pl-10 pr-10 ${
+                    errors.confirmPassword ? "input-error" : ""
+                  }`}
+                  placeholder="••••••••"
+                />
+                <button
+                  type="button"
+                  aria-label={showConfirmPassword ? "Hide confirm password" : "Show confirm password"}
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-base-content/60 hover:text-base-content transition-colors"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                >
+                  {showConfirmPassword ? (
+                    <EyeOff className="h-5 w-5" />
+                  ) : (
+                    <Eye className="h-5 w-5" />
+                  )}
+                </button>
+              </div>
+              {errors.confirmPassword && (
+                <p className="text-error text-sm mt-1">{errors.confirmPassword.message}</p>
               )}
             </div>
 
@@ -172,7 +209,7 @@ const SignUpPage = () => {
       <AuthImagePattern
         title={"Welcome to { Cook the Code }"}
         subtitle={
-          "Sign up to access our platform and start using our services."
+          "Sign up to start solving problems."
         }
       />
     </div>

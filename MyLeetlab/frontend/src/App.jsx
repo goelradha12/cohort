@@ -17,6 +17,7 @@ import ForgotPassword from "./page/ForgotPassword";
 import VerifyEmail from "./page/VerifyEmail";
 import EditProblem from "./page/EditProblem";
 import PortfolioPage from "./page/PortfolioPage";
+import PlaylistPage from "./page/PlaylistPage";
 import Leaderboard from "./page/Leaderboard";
 function App() {
   // giving useful routes to the user as per the authentication
@@ -39,7 +40,6 @@ function App() {
   return (
     <>
       <Toaster />
-      <ThemeToggleButton />
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route
@@ -54,6 +54,10 @@ function App() {
           <Route
           path="/leaderboard"
           element={authUser ? <Leaderboard /> : <Navigate to="/login" />} />
+
+          <Route
+          path="/playlist/:id"
+          element={authUser ? <PlaylistPage /> : <Navigate to="/login" />} />
         </Route>
 
         <Route

@@ -274,6 +274,7 @@ const ProblemTable = ({ problems, solvedProblems }) => {
                             <th>Solved</th>
                             <th>Title</th>
                             <th>Tags</th>
+                            <th>Company</th>
                             <th>Difficulty</th>
                             <th>Actions</th>
                         </tr>
@@ -296,8 +297,15 @@ const ProblemTable = ({ problems, solvedProblems }) => {
                                     <td> <Link className="hover:text-primary" to={`/problem/${problem.id}`}>{problem.title}</Link></td>
                                     <td>
                                         {problem.tags.map((tag) => (
-                                            <span key={tag} className="badge border-1 border-primary mr-2">
+                                            <span key={tag} className="badge mr-1 mb-1">
                                                 {tag}
+                                            </span>
+                                        ))}
+                                    </td>
+                                    <td>
+                                        {Array.isArray(problem.companies) && problem.companies.map((c) => companyMap.get(c.companyId)).filter(Boolean).map((name) => (
+                                            <span key={name} className="text-sm mr-1 mb-1">
+                                                {name}
                                             </span>
                                         ))}
                                     </td>
@@ -327,11 +335,10 @@ const ProblemTable = ({ problems, solvedProblems }) => {
                                                 </div>
                                             )}
                                             <button
-                                                className="btn btn-sm btn-outline flex gap-2 items-center"
+                                                className="btn btn-sm flex gap-2 items-center"
                                                 onClick={() => handleAddToPlaylist(problem.id)}
                                             >
                                                 <Bookmark className="w-4 h-4" />
-                                                <span className="hidden sm:inline">Save to Playlist</span>
                                             </button>
                                         </div>
                                     </td>

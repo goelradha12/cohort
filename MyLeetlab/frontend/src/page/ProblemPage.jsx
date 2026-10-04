@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router";
 import { useProblemStore } from "../store/useProblemStore.js";
 import {
     Bookmark,
+    Building2,
     ChevronRight,
     Clock,
     Code2,

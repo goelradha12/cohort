@@ -77,7 +77,15 @@ axiosInstance.interceptors.response.use(
         const isRefreshCall = requestUrl.includes(REFRESH_URL);
         const isAuthProbe = requestUrl.includes("/auth/getProfile");
         const isLogout = requestUrl.includes("/auth/logout");
-        if (status === 401 && !config._retry && !isRefreshCall && !isAuthProbe && !isLogout) {
+        const isPublicAuthCall = [
+            "/auth/register",
+            "/auth/login",
+            "/auth/resendVerificationEmail",
+            "/auth/forgotPassword",
+            "/auth/resetPassword",
+            "/auth/verifyMail",
+        ].some((endpoint) => requestUrl.includes(endpoint));
+        if (status === 401 && !config._retry && !isRefreshCall && !isAuthProbe && !isLogout && !isPublicAuthCall) {
             config._retry = true;
             try {
                 // Share one refresh across concurrent 401s.

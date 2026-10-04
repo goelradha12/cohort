@@ -31,10 +31,9 @@ const SignUpPage = () => {
 
   const onSubmit = async (data)=>{
    try {
-    login(data);
-    // console.log(data)
+    await login(data);
    } catch (error) {
-     console.error("SignUp failed:", error);
+     console.error("Login failed:", error);
    }
   }
 
@@ -140,10 +139,10 @@ const SignUpPage = () => {
                 here
               </Link>
             </p>
-            <p className='text-base-content/60"'>
+            <p className="text-base-content/60">
               Forgot Password? <Link to="/forgot-password" className="link link-primary">Reset Password</Link>
             </p>
-            <p className='text-base-content/60"'>
+            <p className="text-base-content/60">
               Missed Email Verfication? <Link to="/verify-email" className="link link-primary">Verify email</Link>
             </p>
           </div>

@@ -222,7 +222,7 @@ export const changeCurrPassword = asyncHandler(async function (req, res) {
 
     try {
         // check if such email exists, 
-        const user = await db.User.findUnique({ where: { email } })
+        const user = await db.User.findUnique({ where: { email: email.toLowerCase() } })
 
         if (!user) {
             throw new apiError(401, "Invalid Username Or Email")
@@ -311,8 +311,8 @@ export const resendVerificationEmail = asyncHandler(async function (req, res) {
         // send email for verification
         let verificationURL = process.env.BASE_URL + "/api/v1/auth/verifyMail/" + hashedToken;
         let expiryDateFormatted = new Date(tokenExpiry)
-        const mailGenContent = emailVerificationMailGenContent(user.username, verificationURL, expiryDateFormatted.toLocaleString())
-        sendMail({
+        const mailGenContent = emailVerificationMailGenContent(user.name, verificationURL, expiryDateFormatted.toLocaleString())
+        await sendMail({
             email: user.email,
             subject: "Email Verification Link",
             mailGenContent

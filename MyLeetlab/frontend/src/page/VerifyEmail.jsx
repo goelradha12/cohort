@@ -15,13 +15,11 @@ const VerifyEmail = () => {
     } = useForm();
     const [dispayInfo, setDisplayInfo] = useState(false);
     const handleFormSubmit = async (data) => {
-        console.log(data);
         try {
             const response = await axiosInstance.post("/auth/resendVerificationEmail", data);
             toast.success(response.data?.message || "Mail sent for Email Verification");
             setDisplayInfo(true);
         } catch (error) {
-            console.log(error);
             toast.error(error.response?.data?.message || "Email Verification Failed");
         } finally {
             reset();

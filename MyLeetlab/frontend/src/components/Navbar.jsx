@@ -3,6 +3,8 @@ import { User, Code, LogOut, Trophy } from "lucide-react";
 import { useAuthStore } from "../store/useAuthStore";
 import { Link } from "react-router-dom";
 import LogoutButton from "./LogoutButton";
+import logo from "../assets/logo.png";
+import InitialsAvatar from "./InitialsAvatar";
 
 const Navbar = () => {
   const { authUser } = useAuthStore();
@@ -15,8 +17,9 @@ const Navbar = () => {
         {/* Logo Section */}
         <Link to="/" className="flex items-center gap-3 cursor-pointer">
           <img
-            src="./src/assets/logo.png"
+            src={logo}
             className="h-18 bg-primary/20 text-primary border-none px-2 py-2"
+            alt="Cook the Code logo"
           />
         </Link>
 
@@ -30,17 +33,15 @@ const Navbar = () => {
               <div className="w-10 rounded-full ">
                 {authUser?.avatar ? (
                   <img
-                    src={
-                      authUser?.avatar
-                    }
+                    src={authUser?.avatar}
                     alt="User Avatar"
-                    className="object-cover border-1 border-primary/20"
+                    className="object-cover w-10 h-10 rounded-full border-1 border-primary/20"
                   />
                 ) : (
-                  <img
-                    src={`https://avatar.iran.liara.run/public`} 
-                    alt="User Avatar"
-                    className="object-cover border-2 border-purple-50/60 rounded-full"
+                  <InitialsAvatar
+                    name={authUser?.name}
+                    size={40}
+                    className="rounded-full border-2 border-primary/20"
                   />
                 )}
               </div>
